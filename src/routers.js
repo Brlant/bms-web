@@ -18,7 +18,7 @@ export const routes = [
       {
         path: '/org',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'monitoring', title: '单位主档', icon: 'xitongjiankong', perm: 'ccs-monitor-center'},
+        meta: {moduleId: 'monitoring', title: '单位主档', icon: 'platform', perm: 'ccs-monitor-center'},
         children: [
           {
             path: '/org/info',
@@ -35,7 +35,7 @@ export const routes = [
       {
         path: '/project',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'monitoring', title: '项目管理', icon: 'xitongjiankong', perm: 'ccs-monitor-center'},
+        meta: {moduleId: 'monitoring', title: '项目管理', icon: 'order', perm: 'ccs-monitor-center'},
         children: [
           {
             path: '/project/manager',
@@ -47,7 +47,7 @@ export const routes = [
       {
         path: '/contract',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'monitoring', title: '合同管理', icon: 'xitongjiankong', perm: 'ccs-monitor-center'},
+        meta: {moduleId: 'monitoring', title: '合同管理', icon: 'equipment', perm: 'ccs-monitor-center'},
         children: [
           {
             path: '/contract/info',
@@ -64,13 +64,13 @@ export const routes = [
       {
         path: '/cost/template',
         component: () => import('./components/test.vue'),
-        meta: {moduleId: 'monitoring', title: '计费模板', icon: 'xitongjiankong', perm: 'ccs-monitordev-scan', type: 1},
+        meta: {moduleId: 'monitoring', title: '计费模板', icon: 'validity', perm: 'ccs-monitordev-scan', type: 1},
         children: []
       },
       {
         path: '/income',
         component: () => import('./components/test.vue'),
-        meta: {moduleId: 'monitoring', title: '收入计费', icon: 'xitongjiankong', perm: 'ccs-monitordev-scan', type: 1},
+        meta: {moduleId: 'monitoring', title: '收入计费', icon: 'xiaoshouxiansuo', perm: 'ccs-monitordev-scan', type: 1},
         children: [
           {
             path: '/income/detail/manager',
