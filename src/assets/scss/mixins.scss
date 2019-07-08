@@ -1,0 +1,39 @@
+$activeColor: #ffd04b;
+//$activeColor: #20a0ff;
+$activeHoverColor: #4dbeff;
+$activeColorFont: #fff;
+$order_color_0: #00CCFF;
+$order_color_1: #FF9933;
+$order_color_2: #CCCC66;
+$order_color_3: #00CC99;
+$order_color_4: #66CCFF;
+$order_color_5: #CC6666;
+$order_color_6: #FFCC00;
+$order_color_7: #666666;
+$order_color_8: #6699CC;
+$order_color_9: #66CC99;
+$order_color_10: #996699;
+$order_color_11: #FF6666;
+$dialog-left-bg: #eef2f3;
+
+$primary-color: $activeColor;
+$info-color: #2db7f5;
+$success-color: #00cc66;
+$warning-color: #ff9900;
+$error-color: #ff3300;
+$link-color: #3399ff;
+$black-color: #333;
+$link-hover-color: tint($link-color, 20%);
+$link-active-color: shade($link-color, 5%);
+$selected-color: fade($primary-color, 90%);
+$tooltip-color: #fff;
+$subsidiary-color: #9ea7b4;
+$rate-star-color: #f5a623;
+$css-prefix: tiny-;
+$border-color-split: #f0f0f0; // inside
+$font-size-base: 14px;
+$font-size-small: 12px;
+$tableHeaderColor: #dfebf8;
+
+$loginBackground: #545c64; //#545c64
+$loginBodyBackground: #667788

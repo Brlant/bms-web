@@ -1,0 +1,163 @@
+.amap-marker-label {
+  border-color: red;
+
+  &.active {
+    border-color: #0000ff;
+  }
+}
+
+$lbg: rgba(0, 0, 0, 0.5);
+
+#vehicleMap {
+  .amap-marker-label {
+    position: relative;
+    border: 0;
+    border-radius: 4px;
+    //padding: 4px;
+    //.no-data {
+    //  color: red;
+    //}
+    background: $lbg;
+    color: #fff;
+
+    .arraw {
+      width: 0;
+      height: 0;
+      border: 8px solid transparent;
+      border-right-color: $lbg;
+      position: absolute;
+      left: -16px;
+      top: 10px;
+    }
+
+    .title {
+      //border-bottom: 2px solid #ddd;
+      overflow: hidden;
+      padding-left: 4px;
+
+      .el-icon-close {
+        cursor: pointer;
+        float: right;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+
+    .front-icon {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 4px;
+      border-radius: 50%;
+      background: #0e91ff;
+      @at-root {
+        &--error {
+          background: #ff4d00;
+        }
+      }
+      // @debug $error-color;
+      @at-root {
+        $status: (2: 20%, 3: 30%, 4: 40%, 5: 50%, 6:60%, 7: 70%);
+        @each $index, $value in $status {
+          &--#{$index} {
+            background: hsla(240, 100%, $value, 1)
+          }
+        }
+      }
+    }
+
+    .item {
+      padding: 2px 4px;
+    }
+  }
+}
+
+#waybillMap, #waybillBigMap {
+  .amap-marker-label {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-radius: 10px;
+    border-bottom-left-radius: 0;
+    border: 1px solid #ddd;
+
+    .marker-title {
+      div {
+        display: inline-block;
+      }
+
+      .time {
+        padding: 4px 4px;
+      }
+
+      .content {
+        .name {
+          padding: 4px 4px;
+        }
+
+        .data {
+          padding: 4px 4px;
+          background: #0e91ff;
+          color: #fff;
+
+          &.data_error {
+            background: $error-color;
+          }
+
+          &.data_0 {
+            background: #000099; //#000099
+          }
+
+          &.data_1 {
+            background: #0033FF;
+          }
+
+          &.data_2 {
+            background: #0099FF; //#0099FF
+          }
+        }
+      }
+    }
+  }
+}
+
+.marker-hover-title {
+  div {
+    display: inline-block;
+  }
+
+  .marker-title {
+    .time {
+      padding: 0 4px;
+    }
+
+    .content {
+      .name {
+        padding: 0 4px;
+      }
+
+      .data {
+        padding: 0 4px;
+
+        &.data_error {
+          color: $error-color;
+        }
+
+        &.data_0 {
+          color: #000099; //#000099
+        }
+
+        &.data_1 {
+          color: #0033FF;
+        }
+
+        &.data_2 {
+          color: #0099FF; //#0099FF
+        }
+      }
+    }
+  }
+
+}

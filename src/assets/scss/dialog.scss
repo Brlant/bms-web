@@ -1,0 +1,226 @@
+$leftWidth: 260px;
+
+.content-part {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: auto;
+
+  .content-left {
+    width: $leftWidth;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    text-align: left;
+    background-color: $dialog-left-bg;
+
+    > h2 {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 55px;
+      border-bottom: 1px solid #ddd;
+      background-color: $dialog-left-bg;
+    }
+
+    .list-style {
+      cursor: pointer;
+      padding: 10px;
+      text-align: center;
+
+      span {
+        display: inline-block;
+        padding: 8px 35px;
+      }
+
+      &.active {
+        span {
+          background-color: $activeColor;
+          border-radius: 20px;
+          color: $activeColorFont
+        }
+
+        &.active.danger {
+          span {
+            background-color: #f00;
+          }
+        }
+      }
+
+      &:hover {
+        background: #dee9eb
+      }
+
+      .show-item {
+        width: $leftWidth;
+        padding: 15px 0;
+        text-align: left;
+        cursor: pointer;
+
+        &.active, &:hover {
+          background: #fff;
+        }
+
+        .btn-circle:hover {
+          color: #333;
+        }
+      }
+    }
+
+    .dialog-left-list {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      bottom: 100px;
+      overflow: auto;
+
+      .dialog-left-item {
+        padding: 15px 0;
+        background: #fff;
+        width: 180px;
+        margin: 10px auto;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+
+        &:hover, &.active {
+          background: $activeColor;
+          color: #fff;
+        }
+      }
+    }
+
+    .opera-btn {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 20px;
+      text-align: center;
+
+      .btn {
+        padding: 10px 0;
+        background: #fff;
+        width: 150px;
+        margin: 10px auto;
+        border-radius: 5px;
+        text-align: center;
+        background: $activeColor;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .disable {
+        color: rgb(191, 208, 217);
+        cursor: not-allowed;
+        background: #fbfeff;
+        border-color: rgb(209, 222, 229);
+      }
+    }
+  }
+
+  .content-right {
+    > h3 {
+      padding: 0;
+      margin: 0 0 20px 0;
+      font-size: 18px;
+      font-weight: normal;
+      line-height: 55px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 55px;
+      left: $leftWidth;
+      background: #fff;
+      z-index: 4;
+    }
+
+    position: absolute;
+    top: 0;
+    left: $leftWidth;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 75px 20px 0 0;
+
+    .hide-content {
+      display: none;
+    }
+
+    .show-content {
+      padding: 0 20px;
+      display: block;
+    }
+  }
+}
+
+.page-right-part {
+  position: fixed;
+  top: 50px;
+  bottom: 0;
+  right: 0;
+  z-index: 50;
+  overflow: auto;
+  transition: 0.3s transform ease-in-out;
+
+  background: #fff;
+  transform: translateX(100%);
+
+  &.on {
+    transform: translateX(0);
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+}
+
+.page-right-part-bg {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+}
+
+.temp-dialog {
+  .el-dialog__body {
+    padding: 10px;
+  }
+}
+
+.custom-dialog-dev {
+  .el-dialog__body {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 44px);
+  }
+
+  .el-dialog__header {
+    background: #eee;
+    color: #fff;
+    padding: 10px 20px 10px 20px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 12px;
+  }
+}
+
+.custom-dialog-map {
+  .el-dialog__body {
+    padding: 0;
+  }
+}
+

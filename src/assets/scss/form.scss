@@ -1,0 +1,93 @@
+.form-header-part {
+  position: relative;
+  padding: 0 10px;
+
+  .header {
+    line-height: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 10px 0 10px 0;
+
+    .sign {
+      width: 4px;
+      background: $activeColor;
+      height: 100%;
+    }
+
+    .tit {
+      margin: 0 0 0 10px;
+
+      &.active {
+        color: $activeColor
+      }
+    }
+  }
+
+
+  .content {
+    .oms-row {
+      margin-bottom: 10px;
+    }
+  }
+
+  > .el-row {
+    display: flex;
+    align-items: center;
+  }
+
+  &:first-child {
+    .content {
+      overflow: hidden;
+    }
+  }
+
+  .add-info-part {
+    margin: 2px 0;
+    padding: 10px;
+    background: #f7f9fb;
+
+    .btn-search-toggle, .btn-circle {
+      background: #fff;
+    }
+
+    .btn-circle:hover {
+      color: $activeColor;
+    }
+
+    .des-btn:hover {
+      .btn-circle {
+        color: $activeColor;
+      }
+    }
+  }
+}
+
+// 折行
+.acrony-my {
+  .el-form-item__label {
+    line-height: 20px;
+  }
+}
+
+.opera-btn span:hover {
+  color: $activeColor;
+  cursor: pointer;
+
+  a {
+    background: $activeColor;
+    color: #fff;
+  }
+}
+
+.goods-form-info {
+  .el-form-item {
+    .el-form-item__content {
+      line-height: 20px;
+    }
+
+    .el-form-item__label {
+      line-height: 20px;
+    }
+  }
+}

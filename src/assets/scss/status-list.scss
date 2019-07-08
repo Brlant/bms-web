@@ -1,0 +1,63 @@
+.order-list-status {
+  position: relative;
+  height: 50px;
+  padding: 10px 0 5px;
+  display: flex;
+
+  .status-item {
+    > div {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      transition: 0.3s all;
+      padding: 8px;
+
+      &.status-bg {
+        opacity: 0.3;
+        border-radius: 4px;
+      }
+
+      span.status-num {
+        display: block;
+        text-align: right;
+        font-size: 18px
+      }
+    }
+
+    width: 70px;
+    height: 40px;
+    position: relative;
+    margin-right: 26px;
+    cursor: pointer;
+
+    &.special-width {
+      width: 100px;
+    }
+
+    &.active, &:hover {
+      height: 55px;
+
+      > div.status-bg {
+        opacity: 1;
+      }
+    }
+
+    &.active {
+      width: 85px;
+
+      &.special-width {
+        width: 100px;
+      }
+    }
+  }
+
+  align-items: center;
+
+  .btn-group-right {
+    position: absolute;
+    right: 0;
+    top: 30px
+  }
+}

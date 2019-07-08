@@ -1,0 +1,139 @@
+//2.0变化
+
+.app-body {
+  .warehouse-tree {
+    .el-collapse-item__arrow {
+      float: left;
+    }
+  }
+
+  .el-table thead {
+    color: #1f323d;
+  }
+
+  .el-table td, .el-table th {
+    padding: 4px 0;
+  }
+
+  .el-tag {
+    padding: 0 5px;
+    height: 22px;
+    line-height: 22px;
+  }
+
+  .el-tag--small {
+    height: 24px;
+    padding: 0 8px;
+    line-height: 22px;
+    color: #00BFFF
+  }
+
+  .el-button {
+    padding: 10px 15px;
+  }
+
+  .el-button--mini, .el-button--mini.is-round {
+    padding: 7px 15px;
+  }
+
+  .el-input__inner {
+    height: 36px;
+    line-height: 1;
+  }
+
+  a:focus {
+    outline: none;
+  }
+
+  .el-date-editor--datetimerange.el-input__inner {
+    width: 100%;
+  }
+
+  .el-date-editor--daterange {
+    max-width: 320px;
+  }
+
+  .el-pagination {
+    margin-top: 8px;
+  }
+
+  .el-scrollbar__bar {
+    opacity: 1;
+  }
+
+  .loading-rotation.el-loading-parent--relative {
+    z-index: 40;
+
+    .el-loading-mask {
+      background-color: transparent;
+      z-index: 41;
+    }
+  }
+
+  .el-checkbox-button.is-focus {
+    &.is-checked {
+      .el-checkbox-button__inner {
+        border-color: $activeColor;
+      }
+    }
+
+    .el-checkbox-button__inner {
+      border-color: #dcdfe6;
+    }
+  }
+
+  .el-pagination .el-select .el-input__inner {
+    height: 28px;
+    line-height: 28px;
+  }
+
+  .el-pagination .el-input__icon {
+    line-height: 28px;
+  }
+}
+
+:focus {
+  outline: none;
+}
+
+.el-button-group {
+
+  > span:last-child > .el-button:last-child, > .el-button:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  > span:first-child > .el-button:first-child, > .el-button:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .el-button {
+    margin-left: -1px;
+    border-radius: 0;
+  }
+
+}
+
+.el-dropdown-menu-width {
+  .el-dropdown-menu__item {
+    width: 260px;
+  }
+}
+
+.el-date-picker--mini {
+  &.el-date-editor .el-range-input {
+    width: 35%;
+  }
+}
+
+//.el-tag.el-tag--width {
+//  width: 48px;
+//  text-align: center;
+//}
+
+.preloader {
+  .el-input__inner {
+    line-height: 1;
+  }
+}

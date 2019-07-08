@@ -1,0 +1,400 @@
+
+.order-list {
+
+  .order-list-header {
+    background: $tableHeaderColor;
+    line-height: 45px;
+    padding: 0 5px 0 15px;
+    margin: 0 0 5px 0;
+
+    &.mt-10 {
+      margin-top: 10px;
+    }
+  }
+
+  .order-list-body {
+    .order-list-item {
+      position: relative;
+      background: #fff;
+      //margin-left: -5px;
+      //margin-right: -5px;
+      padding: 10px 5px 10px 15px;
+      margin-top: 10px;
+      box-shadow: 0 1px 2px rgba(51, 51, 51, 0.15);
+      cursor: pointer;
+
+      &.no-pointer {
+        cursor: default;
+      }
+
+      .order-list-item-bg {
+        position: absolute;
+        opacity: 1;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        right: 0;
+        background: transparent;
+        border-left: 12px solid #f00;
+        transition: 0.1s all ease-in-out;
+      }
+
+      &.order-list-item-bg {
+        &:hover, &.active {
+          background: $dialog-left-bg;
+        }
+      }
+
+      .el-row {
+        position: relative;
+        z-index: 3;
+
+        .f-grey {
+          color: #999
+        }
+
+        .el-col {
+          padding-right: 10px;
+        }
+      }
+
+      &.status-no {
+        &:hover, &.active {
+          background: $dialog-left-bg;
+        }
+      }
+
+      &.status-common {
+        .order-list-item-bg {
+          border-left-color: #67c23a
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_0
+          }
+
+          box-shadow: 2px 0 5px 2px #67c23a
+        }
+        .alarm-title {
+          color: #67c23a;
+        }
+      }
+
+
+      &.status-close {
+        .order-list-item-bg {
+          border-left-color: #cdcfd2
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_0
+          }
+
+          box-shadow: 2px 0 5px 2px #eee
+        }
+        .alarm-title {
+          color: #eee;
+        }
+      }
+
+      &.status-alarm {
+        .order-list-item-bg {
+          border-left-color: $error-color
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_0
+          }
+
+          box-shadow: 2px 0 5px 2px $error-color
+        }
+        .alarm-title {
+          color: $error-color;
+        }
+      }
+
+
+
+      &.status-0 {
+        .order-list-item-bg {
+          border-left-color: $order_color_0
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_0
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_0
+        }
+      }
+
+      &.status-1 {
+        .order-list-item-bg {
+          border-left-color: $order_color_1
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_1
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_1
+
+        }
+      }
+
+      &.status-2 {
+        .order-list-item-bg {
+          border-left-color: $order_color_2
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_2
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_2
+
+        }
+      }
+
+      &.status-3 {
+        .order-list-item-bg {
+          border-left-color: $order_color_3
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_3
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_3
+
+        }
+      }
+
+      &.status-4 {
+        .order-list-item-bg {
+          border-left-color: $order_color_4
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_4
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_4
+
+        }
+      }
+
+      &.status-5 {
+        .order-list-item-bg {
+          border-left-color: $order_color_5
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_5
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_5
+
+        }
+      }
+
+      &.status-6 {
+        .order-list-item-bg {
+          border-left-color: $order_color_6
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_6
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_6
+
+        }
+      }
+
+      &.status-7 {
+        .order-list-item-bg {
+          border-left-color: $order_color_7
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_7
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_7
+
+        }
+      }
+
+      &.status-8 {
+        .order-list-item-bg {
+          border-left-color: $order_color_8
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_8
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_8
+
+        }
+      }
+
+      &.status-9 {
+        .order-list-item-bg {
+          border-left-color: $order_color_9
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_9
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_9
+
+        }
+      }
+
+      &.status-10 {
+        .order-list-item-bg {
+          border-left-color: $order_color_10
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_10
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_10
+
+        }
+      }
+
+      &.status-11 {
+        .order-list-item-bg {
+          border-left-color: $order_color_11
+        }
+
+        &:hover, &.active {
+          .order-list-item-bg {
+            opacity: 1;
+            //background: $order_color_11
+          }
+
+          box-shadow: 2px 0 5px 2px $order_color_11
+        }
+      }
+    }
+  }
+
+}
+
+.flex-list-dom {
+  .el-row {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.order-detail-info {
+  font-size: 12px;
+}
+
+.b_color_0 {
+  background: $order_color_0;
+}
+
+.b_color_1 {
+  background: $order_color_1;
+}
+
+.b_color_2 {
+  background: $order_color_2;
+}
+
+.b_color_3 {
+  background: $order_color_3;
+}
+
+.b_color_4 {
+  background: $order_color_4;
+}
+
+.b_color_5 {
+  background: $order_color_5;
+}
+
+.b_color_6 {
+  background: $order_color_6;
+}
+
+.b_color_7 {
+  background: $order_color_7;
+}
+
+.b_color_8 {
+  background: $order_color_8;
+}
+
+.b_color_9 {
+  background: $order_color_9;
+}
+
+.b_color_10 {
+  background: $order_color_10;
+}
+
+.b_color_11 {
+  background: $order_color_11;
+}
+
+// 订单部分
+
+.order-page {
+  h2 {
+    padding: 10px;
+    margin: 0;
+    background: #fff;
+  }
+
+  .advanced-query-form {
+    background: #fff;
+    padding: 10px 10px 0 10px;
+
+    .el-select {
+      display: block;
+      position: relative;
+    }
+
+    .el-date-editor.el-input {
+      width: 100%;
+    }
+  }
+}

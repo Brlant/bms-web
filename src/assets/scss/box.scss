@@ -1,0 +1,71 @@
+.comment-box {
+  textarea {
+    border: 0;
+  }
+
+  border: 1px solid #eee;
+
+  .comment-box-submit {
+    border-top: 1px solid #eee;
+    text-align: right;
+
+    button {
+      border-radius: 0;
+    }
+  }
+
+  &.quality-check-box {
+    .el-input {
+      input {
+        border: 0;
+        border-bottom: 1px solid #eee;
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+.part-border-box {
+  position: relative;
+  border: 1px solid $tableHeaderColor;
+  border-radius: 10px;
+  padding: 20px 20px 0 20px;
+  margin-bottom: 20px;
+
+  &.no-border {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  .btn-modify {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #ffffff;
+  }
+
+  &:hover {
+    border-color: $activeColor;
+
+    .title {
+      color: $activeColor;
+    }
+  }
+
+  .opera-btn {
+    padding-top: 2px;
+  }
+
+  .title {
+    position: absolute;
+    left: 10px;
+    top: -10px;
+    background: #fff;
+  }
+
+  .el-input.is-disabled .el-input__inner {
+    color: inherit;
+  }
+}

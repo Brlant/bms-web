@@ -1,0 +1,33 @@
+.selects--custom, .good-selects, .org-goods-selects {
+  .el-select-dropdown__item {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    height: auto;
+
+    span {
+      line-height: initial !important;
+    }
+
+    .el-tag {
+      line-height: 22px !important;
+      height: 22px;
+      float: left;
+      padding: 0 5px;
+    }
+
+    .select-other-info {
+      line-height: initial;
+      margin-left: 0;
+
+      &:after, &:before {
+        content: '';
+        clear: both;
+      }
+    }
+  }
+}
+
+.select-other-info {
+  color: #999;
+  margin-left: 10px
+}

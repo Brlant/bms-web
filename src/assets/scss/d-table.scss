@@ -1,0 +1,68 @@
+
+.d-table {
+  width: 100%;
+  margin: 20px auto;
+  background: #eeeeee;
+  display: table;
+
+  > div {
+    display: table-cell;
+    vertical-align: top;
+
+    &.d-table-left {
+      position: relative;
+      width: 280px;
+      min-width: 280px;
+      background: #fff;
+      border: 1px solid #eee;
+
+      h2 {
+        margin: 0;
+        padding: 18px 20px;
+        border-bottom: 1px solid #eee;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+      }
+    }
+
+    &.d-table-right {
+      position: relative;
+      font-size: 12px;
+      border: 6px solid #eee;
+      background: #fff;
+      padding: 10px 20px;
+
+      .table td {
+        padding: 13px;
+
+      }
+
+      > h2 {
+        font-size: 13px;
+        font-weight: normal;
+
+      }
+
+      div > h2 {
+        font-size: 13px;
+        font-weight: normal;
+
+        a {
+          &:hover {
+            color: $activeColor
+          }
+        }
+      }
+
+    }
+  }
+
+  td a:hover {
+    color: $activeColor;
+  }
+}
+
+.d-table-left_scroll {
+  height: calc(100% - 65px);
+}
