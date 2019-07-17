@@ -22,7 +22,7 @@ export const routes = [
         children: [
           {
             path: '/org/info',
-            component: () => import('./components/test.vue'),
+            component: () => import('./components/supplier/info/list.vue'),
             meta: {moduleId: 'monitoring', title: '单位信息', perm: 'ccs-monitordev-scan', type: 1}
           },
           {
@@ -113,6 +113,11 @@ export const routes = [
             path: '/permission/role',
             component: () => import('./components/system/role/role.vue'),
             meta: {moduleId: 'permission', title: '角色管理', perm: 'ccs-access-role-watch'} // ccs-access-role-watch
+          },
+          {
+            path: '/permission/dict',
+            component: () => import('./components/system/dict/dict.vue'),
+            meta: {moduleId: 'permission', title: '数据字典', perm: 'ccs-access-role-watch'} // ccs-access-role-watch
           },
           {
             path: '/permission/log',
