@@ -27,7 +27,7 @@ export const routes = [
           },
           {
             path: '/org/fund',
-            component: () => import('./components/test.vue'),
+            component: () => import('./components/supplier/fund/index.vue'),
             meta: {moduleId: 'monitoring', title: '单位资金账户', perm: 'ccs-monitordev-scan', type: 1}
           }
         ]

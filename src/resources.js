@@ -92,6 +92,14 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+
+// 单位资金账户
+export const capitalAccount = resource('/bms-oa/add-org-account', http, {
+  query(obj) {
+    return http.post('/bms-oa/query-org-account/page', obj)
+  }
+});
+
 // 货主随货通行单模板
 export const FollowSheet = resource('/followCargoSheet', http, {
   stop(id) {
