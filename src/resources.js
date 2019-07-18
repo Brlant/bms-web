@@ -94,6 +94,9 @@ Vue.prototype.$http = http;
 
 
 // 单位资金账户
+export const AccountTurnover = resource('/bms-otd/add-org-turnover-details', http, {});
+
+// 单位资金账户
 export const capitalAccount = resource('/bms-oa/add-org-account', http, {
   query(obj) {
     return http.post('/bms-oa/query-org-account/page', obj)
