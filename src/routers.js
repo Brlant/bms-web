@@ -61,10 +61,21 @@ export const routes = [
         ]
       },
       {
-        path: '/cost/template',
-        component: () => import('./components/test.vue'),
-        meta: {moduleId: 'monitoring', title: '计费模板', icon: 'validity', perm: 'ccs-monitordev-scan', type: 1},
-        children: []
+        path: '/cost',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'monitoring', title: '计费模型管理', icon: 'validity', perm: 'ccs-monitordev-scan', type: 1},
+        children: [
+          {
+            path: '/cost/template',
+            component: () => import('./components/contract/info/index.vue'),
+            meta: {moduleId: 'monitoring', title: '计费模型', perm: 'ccs-monitordev-scan', type: 1}
+          },
+          {
+            path: '/cost/item',
+            component: () => import('./components/test.vue'),
+            meta: {moduleId: 'monitoring', title: '计费项', perm: 'ccs-monitordev-scan', type: 1}
+          }
+        ]
       },
       {
         path: '/income',

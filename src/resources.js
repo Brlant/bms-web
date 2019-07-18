@@ -93,6 +93,28 @@ http.interceptors.response.use(response => {
 Vue.prototype.$http = http;
 
 
+// 计费模型
+export const codeModel = resource('/bms-bm', http, {
+  add(obj) {
+    return http.post('/bms-bm/add-billing-model', obj)
+  },
+  queryStateNum: (params) => {
+    return http.get('/bms-bm/count', {params});
+  },
+  start(obj) {
+    return http.put('/bms-bm/enable-billing-model', obj)
+  },
+  stop(obj) {
+    return http.put('/bms-bm/disable-billing-model', obj)
+  },
+  update(obj){
+    return http.put('/bms-bm/edit-billing-model', obj)
+  },
+  query(obj) {
+    return http.post('/bms-bm/query-billing-model/page', obj)
+  }
+});
+
 // 合同信息
 export const Contact = resource('/bms-contract', http, {
   add(obj) {
@@ -102,13 +124,13 @@ export const Contact = resource('/bms-contract', http, {
     return http.get('/bms-contract/count', {params});
   },
   start(obj) {
-    return http.post('/bms-contract/enable-contract', obj)
+    return http.put('/bms-contract/enable-contract', obj)
   },
   stop(obj) {
-    return http.post('/bms-contract/disable-contract', obj)
+    return http.put('/bms-contract/disable-contract', obj)
   },
   update(obj){
-    return http.post('/bms-contract/edit-contract', obj)
+    return http.put('/bms-contract/edit-contract', obj)
   },
   query(obj) {
     return http.post('/bms-contract/query-contract/page', obj)
@@ -124,13 +146,13 @@ export const project = resource('/bms-project', http, {
     return http.get('/bms-project/count', {params});
   },
   start(obj) {
-    return http.post('/bms-project/enable-project', obj)
+    return http.put('/bms-project/enable-project', obj)
   },
   stop(obj) {
-    return http.post('/bms-project/disable-project', obj)
+    return http.put('/bms-project/disable-project', obj)
   },
   update(obj){
-    return http.post('/bms-project/edit-project', obj)
+    return http.put('/bms-project/edit-project', obj)
   },
   query(obj) {
     return http.post('/bms-oa/query-org-account/page', obj)
