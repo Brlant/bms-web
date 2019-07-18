@@ -8,6 +8,9 @@
         </el-button>
       </template>
     </search-part>
+    <status-list :activeStatus="filters.status" :statusList="orgType"
+                 :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
+                 :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="8">项目名称</el-col>
@@ -81,9 +84,15 @@
     data() {
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
-        filters: {},
+        filters: {
+          status: ''
+        },
         dialogComponents: {
           0: addForm,
+        },
+        orgType: {
+          1: {'title': '正常', 'num': 0, 'status': '1'},
+          2: {'title': '停用', 'num': 0, 'status': '0'}
         },
         defaultPageRight: {'width': '700px', 'padding': 0}
       };
@@ -100,6 +109,17 @@
       this.queryList(1);
     },
     methods: {
+      changeType(item, key) {
+        this.filters.status = item.status;
+      },
+      isShowIcon(item, key, activeStatus) {
+        return item.status === activeStatus;
+      },
+      formatClass(item, key, activeStatus) {
+        return {
+          'active': item.status === activeStatus
+        };
+      },
       showRecordDate: function (data) {
         if (!data) return '';
         return data ? this.$moment(data).format('YYYY-MM-DD HH:mm:ss') : '';
@@ -120,6 +140,15 @@
       queryList(pageNo) {
         const http = project.query;
         const params = this.queryUtil(http, pageNo);
+        this.queryStatusNum(params);
+      },
+      queryStatusNum: function (params) {
+        project.queryStateNum(params).then(res => {
+          let data = res.data;
+          this.orgType[0].num = data['all'];
+          this.orgType[1].num = data['valid'];
+          this.orgType[2].num = data['stop'];
+        });
       },
       add() {
         this.form = {};
