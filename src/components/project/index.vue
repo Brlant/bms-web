@@ -2,7 +2,7 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="perms[0]">
+        <el-button @click="add" plain size="small" v-has="''">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
@@ -10,9 +10,12 @@
     </search-part>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="3">单位名称</el-col>
-        <el-col :span="4">账户余额</el-col>
-        <el-col :span="3">操作</el-col>
+        <el-col :span="8">项目名称</el-col>
+        <el-col :span="4">项目编号</el-col>
+        <el-col :span="3">业务员</el-col>
+        <el-col :span="3">所属部门</el-col>
+        <el-col :span="2">状态</el-col>
+        <el-col :span="4">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -30,11 +33,17 @@
         <div :class="[{'active':currentItemId===item.id}]" class="order-list-item order-list-item-bg"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="3" class="R">{{item.orgName}}</el-col>
-            <el-col :span="4" class="R">{{item.balance}}</el-col>
-            <el-col :span="3" class="opera-btn">
-              <des-btn @click="edit(item)" icon="edit" v-has="perms[1]">编辑</des-btn>
-              <des-btn @click="deleteItem(item)" icon="delete" v-has="perms[2]">编辑</des-btn>
+            <el-col :span="8">{{item.projectName}}</el-col>
+            <el-col :span="4">{{item.projectNumber}}</el-col>
+            <el-col :span="3">{{item.businessManageId}}</el-col>
+            <el-col :span="3">{{item.companyDepartment}}</el-col>
+            <el-col :span="2">
+              {{item.projectState === '0' ? '停用': '启用'}}
+            </el-col>
+            <el-col :span="4" class="opera-btn">
+              <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.status === '0'">启用</des-btn>
+              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.status === '1'">停用</des-btn>
             </el-col>
           </el-row>
         </div>
@@ -51,7 +60,8 @@
     </div>
 
     <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
-      <component :formItem="form" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change" @right-close="resetRightBox"/>
+      <component :formItem="form" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change"
+                 @right-close="resetRightBox"/>
     </page-right>
 
   </div>
@@ -61,7 +71,7 @@
   import SearchPart from './search';
   import addForm from './form/add-form.vue';
   import CommonMixin from '@/mixins/commonMixin';
-  import {capitalAccount} from '@/resources';
+  import {project} from '@/resources';
 
   export default {
     components: {
@@ -71,19 +81,12 @@
     data() {
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
-        filters: {
-
-        },
+        filters: {},
         dialogComponents: {
           0: addForm,
         },
         defaultPageRight: {'width': '700px', 'padding': 0}
       };
-    },
-    computed: {
-      perms() {
-        return this.$route.meta.perms;
-      }
     },
     watch: {
       filters: {
@@ -115,7 +118,7 @@
         });
       },
       queryList(pageNo) {
-        const http = capitalAccount.query;
+        const http = project.query;
         const params = this.queryUtil(http, pageNo);
       },
       add() {
@@ -131,8 +134,8 @@
       start(item) {
         this.currentItem = item;
         this.currentItemId = item.id;
-        this.$confirmOpera(`是否启用探头"${item.name}"`, () => {
-          this.$httpRequestOpera(probe.start(item.id), {
+        this.$confirmOpera(`是否启用项目"${item.projectName}"`, () => {
+          this.$httpRequestOpera(project.start(item.id), {
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
@@ -148,8 +151,8 @@
       stop(item) {
         this.currentItem = item;
         this.currentItemId = item.id;
-        this.$confirmOpera(`是否停用探头"${item.name}"`, () => {
-          this.$httpRequestOpera(probe.stop(item.id), {
+        this.$confirmOpera(`是否停用项目"${item.projectName}"`, () => {
+          this.$httpRequestOpera(project.stop(item.id), {
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {

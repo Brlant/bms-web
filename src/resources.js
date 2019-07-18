@@ -93,7 +93,30 @@ http.interceptors.response.use(response => {
 Vue.prototype.$http = http;
 
 
+
 // 单位资金账户
+export const project = resource('/bms-project', http, {
+  add(obj) {
+    return http.post('/bms-project/add-project', obj)
+  },
+  queryStateNum: (params) => {
+    return http.get('/bms-project/count', {params});
+  },
+  start(obj) {
+    return http.post('/bms-project/enable-project', obj)
+  },
+  stop(obj) {
+    return http.post('/bms-project/disable-project', obj)
+  },
+  update(obj){
+    return http.post('/bms-project/edit-project', obj)
+  },
+  query(obj) {
+    return http.post('/bms-oa/query-org-account/page', obj)
+  }
+});
+
+// 账户流水明细
 export const AccountTurnover = resource('/bms-otd/add-org-turnover-details', http, {});
 
 // 单位资金账户

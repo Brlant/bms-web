@@ -9,17 +9,25 @@
     <el-form ref="accountform" :model="form" label-width="100px" :rules="rules"
              @submit.prevent="onSubmit('accountform')" onsubmit="return false">
       <el-form-item label="姓名" prop="name">
-        <oms-input type="text" v-model="form.name" placeholder="请输入姓名"></oms-input>
+        <oms-input type="text" v-model="form.name" placeholder="请输入"></oms-input>
       </el-form-item>
       <el-form-item label="手机号码" prop="phone" class="contact-check">
-        <oms-input type="text" v-model="form.phone" placeholder="请输入手机号码"></oms-input>
+        <oms-input type="text" v-model="form.phone" placeholder="请输入"></oms-input>
       </el-form-item>
       <el-form-item label="Email">
-        <oms-input type="text" v-model="form.email" placeholder="请输入邮箱"></oms-input>
+        <oms-input type="text" v-model="form.email" placeholder="请输入"></oms-input>
       </el-form-item>
-      <el-form-item label="用户角色" v-if="!form.adminFlag">
-        <el-select placeholder="请选择用户角色" v-model="form.list" multiple filterable clearable>
+      <el-form-item label="用户角色">
+        <el-select placeholder="请选择" v-model="form.list" multiple>
           <el-option :label="item.title" :value="item.id" :key="item.id" v-for="item in roleSelect"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="所属部门">
+        <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="filterDepartment"
+                   @click.native.once="filterDepartment('')"
+                   :clearable="true" v-model="form.companyDepartment" popperClass="good-selects">
+          <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in departmentList">
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label-width="100px">
@@ -31,7 +39,7 @@
 </template>
 
 <script>
-  import {OrgUser, User, Access} from '../../../../resources';
+  import {Access, Department, User} from '../../../../resources';
 
   export default {
     name: 'editForm',
@@ -54,25 +62,20 @@
         default: true
       }
     },
+    mounted () {
+      this.$nextTick(function () {
+        let param = {
+          usableStatus: 1,
+          objectId: 'mdm-system'
+        };
+        let self = this;
+        Access.query(param).then(res => {
+          self.roleSelect = res.data.list;
+        });
+      });
+      this.filterDepartment();
+    },
     data: function () {
-      let checkEmail = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入邮箱'));
-        } else {
-          let re = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ig;
-          if (!re.test(value)) {
-            callback(new Error('请输入正确的邮箱'));
-          }
-          let orgId = this.$store.state.user.userCompanyAddress;
-          User.checkEmail(value, this.form.id, orgId).then(function (res) {
-            if (res.data.valid) {
-              callback();
-            } else {
-              callback(new Error('邮箱已经存在'));
-            }
-          });
-        }
-      };
       let checkPhone = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入手机号码'));
@@ -81,8 +84,7 @@
           if (!re.test(value)) {
             callback(new Error('请输入正确的手机号码'));
           }
-          let orgId = this.$store.state.user.userCompanyAddress;
-          User.checkPhone(value, this.form.id, orgId).then(function (res) {
+          User.checkPhone(value, this.form.id).then(function (res) {
             if (res.data.valid) {
               callback();
             } else {
@@ -107,19 +109,13 @@
             {required: true, message: '请输入手机号码', trigger: 'blur'},
             {validator: checkPhone, trigger: 'blur'}
           ],
-          email: [
-//            {required: true, message: '请输入邮箱', trigger: 'blur'},
-            {validator: checkEmail, trigger: 'blur'}
-          ],
-          roleId: [
-            {required: true, message: '请输入用户角色', trigger: 'blur'}
-          ],
           list: [
             {required: true, type: 'array', message: '请选择用户角色', trigger: 'blur'}
           ]
         },
         roleSelect: [],
-        doing: false
+        doing: false,
+        departmentList: []
       };
     },
     watch: {
@@ -143,76 +139,79 @@
         }
       }
     },
-    mounted() {
-      this.getRoleSelect();
-    },
     methods: {
+      filterDepartment(query) { // 查询厂商
+        let params = {
+          pageNo: 1,
+          pageSize: 20,
+          keyword: query
+        };
+        Department.getPage(params).then(res => {
+          this.departmentList = res.data.list;
+        });
+      },
       getRoleSelect: function () {
         let param = {
-          usableStatus: 1,
-          objectId: 'hmcc-system',
-          pageNo: 1,
-          pageSize: 100
+          objectId: 'mdm-system'
         };
+        let self = this;
         Access.query(param).then(res => {
-          this.roleSelect = res.data.list;
+          self.roleSelect = res.data.list;
         });
       },
       onSubmit: function (formName) {
         let self = this;
-        if (this.doing) return;
-        this.doing = true;
         this.$refs[formName].validate((valid) => {
-          if (!valid) {
-            this.doing = false;
+          if (!valid || this.doing) {
             return false;
           }
-          this.doing = true;
           let formData = JSON.parse(JSON.stringify(this.form));
+          formData.objectId = 'mdm-system';
           formData.list = self.form.list.map(m => {
             return {
               roleId: m
             };
           });
-          formData.objectId = 'hmcc-system';
+          this.doing = true;
           if (this.action === 'add') {
-            OrgUser.save(formData).then(() => {
+            User.save(formData).then(() => {
               this.doing = false;
               this.$notify.success({
                 duration: 2000,
                 name: '成功',
-                message: '新增用户"' + self.form.name + '"成功'
+                message: '新增平台用户"' + self.form.name + '"成功'
               });
               formData.list = this.getSelectRoles(formData, this.roleSelect);
               self.$emit('change', formData);
             }).catch(() => {
               this.$notify.error({
                 duration: 2000,
-                message: '新增用户"' + self.form.name + '"失败'
+                message: '新增平台用户"' + self.form.name + '"失败'
               });
               this.doing = false;
             });
           } else {
-            OrgUser.update(self.form.id, formData).then(() => {
+            this.doing = true;
+            User.update(self.form.id, formData).then(() => {
               this.doing = false;
               this.$notify.success({
                 duration: 2000,
                 name: '成功',
-                message: '修改用户"' + self.form.name + '"成功'
+                message: '修改平台用户"' + self.form.name + '"成功'
               });
               formData.list = this.getSelectRoles(formData, this.roleSelect);
               self.$emit('change', formData);
             }).catch(() => {
               this.$notify.error({
                 duration: 2000,
-                message: '修改用户"' + self.form.name + '"失败'
+                message: '修改平台用户"' + self.form.name + '"失败'
               });
               this.doing = false;
             });
           }
         });
       },
-      getSelectRoles(formData, roles) {
+      getSelectRoles (formData, roles) {
         return roles.filter(f => formData.list.some(s => s.roleId === f.id)).map(m => {
           return {
             roleId: m.id,

@@ -41,13 +41,7 @@ export const routes = [
         path: '/project',
         component: () => import('./components/common/parent-route.vue'),
         meta: {moduleId: 'monitoring', title: '项目管理', icon: 'order', perm: 'ccs-monitor-center'},
-        children: [
-          {
-            path: '/project/manager',
-            component: () => import('./components/test.vue'),
-            meta: {moduleId: 'monitoring', title: '项目立项', perm: 'ccs-monitordev-scan', type: 1}
-          }
-        ]
+        children: []
       },
       {
         path: '/contract',
