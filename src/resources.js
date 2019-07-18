@@ -93,6 +93,27 @@ http.interceptors.response.use(response => {
 Vue.prototype.$http = http;
 
 
+// 合同信息
+export const Contact = resource('/bms-contract', http, {
+  add(obj) {
+    return http.post('/bms-contract/add-contract', obj)
+  },
+  queryStateNum: (params) => {
+    return http.get('/bms-contract/count', {params});
+  },
+  start(obj) {
+    return http.post('/bms-contract/enable-contract', obj)
+  },
+  stop(obj) {
+    return http.post('/bms-contract/disable-contract', obj)
+  },
+  update(obj){
+    return http.post('/bms-contract/edit-contract', obj)
+  },
+  query(obj) {
+    return http.post('/bms-contract/query-contract/page', obj)
+  }
+});
 
 // 单位资金账户
 export const project = resource('/bms-project', http, {
