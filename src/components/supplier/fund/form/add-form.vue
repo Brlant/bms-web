@@ -48,7 +48,7 @@
     watch: {
       index: function (val) {
         this.$refs['form'].clearValidate();
-        if (this.formItem.id) {
+        if (this.formItem.orgAccountId) {
           this.orgList = [
             {name: this.formItem.orgName, id: this.formItem.orgId}
           ];
@@ -67,7 +67,7 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            if (!this.form.id) {
+            if (!this.form.orgAccountId) {
               this.doing = true;
               this.$httpRequestOpera(capitalAccount.save(this.form), {
                 errorTitle: '添加失败',

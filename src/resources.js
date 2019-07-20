@@ -96,76 +96,89 @@ Vue.prototype.$http = http;
 // 计费模型
 export const codeModel = resource('/bms-bm', http, {
   add(obj) {
-    return http.post('/bms-bm/add-billing-model', obj)
+    return http.post('/bms-bm/add-billing-model', obj);
   },
   queryStateNum: (params) => {
     return http.get('/bms-bm/count', {params});
   },
   start(obj) {
-    return http.put('/bms-bm/enable-billing-model', obj)
+    return http.put('/bms-bm/enable-billing-model', obj);
   },
   stop(obj) {
-    return http.put('/bms-bm/disable-billing-model', obj)
+    return http.put('/bms-bm/disable-billing-model', obj);
   },
-  update(obj){
-    return http.put('/bms-bm/edit-billing-model', obj)
+  update(obj) {
+    return http.put('/bms-bm/edit-billing-model', obj);
   },
   query(obj) {
-    return http.post('/bms-bm/query-billing-model/page', obj)
+    return http.post('/bms-bm/query-billing-model/page', obj);
   }
 });
 
 // 合同信息
 export const Contact = resource('/bms-contract', http, {
   add(obj) {
-    return http.post('/bms-contract/add-contract', obj)
+    return http.post('/bms-contract/add-contract', obj);
   },
   queryStateNum: (params) => {
     return http.get('/bms-contract/count', {params});
   },
   start(obj) {
-    return http.put('/bms-contract/enable-contract', obj)
+    return http.put('/bms-contract/enable-contract', obj);
   },
   stop(obj) {
-    return http.put('/bms-contract/disable-contract', obj)
+    return http.put('/bms-contract/disable-contract', obj);
   },
-  update(obj){
-    return http.put('/bms-contract/edit-contract', obj)
+  update(obj) {
+    return http.put('/bms-contract/edit-contract', obj);
   },
   query(obj) {
-    return http.post('/bms-contract/query-contract/page', obj)
+    return http.post('/bms-contract/query-contract/page', obj);
   }
 });
 
 // 单位资金账户
 export const project = resource('/bms-project', http, {
   add(obj) {
-    return http.post('/bms-project/add-project', obj)
+    return http.post('/bms-project/add-project', obj);
   },
   queryStateNum: (params) => {
     return http.get('/bms-project/count', {params});
   },
   start(obj) {
-    return http.put('/bms-project/enable-project', obj)
+    return http.put('/bms-project/enable-project', obj);
   },
   stop(obj) {
-    return http.put('/bms-project/disable-project', obj)
+    return http.put('/bms-project/disable-project', obj);
   },
-  update(obj){
-    return http.put('/bms-project/edit-project', obj)
+  update(obj) {
+    return http.put('/bms-project/edit-project', obj);
   },
   query(obj) {
-    return http.post('/bms-oa/query-org-account/page', obj)
+    return http.post('/bms-project/query-project/page', obj);
   }
 });
 
 // 账户流水明细
-export const AccountTurnover = resource('/bms-otd/add-org-turnover-details', http, {});
+export const AccountTurnover = resource('/bms-otd/add-org-turnover-details', http, {
+  query(obj) {
+    return http.post('/bms-otd/query-org-turnover-details/page', obj);
+  }
+});
 
 // 单位资金账户
-export const capitalAccount = resource('/bms-oa/add-org-account', http, {
+export const capitalAccount = resource('/bms-oa', http, {
+  save(obj) {
+    return http.post('/bms-oa/add-org-account', obj);
+  },
   query(obj) {
-    return http.post('/bms-oa/query-org-account/page', obj)
+    return http.post('/bms-oa/query-org-account/page', obj);
+  },
+  delete(key) {
+    return http.delete(`/bms-oa/del-org-account/${key}`);
+  },
+  update(obj) {
+    return http.put('/bms-oa/edit-org-account', obj);
   }
 });
 
@@ -351,18 +364,18 @@ export const QualityItem = resource('/qualityItem', http, {
 });
 
 // 部门对象
-export const Department = resource('oms/department', http, {
+export const Department = resource('/department', http, {
   getPage: (params) => {
-    return http.get('oms/department/page', {params});
+    return http.get('/department/page', {params});
   },
   getOnesMember: (id, params) => {
-    return http.get('oms/department/' + id + '/member', {params});
+    return http.get('/department/' + id + '/member', {params});
   },
   getMembers: (params) => {
-    return http.get('oms/department/members', {params});
+    return http.get('/department/members', {params});
   },
   queryStateNum: (params) => {
-    return http.get('/oms/department/member/count', {params});
+    return http.get('/department/member/count', {params});
   }
 });
 

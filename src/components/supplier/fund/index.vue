@@ -10,9 +10,9 @@
     </search-part>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="3">单位名称</el-col>
-        <el-col :span="4">账户余额</el-col>
-        <el-col :span="3">操作</el-col>
+        <el-col :span="10">单位名称</el-col>
+        <el-col :span="8">账户余额</el-col>
+        <el-col :span="6">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -27,14 +27,15 @@
         </el-col>
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
-        <div :class="[{'active':currentItemId===item.id}]" class="order-list-item order-list-item-bg"
+        <div :class="[{'active':currentItemId===item.orgAccountId}]"
+             class="order-list-item order-list-item-bg no-pointer"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="3" class="R">{{item.orgName}}</el-col>
-            <el-col :span="4" class="R">{{item.balance}}</el-col>
-            <el-col :span="3" class="opera-btn">
+            <el-col :span="10" class="R">{{item.orgName}}</el-col>
+            <el-col :span="8" class="R">{{item.balance}}</el-col>
+            <el-col :span="6" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="perms[1]">编辑</des-btn>
-              <des-btn @click="deleteItem(item)" icon="delete" v-has="perms[2]">编辑</des-btn>
+              <des-btn @click="deleteItem(item)" icon="delete" v-has="perms[2]">删除</des-btn>
             </el-col>
           </el-row>
         </div>
@@ -51,7 +52,8 @@
     </div>
 
     <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
-      <component :formItem="form" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change" @right-close="resetRightBox"/>
+      <component :formItem="form" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change"
+                 @right-close="resetRightBox"/>
     </page-right>
 
   </div>
@@ -71,9 +73,7 @@
     data() {
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
-        filters: {
-
-        },
+        filters: {},
         dialogComponents: {
           0: addForm,
         },
@@ -82,7 +82,7 @@
     },
     computed: {
       perms() {
-        return this.$route.meta.perms;
+        return this.$route.meta.perms || {};
       }
     },
     watch: {
@@ -124,39 +124,22 @@
       },
       edit(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.orgAccountId;
         this.form = item;
         this.showPart(0);
       },
-      start(item) {
+      deleteItem(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
-        this.$confirmOpera(`是否启用探头"${item.name}"`, () => {
-          this.$httpRequestOpera(probe.start(item.id), {
-            successTitle: '启用成功',
-            errorTitle: '启用失败',
+        this.currentItemId = item.orgAccountId;
+        this.$confirmOpera(`是否删除单位"${item.orgName}"`, () => {
+          this.$httpRequestOpera(capitalAccount.delete(item.orgAccountId), {
+            successTitle: '删除成功',
+            errorTitle: '删除失败',
             success: (res) => {
-              if(res.data.code === 200) {
-                item.status = '1';
+              if (res.data.code === 200) {
+                this.queryList(1);
               } else {
-                this.$notify.error({message: res.data.msg})
-              }
-            }
-          });
-        });
-      },
-      stop(item) {
-        this.currentItem = item;
-        this.currentItemId = item.id;
-        this.$confirmOpera(`是否停用探头"${item.name}"`, () => {
-          this.$httpRequestOpera(probe.stop(item.id), {
-            successTitle: '停用完成',
-            errorTitle: '停用失败',
-            success: (res) => {
-              if(res.data.code === 200) {
-                item.status = '0';
-              } else {
-                this.$notify.error({message: res.data.msg})
+                this.$notify.error({message: res.data.msg});
               }
             }
           });

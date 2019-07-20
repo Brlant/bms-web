@@ -32,14 +32,14 @@ export const routes = [
           },
           {
             path: '/org/fund/records',
-            component: () => import('./components/supplier/fund/index.vue'),
+            component: () => import('./components/supplier/records/index.vue'),
             meta: {moduleId: 'monitoring', title: '账户流水明细', perm: 'ccs-monitordev-scan', type: 1}
           }
         ]
       },
       {
         path: '/project',
-        component: () => import('./components/common/parent-route.vue'),
+        component: () => import('./components/project/index.vue'),
         meta: {moduleId: 'monitoring', title: '项目管理', icon: 'order', perm: 'ccs-monitor-center'},
         children: []
       },

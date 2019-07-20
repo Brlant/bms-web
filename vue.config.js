@@ -8,13 +8,13 @@ function resolve(dir) {
 module.exports = {
   devServer: {
     open: true,
-    port: '8006',
+    port: '8013',
     https: false,
     hotOnly: false,
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'http://oms.cdcerp.net/',
+        target: 'http://192.168.2.128:8081',
         changOrigin: true
       }
     }

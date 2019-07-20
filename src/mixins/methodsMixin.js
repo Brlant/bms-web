@@ -21,7 +21,7 @@ export default {
         keyword: query
       };
       Department.getPage(params).then(res => {
-        this.departmentList = res.data;
+        this.departmentList = res.data.list;
       });
     },
     queryDepartmentUser(params) {

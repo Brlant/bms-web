@@ -8,9 +8,9 @@
         </el-button>
       </template>
     </search-part>
-    <status-list :activeStatus="filters.status" :statusList="orgType"
+    <projectState-list :activeStatus="filters.projectState" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
-                 :formatClass="formatClass"></status-list>
+                 :formatClass="formatClass"></projectState-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="8">项目名称</el-col>
@@ -38,15 +38,15 @@
           <el-row>
             <el-col :span="8">{{item.projectName}}</el-col>
             <el-col :span="4">{{item.projectNumber}}</el-col>
-            <el-col :span="3">{{item.businessManageId}}</el-col>
+            <el-col :span="3">{{item.businessManageName}}</el-col>
             <el-col :span="3">{{item.companyDepartment}}</el-col>
             <el-col :span="2">
               {{item.projectState === '0' ? '停用': '启用'}}
             </el-col>
             <el-col :span="4" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.status === '0'">启用</des-btn>
-              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.status === '1'">停用</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.projectState === '0'">启用</des-btn>
+              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.projectState === '1'">停用</des-btn>
             </el-col>
           </el-row>
         </div>
@@ -85,14 +85,14 @@
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {
-          status: ''
+          projectState: ''
         },
         dialogComponents: {
           0: addForm,
         },
         orgType: {
-          1: {'title': '正常', 'num': 0, 'status': '1'},
-          2: {'title': '停用', 'num': 0, 'status': '0'}
+          1: {'title': '正常', 'num': 0, 'projectState': '1'},
+          2: {'title': '停用', 'num': 0, 'projectState': '0'}
         },
         defaultPageRight: {'width': '700px', 'padding': 0}
       };
@@ -110,14 +110,14 @@
     },
     methods: {
       changeType(item, key) {
-        this.filters.status = item.status;
+        this.filters.projectState = item.projectState;
       },
       isShowIcon(item, key, activeStatus) {
-        return item.status === activeStatus;
+        return item.projectState === activeStatus;
       },
       formatClass(item, key, activeStatus) {
         return {
-          'active': item.status === activeStatus
+          'active': item.projectState === activeStatus
         };
       },
       showRecordDate: function (data) {
@@ -169,7 +169,7 @@
             errorTitle: '启用失败',
             success: (res) => {
               if(res.data.code === 200) {
-                item.status = '1';
+                item.projectState = '1';
               } else {
                 this.$notify.error({message: res.data.msg})
               }
@@ -186,7 +186,7 @@
             errorTitle: '停用失败',
             success: (res) => {
               if(res.data.code === 200) {
-                item.status = '0';
+                item.projectState = '0';
               } else {
                 this.$notify.error({message: res.data.msg})
               }
