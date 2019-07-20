@@ -50,7 +50,7 @@ export const routes = [
         children: [
           {
             path: '/contract/info',
-            component: () => import('./components/test.vue'),
+            component: () => import('./components/contract/info/index.vue'),
             meta: {moduleId: 'monitoring', title: '合同基础信息', perm: 'ccs-monitordev-scan', type: 1}
           },
           {
@@ -67,7 +67,7 @@ export const routes = [
         children: [
           {
             path: '/cost/template',
-            component: () => import('./components/contract/info/index.vue'),
+            component: () => import('./components/cost/info/index.vue'),
             meta: {moduleId: 'monitoring', title: '计费模型', perm: 'ccs-monitordev-scan', type: 1}
           },
           {

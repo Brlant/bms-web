@@ -8,7 +8,7 @@
         </el-button>
       </template>
     </search-part>
-    <status-list :activeStatus="filters.status" :statusList="orgType"
+    <status-list :activeStatus="filters.contractState" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
@@ -19,7 +19,7 @@
         <el-col :span="3">所属部门</el-col>
         <el-col :span="5">合同日期</el-col>
         <el-col :span="2">状态</el-col>
-        <el-col :span="4">操作</el-col>
+        <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -39,13 +39,16 @@
           <el-row>
             <el-col :span="5">{{item.contractName}}</el-col>
             <el-col :span="3">{{item.contractNo}}</el-col>
-            <el-col :span="3">{{item.businessManageId}}</el-col>
+            <el-col :span="3" class="R">{{item.businessManageId}}</el-col>
             <el-col :span="3">{{item.companyDepartment}}</el-col>
-            <el-col :span="3">{{item.contractSignTime | time}}~{{item.contractOverTime | time}}</el-col>
+            <el-col :span="5">
+              始 {{item.contractSignTime | date}}
+              <div>终 {{item.contractOverTime | date}}</div>
+            </el-col>
             <el-col :span="2">
               {{item.contractState === '0' ? '停用': '启用'}}
             </el-col>
-            <el-col :span="4" class="opera-btn">
+            <el-col :span="3" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
               <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.contractState === '0'">启用</des-btn>
               <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.contractState === '1'">停用</des-btn>
@@ -87,16 +90,16 @@
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {
-          contractState: ''
+          contractState: '1'
         },
         dialogComponents: {
           0: addForm,
         },
         orgType: {
-          1: {'title': '正常', 'num': 0, 'contractState': '1'},
-          2: {'title': '停用', 'num': 0, 'contractState': '0'}
+          0: {'title': '正常', 'num': 0, 'contractState': '1'},
+          1: {'title': '停用', 'num': 0, 'contractState': '0'}
         },
-        defaultPageRight: {'width': '700px', 'padding': 0}
+        defaultPageRight: {'width': '700px', 'padding': 0},
       };
     },
     watch: {
@@ -132,6 +135,7 @@
       resetRightBox() {
         this.defaultPageRight.width = '700px';
         this.showIndex = -1;
+        this.currentItemId = '';
       },
       showPart(index) {
         this.currentPart = this.dialogComponents[index];
@@ -146,10 +150,9 @@
       },
       queryStatusNum: function (params) {
         Contact.queryStateNum(params).then(res => {
-          let data = res.data;
-          this.orgType[0].num = data['all'];
-          this.orgType[1].num = data['valid'];
-          this.orgType[2].num = data['stop'];
+          let data = res.data.data;
+          this.orgType[0].num = data['enableState'];
+          this.orgType[1].num = data['disableState'];
         });
       },
       add() {
@@ -170,10 +173,10 @@
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
-              if(res.data.code === 200) {
+              if (res.data.code === 200) {
                 item.contractState = '1';
               } else {
-                this.$notify.error({message: res.data.msg})
+                this.$notify.error({message: res.data.msg});
               }
             }
           });
@@ -187,10 +190,10 @@
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {
-              if(res.data.code === 200) {
+              if (res.data.code === 200) {
                 item.contractState = '0';
               } else {
-                this.$notify.error({message: res.data.msg})
+                this.$notify.error({message: res.data.msg});
               }
             }
           });
