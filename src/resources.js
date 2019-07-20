@@ -95,7 +95,7 @@ Vue.prototype.$http = http;
 
 // 计费模型
 export const codeModel = resource('/bms-bm', http, {
-  add(obj) {
+  save(obj) {
     return http.post('/bms-bm/add-billing-model', obj);
   },
   queryStateNum: (params) => {
@@ -117,7 +117,7 @@ export const codeModel = resource('/bms-bm', http, {
 
 // 合同信息
 export const Contact = resource('/bms-contract', http, {
-  add(obj) {
+  save(obj) {
     return http.post('/bms-contract/add-contract', obj);
   },
   queryStateNum: (params) => {
@@ -137,9 +137,9 @@ export const Contact = resource('/bms-contract', http, {
   }
 });
 
-// 单位资金账户
+// 项目信息
 export const project = resource('/bms-project', http, {
-  add(obj) {
+  save(obj) {
     return http.post('/bms-project/add-project', obj);
   },
   queryStateNum: (params) => {

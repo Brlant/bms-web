@@ -8,9 +8,9 @@
         </el-button>
       </template>
     </search-part>
-    <projectState-list :activeStatus="filters.projectState" :statusList="orgType"
+    <status-list :activeStatus="filters.projectState" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
-                 :formatClass="formatClass"></projectState-list>
+                 :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
         <el-col :span="8">项目名称</el-col>
@@ -33,8 +33,8 @@
         </el-col>
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
-        <div :class="[{'active':currentItemId===item.id}]" class="order-list-item order-list-item-bg"
-             v-for="item in dataList">
+        <div :class="[{'active':currentItemId===item.projectId}]"
+             class="order-list-item order-list-item-bg no-pointer" v-for="item in dataList">
           <el-row>
             <el-col :span="8">{{item.projectName}}</el-col>
             <el-col :span="4">{{item.projectNumber}}</el-col>
@@ -85,14 +85,14 @@
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {
-          projectState: ''
+          projectState: '1'
         },
         dialogComponents: {
           0: addForm,
         },
         orgType: {
-          1: {'title': '正常', 'num': 0, 'projectState': '1'},
-          2: {'title': '停用', 'num': 0, 'projectState': '0'}
+          0: {'title': '正常', 'num': 0, 'projectState': '1'},
+          1: {'title': '停用', 'num': 0, 'projectState': '0'}
         },
         defaultPageRight: {'width': '700px', 'padding': 0}
       };
@@ -130,6 +130,7 @@
       resetRightBox() {
         this.defaultPageRight.width = '700px';
         this.showIndex = -1;
+        this.currentItemId = '';
       },
       showPart(index) {
         this.currentPart = this.dialogComponents[index];
@@ -144,10 +145,9 @@
       },
       queryStatusNum: function (params) {
         project.queryStateNum(params).then(res => {
-          let data = res.data;
-          this.orgType[0].num = data['all'];
-          this.orgType[1].num = data['valid'];
-          this.orgType[2].num = data['stop'];
+          let data = res.data.data;
+          this.orgType[0].num = data['enableState'];
+          this.orgType[1].num = data['disableState'];
         });
       },
       add() {
@@ -155,16 +155,14 @@
         this.showPart(0);
       },
       edit(item) {
-        this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.projectId;
         this.form = item;
         this.showPart(0);
       },
       start(item) {
-        this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.projectId;
         this.$confirmOpera(`是否启用项目"${item.projectName}"`, () => {
-          this.$httpRequestOpera(project.start(item.id), {
+          this.$httpRequestOpera(project.start(item), {
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
@@ -178,10 +176,9 @@
         });
       },
       stop(item) {
-        this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.projectId;
         this.$confirmOpera(`是否停用项目"${item.projectName}"`, () => {
-          this.$httpRequestOpera(project.stop(item.id), {
+          this.$httpRequestOpera(project.stop(item), {
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {

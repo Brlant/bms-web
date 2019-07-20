@@ -52,7 +52,7 @@
           orgId: [
             {required: true, message: '请选择所属部门', trigger: 'change'}
           ],
-          queryDepartmentUserNew: [
+          businessManageId: [
             {required: true, message: '请选择业务员', trigger: 'change'}
           ]
         },
@@ -67,10 +67,7 @@
     watch: {
       index: function (val) {
         this.$refs['form'].clearValidate();
-        if (this.formItem.id) {
-          this.orgList = [
-            {name: this.formItem.orgName, id: this.formItem.orgId}
-          ];
+        if (this.formItem.projectId) {
           this.form = Object.assign({}, this.formItem);
           this.actionType = '编辑';
         } else {

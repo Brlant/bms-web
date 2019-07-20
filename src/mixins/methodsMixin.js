@@ -18,7 +18,8 @@ export default {
     },
     queryDepartment(query) {
       let params = {
-        keyword: query
+        keyword: query,
+        pageSize: 1000
       };
       Department.getPage(params).then(res => {
         this.departmentList = res.data.list;
