@@ -35,7 +35,7 @@
              v-for="item in dataList">
           <el-row>
             <el-col :span="10">{{item.billingModelName}}</el-col>
-            <el-col :span="6">{{item.billingModelTemplate === '0' ? '普通计费模板' : '计费模板'}}</el-col>
+            <el-col :span="6">{{item.billingModelTemplate === '0' ? '普通计费模型' : '计费模板'}}</el-col>
             <el-col :span="2">
               {{item.billingModelState === '0' ? '停用': '启用'}}
             </el-col>
@@ -70,7 +70,7 @@
   import SearchPart from './search';
   import addForm from './form/add-form.vue';
   import CommonMixin from '@/mixins/commonMixin';
-  import {codeModel} from '@/resources';
+  import {costModel} from '@/resources';
 
   export default {
     components: {
@@ -134,12 +134,12 @@
         });
       },
       queryList(pageNo) {
-        const http = codeModel.query;
+        const http = costModel.query;
         const params = this.queryUtil(http, pageNo);
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        codeModel.queryStateNum(params).then(res => {
+        costModel.queryStateNum(params).then(res => {
           let data = res.data;
           this.orgType[0].num = data['all'];
           this.orgType[1].num = data['valid'];
@@ -160,7 +160,7 @@
         this.currentItem = item;
         this.currentItemId = item.id;
         this.$confirmOpera(`是否启用计费模型"${item.contractName}"`, () => {
-          this.$httpRequestOpera(codeModel.start(item.id), {
+          this.$httpRequestOpera(costModel.start(item.id), {
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
@@ -177,7 +177,7 @@
         this.currentItem = item;
         this.currentItemId = item.id;
         this.$confirmOpera(`是否停用计费模型"${item.contractName}"`, () => {
-          this.$httpRequestOpera(codeModel.stop(item.id), {
+          this.$httpRequestOpera(costModel.stop(item.id), {
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {

@@ -92,9 +92,31 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// 计费项
+export const costItem = resource('/bms-billing-item/add-billing-item', http, {
+  save(obj) {
+    return http.post('/bms-billing-item/add-billing-item', obj);
+  },
+  queryStateNum: (params) => {
+    return http.get('/bms-billing-item/count', {params});
+  },
+  start(obj) {
+    return http.put('/bms-billing-item/enable-billing-item', obj);
+  },
+  stop(obj) {
+    return http.put('/bms-billing-item/disable-billing-item', obj);
+  },
+  update(obj) {
+    return http.put('/bms-billing-item/edit-billing-item', obj);
+  },
+  query(obj) {
+    return http.post('/bms-billing-item/query-billing-item/page', obj);
+  }
+
+});
 
 // 计费模型
-export const codeModel = resource('/bms-bm', http, {
+export const costModel = resource('/bms-bm', http, {
   save(obj) {
     return http.post('/bms-bm/add-billing-model', obj);
   },

@@ -6,39 +6,25 @@
     </template>
     <template slot="content">
       <el-form :model="form" :rules="rules" label-width="140px" ref="form">
-        <el-form-item label="合同名称">
-          <oms-input placeholder="请输入合同名称" type="input" v-model="form.projectName"/>
+        <el-form-item label="计费模型名称">
+          <oms-input placeholder="请输入计费模型名称" type="input" v-model="form.billingModelName"/>
         </el-form-item>
-        <el-form-item label="合同编号">
-          <oms-input placeholder="请输入合同编号" type="input" v-model="form.projectNumber"/>
+        <el-form-item label="模型类型">
+          <oms-input placeholder="请输入模型类型" type="input" v-model="form.billingModelTemplate"/>
         </el-form-item>
-        <el-form-item label="所属部门">
-          <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
-                     :clearable="true" v-model="form.companyDepartment" popperClass="good-selects"
-                     @change="companyDepartmentChange">
-            <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in departmentList">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="业务员">
-          <el-select placeholder="请选择业务员" v-model="form.businessManageId"
+        <el-form-item label="计费项" v-if="form.billingModelTemplate === '1'">
+          <el-select placeholder="请选择计费项" v-model="form.billingItemIds"
                      filterable clearable remote :remote-method="queryDepartmentUserNew">
             <el-option :label="item.name" :value="item.id" :key="item.id"
                        v-for="item in departmentUserList"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="合同日期">
-          <el-date-picker v-model="form.contractTime" range-separator="至" type="datetimerange"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期">
-          </el-date-picker>
         </el-form-item>
       </el-form>
     </template>
   </dialog-template>
 </template>
 <script>
-  import {codeModel} from '@/resources';
+  import {costModel} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
 
   export default {
@@ -49,20 +35,14 @@
         form: {},
         doing: false,
         rules: {
-          projectName: [
-            {required: true, message: '请输入合同名称', trigger: 'blur'}
+          billingModelName: [
+            {required: true, message: '请输入计费模型名称', trigger: 'blur'}
           ],
-          projectNumber: [
-            {required: true, message: '请输入合同编号', trigger: 'blur'}
+          billingModelTemplate: [
+            {required: true, message: '请输入模型类型', trigger: 'change'}
           ],
-          orgId: [
-            {required: true, message: '请选择所属部门', trigger: 'change'}
-          ],
-          queryDepartmentUserNew: [
-            {required: true, message: '请选择业务员', trigger: 'change'}
-          ],
-          contractTime: [
-            {required: true, message: '请选择合同日期', type: 'ranger', trigger: 'change'}
+          billingItemIds: [
+            {required: true, type: 'array', message: '请选择所属部门', trigger: 'change'}
           ]
         },
         actionType: '添加',
@@ -86,8 +66,8 @@
           this.actionType = '编辑';
         } else {
           this.form = {
-            projectName: '',
-            projectNumber: '',
+            billingModelName: '',
+            billingModelTemplate: '',
             companyDepartment: '',
             businessManageId: '',
             contractTime: ''
@@ -119,7 +99,7 @@
             this.form.contractOverTime = this.contractTime[1];
             if (!this.form.id) {
               this.doing = true;
-              this.$httpRequestOpera(codeModel.save(this.form), {
+              this.$httpRequestOpera(costModel.save(this.form), {
                 errorTitle: '添加失败',
                 success: res => {
                   if (res.data.code === 200) {
@@ -135,7 +115,7 @@
                 }
               });
             } else {
-              this.$httpRequestOpera(codeModel.update(this.form), {
+              this.$httpRequestOpera(costModel.update(this.form), {
                 errorTitle: '修改失败',
                 success: res => {
                   if (res.data.code === 200) {

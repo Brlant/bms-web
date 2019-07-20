@@ -30,6 +30,9 @@ export default {
       return Department.getOnesMember(params.id, params).then(res => {
         this.departmentUserList = res.data.list;
       });
+    },
+    queryCostItem() {
+
     }
   }
 };
