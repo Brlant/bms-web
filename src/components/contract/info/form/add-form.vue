@@ -6,13 +6,13 @@
     </template>
     <template slot="content">
       <el-form :model="form" :rules="rules" label-width="140px" ref="form">
-        <el-form-item label="合同名称" prop="projectName">
-          <oms-input placeholder="请输入合同名称" type="input" v-model="form.projectName"/>
+        <el-form-item label="合同名称" prop="contractName">
+          <oms-input placeholder="请输入合同名称" type="input" v-model="form.contractName"/>
         </el-form-item>
-        <el-form-item label="合同编号" prop="projectNumber">
-          <oms-input placeholder="请输入合同编号" type="input" v-model="form.projectNumber"/>
+        <el-form-item label="合同编号" prop="contractNo">
+          <oms-input placeholder="请输入合同编号" type="input" v-model="form.contractNo"/>
         </el-form-item>
-        <el-form-item label="所属部门" prop="orgId">
+        <el-form-item label="所属部门" prop="companyDepartment">
           <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
                      :clearable="true" v-model="form.companyDepartment" popperClass="good-selects"
                      @change="companyDepartmentChange">
@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="业务员" prop="queryDepartmentUserNew">
+        <el-form-item label="业务员" prop="businessManageId">
           <el-select placeholder="请选择业务员" v-model="form.businessManageId"
                      filterable clearable remote :remote-method="queryDepartmentUserNew">
             <el-option :label="item.name" :value="item.id" :key="item.id"
@@ -49,13 +49,13 @@
         form: {},
         doing: false,
         rules: {
-          projectName: [
+          contractName: [
             {required: true, message: '请输入合同名称', trigger: 'blur'}
           ],
-          projectNumber: [
+          contractNo: [
             {required: true, message: '请输入合同编号', trigger: 'blur'}
           ],
-          orgId: [
+          companyDepartment: [
             {required: true, message: '请选择所属部门', trigger: 'change'}
           ],
           queryDepartmentUserNew: [
@@ -76,7 +76,7 @@
     watch: {
       index: function (val) {
         this.$refs['form'].clearValidate();
-        if (this.formItem.id) {
+        if (this.formItem.contractId) {
           this.orgList = [
             {name: this.formItem.orgName, id: this.formItem.orgId}
           ];
@@ -86,8 +86,8 @@
           this.actionType = '编辑';
         } else {
           this.form = {
-            projectName: '',
-            projectNumber: '',
+            contractName: '',
+            contractNo: '',
             companyDepartment: '',
             businessManageId: '',
             contractTime: ''
@@ -117,7 +117,7 @@
           if (valid && this.doing === false) {
             this.form.contractSignTime = this.form.contractTime[0];
             this.form.contractOverTime = this.form.contractTime[1];
-            if (!this.form.id) {
+            if (!this.form.contractId) {
               this.doing = true;
               this.$httpRequestOpera(Contact.save(this.form), {
                 errorTitle: '添加失败',

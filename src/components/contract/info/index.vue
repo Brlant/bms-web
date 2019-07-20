@@ -34,7 +34,7 @@
         </el-col>
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
-        <div :class="[{'active':currentItemId===item.id}]" class="order-list-item order-list-item-bg"
+        <div :class="[{'active':currentItemId===item.contractId}]" class="order-list-item order-list-item-bg"
              v-for="item in dataList">
           <el-row>
             <el-col :span="5">{{item.contractName}}</el-col>
@@ -161,15 +161,15 @@
       },
       edit(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.contractId;
         this.form = item;
         this.showPart(0);
       },
       start(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.contractId;
         this.$confirmOpera(`是否启用合同"${item.contractName}"`, () => {
-          this.$httpRequestOpera(Contact.start(item.id), {
+          this.$httpRequestOpera(Contact.start(item), {
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
@@ -184,9 +184,9 @@
       },
       stop(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.contractId;
         this.$confirmOpera(`是否停用合同"${item.contractName}"`, () => {
-          this.$httpRequestOpera(Contact.stop(item.id), {
+          this.$httpRequestOpera(Contact.stop(item), {
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {

@@ -6,13 +6,13 @@
     </template>
     <template slot="content">
       <el-form :model="form" :rules="rules" label-width="140px" ref="form">
-        <el-form-item label="项目名称">
+        <el-form-item label="项目名称" prop="projectName">
           <oms-input placeholder="请输入项目名称" type="input" v-model="form.projectName"/>
         </el-form-item>
-        <el-form-item label="项目编号">
+        <el-form-item label="项目编号" prop="projectNumber">
           <oms-input placeholder="请输入项目编号" type="input" v-model="form.projectNumber"/>
         </el-form-item>
-        <el-form-item label="所属部门">
+        <el-form-item label="所属部门" prop="companyDepartment">
           <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
                      :clearable="true" v-model="form.companyDepartment" popperClass="good-selects"
                      @change="companyDepartmentChange">
@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="业务员">
+        <el-form-item label="业务员" prop="businessManageId">
           <el-select placeholder="请选择业务员" v-model="form.businessManageId"
                      filterable clearable remote :remote-method="queryDepartmentUserNew">
             <el-option :label="item.name" :value="item.id" :key="item.id"
