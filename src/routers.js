@@ -72,7 +72,7 @@ export const routes = [
           },
           {
             path: '/cost/item',
-            component: () => import('./components/test.vue'),
+            component: () => import('./components/cost/item/index.vue'),
             meta: {moduleId: 'monitoring', title: '计费项', perm: 'ccs-monitordev-scan', type: 1}
           }
         ]
