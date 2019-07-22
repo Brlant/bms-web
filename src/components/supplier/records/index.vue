@@ -24,7 +24,7 @@
              v-for="item in dataList">
           <el-row>
             <el-col :span="10" class="R">{{item.orgName}}</el-col>
-            <el-col :span="7" class="R">{{item.changeAmount}}</el-col>
+            <el-col :span="7" class="R">{{item.changeAmount | formatMoney}}</el-col>
             <el-col :span="7" class="R">{{item.createTime | time}}</el-col>
           </el-row>
         </div>

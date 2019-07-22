@@ -68,8 +68,15 @@
       index: function (val) {
         this.$refs['form'].clearValidate();
         if (this.formItem.projectId) {
+          this.departmentUserList = [
+            {id: this.formItem.businessManageId, name: this.formItem.businessManageName}
+          ];
+          this.departmentList = [
+            {id: this.formItem.companyDepartment, name: this.formItem.companyDepartmentName}
+          ];
           this.form = Object.assign({}, this.formItem);
           this.actionType = '编辑';
+
         } else {
           this.form = {
             projectName: '',

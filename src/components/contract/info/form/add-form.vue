@@ -58,15 +58,14 @@
           companyDepartment: [
             {required: true, message: '请选择所属部门', trigger: 'change'}
           ],
-          queryDepartmentUserNew: [
+          businessManageId: [
             {required: true, message: '请选择业务员', trigger: 'change'}
           ],
           contractTime: [
             {required: true, message: '请选择合同日期', type: 'array', trigger: 'change'}
           ]
         },
-        actionType: '添加',
-        orgList: []
+        actionType: '添加'
       };
     },
     props: {
@@ -77,8 +76,11 @@
       index: function (val) {
         this.$refs['form'].clearValidate();
         if (this.formItem.contractId) {
-          this.orgList = [
-            {name: this.formItem.orgName, id: this.formItem.orgId}
+          this.departmentUserList = [
+            {id: this.formItem.businessManageId, name: this.formItem.businessManageName}
+          ];
+          this.departmentList = [
+            {id: this.formItem.companyDepartment, name: this.formItem.companyDepartmentName}
           ];
           this.form = Object.assign({}, this.formItem, {
             contractTime: [this.formItem.contractSignTime, this.formItem.contractOverTime]

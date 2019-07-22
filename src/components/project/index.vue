@@ -39,7 +39,7 @@
             <el-col :span="8">{{item.projectName}}</el-col>
             <el-col :span="4">{{item.projectNumber}}</el-col>
             <el-col :span="3">{{item.businessManageName}}</el-col>
-            <el-col :span="3">{{item.companyDepartment}}</el-col>
+            <el-col :span="3">{{item.companyDepartmentName}}</el-col>
             <el-col :span="2">
               {{item.projectState === '0' ? '停用': '启用'}}
             </el-col>

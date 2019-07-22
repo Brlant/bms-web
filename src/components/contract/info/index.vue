@@ -39,8 +39,8 @@
           <el-row>
             <el-col :span="5">{{item.contractName}}</el-col>
             <el-col :span="3">{{item.contractNo}}</el-col>
-            <el-col :span="3" class="R">{{item.businessManageId}}</el-col>
-            <el-col :span="3">{{item.companyDepartment}}</el-col>
+            <el-col :span="3" class="R">{{item.businessManageName}}</el-col>
+            <el-col :span="3">{{item.companyDepartmentName}}</el-col>
             <el-col :span="5">
               始 {{item.contractSignTime | date}}
               <div>终 {{item.contractOverTime | date}}</div>

@@ -32,7 +32,7 @@
              v-for="item in dataList">
           <el-row>
             <el-col :span="10" class="R">{{item.orgName}}</el-col>
-            <el-col :span="8" class="R">{{item.balance}}</el-col>
+            <el-col :span="8" class="R">{{item.balance | formatMoney}}</el-col>
             <el-col :span="6" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="perms[1]">编辑</des-btn>
               <des-btn @click="deleteItem(item)" icon="delete" v-has="perms[2]">删除</des-btn>

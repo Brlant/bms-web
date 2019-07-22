@@ -12,7 +12,7 @@
                       placeholder="请输入名称搜索单位" v-model="form.orgId"></org-select>
         </el-form-item>
         <el-form-item label="余额">
-          <oms-input placeholder="请输入余额" type="input" v-model="form.balance"/>
+          <oms-input placeholder="请输入余额" type="input" v-model="form.balance" @blur="formatPrice"/>
         </el-form-item>
       </el-form>
     </template>
@@ -21,6 +21,7 @@
 <script>
   import {capitalAccount} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
+  import utils from '@/tools/utils';
 
   export default {
     mixins: [methodsMixin],
@@ -64,6 +65,9 @@
       }
     },
     methods: {
+      formatPrice() {// 格式化单价，保留两位小数
+        this.form.balance = utils.autoformatDecimalPoint(this.form.balance);
+      },
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {

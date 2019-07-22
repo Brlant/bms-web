@@ -44,7 +44,7 @@
         </el-col>
         <el-col :span="8">
           <oms-form-row label="合同日期" :span="5">
-            <el-date-picker v-model="searchCondition.contractTime" range-separator="至" type="daterange"
+            <el-date-picker v-model="contractTime" range-separator="至" type="daterange"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期">
             </el-date-picker>
@@ -71,6 +71,7 @@
           contractSignTime: '',
           contractOverTime: ''
         },
+        contractTime: '',
         showSearch: false,
         list: [],
         times: [],
@@ -82,8 +83,8 @@
     },
     methods: {
       search() {
-        this.searchCondition.contractSignTime = this.searchCondition.contractTime && this.searchCondition.contractTime[0] || '';
-        this.searchCondition.contractOverTime = this.searchCondition.contractTime && this.searchCondition.contractTime[1] || '';
+        this.searchCondition.contractSignTime = this.contractTime && this.contractTime[0] || '';
+        this.searchCondition.contractOverTime = this.contractTime && this.contractTime[1] || '';
         this.$emit('search', this.searchCondition);
       },
       reset() {
@@ -95,6 +96,7 @@
           contractSignTime: '',
           contractOverTime: ''
         };
+        this.contractTime = '';
         this.$emit('search', this.searchCondition);
       },
       isShow(val) {
