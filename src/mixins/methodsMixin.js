@@ -1,4 +1,4 @@
-import {Department} from '@/resources';
+import {costItem, Department} from '@/resources';
 
 
 export default {
@@ -6,7 +6,8 @@ export default {
     return {
       orgList: [],
       departmentList: [],
-      departmentUserList: []
+      departmentUserList: [],
+      costItemList: []
     };
   },
   methods: {
@@ -31,8 +32,11 @@ export default {
         this.departmentUserList = res.data.list;
       });
     },
-    queryCostItem() {
-
+    queryCostItem(query) {
+      let params = {keyWord: query};
+      costItem.query(params).then(res => {
+        this.costItemList = res.data.list;
+      });
     }
   }
 };

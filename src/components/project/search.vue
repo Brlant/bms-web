@@ -15,12 +15,12 @@
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-col :span="8">
           <oms-form-row label="项目名称" :span="5">
-             <el-input v-model="searchCondition.projectName"></el-input>
+             <el-input v-model.trim="searchCondition.projectName"></el-input>
           </oms-form-row>
         </el-col>
         <el-col :span="8">
           <oms-form-row label="项目编号" :span="5">
-            <el-input v-model="searchCondition.projectNumber"></el-input>
+            <el-input v-model.trim="searchCondition.projectNumber"></el-input>
           </oms-form-row>
         </el-col>
         <el-col :span="8">

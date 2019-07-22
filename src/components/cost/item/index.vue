@@ -37,8 +37,12 @@
              v-for="item in dataList">
           <el-row>
             <el-col :span="6">{{item.billingTypeName}}</el-col>
-            <el-col :span="5">{{item.billingType}}</el-col>
-            <el-col :span="4">{{item.businessType}}</el-col>
+            <el-col :span="5">
+              {{item.billingType}}
+            </el-col>
+            <el-col :span="4">
+              {{item.businessType}}
+            </el-col>
             <el-col :span="3">{{item.ladderState === '0' ? '否' : '是'}}</el-col>
             <el-col :span="3">
               {{item.billingItemState === '0' ? '停用': '启用'}}

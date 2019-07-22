@@ -143,7 +143,7 @@ export const Contact = resource('/bms-contract', http, {
     return http.post('/bms-contract/add-contract', obj);
   },
   queryStateNum: (params) => {
-    return http.get('/bms-contract/count', {params});
+    return http.post('/bms-contract/count', params);
   },
   start(obj) {
     return http.put('/bms-contract/enable-contract', obj);

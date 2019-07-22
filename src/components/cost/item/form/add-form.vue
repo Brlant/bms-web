@@ -14,13 +14,6 @@
             <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in calculateType"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="计费项" v-if="form.billingModelTemplate === '1'">
-          <el-select placeholder="请选择计费项" v-model="form.billingItemIds"
-                     filterable clearable remote :remote-method="queryDepartmentUserNew">
-            <el-option :label="item.name" :value="item.id" :key="item.id"
-                       v-for="item in departmentUserList"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="业务类型">
           <el-select placeholder="请选择计费类型" v-model="form.businessType" clearable>
             <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in bizType"></el-option>
@@ -84,17 +77,13 @@
           this.orgList = [
             {name: this.formItem.orgName, id: this.formItem.orgId}
           ];
-          this.form = Object.assign({}, this.formItem, {
-            contractTime: [this.formItem.contractSignTime, this.formItem.contractOverTime]
-          });
           this.actionType = '编辑';
         } else {
           this.form = {
             billingItemName: '',
             billingModelTemplate: '',
             companyDepartment: '',
-            businessManageId: '',
-            contractTime: ''
+            businessManageId: ''
           };
           this.actionType = '添加';
         }
@@ -119,8 +108,6 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            this.form.contractSignTime = this.contractTime[0];
-            this.form.contractOverTime = this.contractTime[1];
             if (!this.form.id) {
               this.doing = true;
               this.$httpRequestOpera(costItem.save(this.form), {

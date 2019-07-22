@@ -15,12 +15,12 @@
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-col :span="8">
           <oms-form-row label="合同名称" :span="5">
-            <el-input v-model="searchCondition.contractName"></el-input>
+            <el-input v-model.trim="searchCondition.contractName"></el-input>
           </oms-form-row>
         </el-col>
         <el-col :span="8">
           <oms-form-row label="合同编号" :span="5">
-            <el-input v-model="searchCondition.contractNo"></el-input>
+            <el-input v-model.trim="searchCondition.contractNo"></el-input>
           </oms-form-row>
         </el-col>
         <el-col :span="8">
@@ -64,8 +64,8 @@
     data: function () {
       return {
         searchCondition: {
-          projectName: '',
-          projectNumber: '',
+          contractName: '',
+          contractNo: '',
           companyDepartment: '',
           businessManageId: '',
           contractSignTime: '',
@@ -89,8 +89,8 @@
       },
       reset() {
         this.searchCondition = {
-          projectName: '',
-          projectNumber: '',
+          contractName: '',
+          contractNo: '',
           companyDepartment: '',
           businessManageId: '',
           contractSignTime: '',
