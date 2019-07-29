@@ -13,10 +13,17 @@
     </template>
     <template slot="content">
       <el-form class="advanced-query-form" onsubmit="return false">
-        <el-col :span="8">
-          <oms-form-row label="单位" :span="5">
-            <org-select :list="orgList" :remoteMethod="queryAllOrg"
-                        placeholder="请输入名称搜索单位" v-model="searchCondition.orgId" @change="search"></org-select>
+        <el-col :span="12">
+          <oms-form-row label="计费模型名称" :span="5">
+            <oms-input placeholder="请输入计费模型名称" type="input" v-model="searchCondition.billingModelName"/>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="12">
+          <oms-form-row label="计费模型类型" :span="5">
+            <el-radio-group v-model="searchCondition.billingModelTemplate" size="small">
+              <el-radio-button label="0">普通计费模型</el-radio-button>
+              <el-radio-button label="1">计费模板</el-radio-button>
+            </el-radio-group>
           </oms-form-row>
         </el-col>
       </el-form>
@@ -33,7 +40,8 @@
     data: function () {
       return {
         searchCondition: {
-          orgId: ''
+          billingModelName: '',
+          billingModelTemplate: ''
         },
         showSearch: false,
         list: [],
@@ -59,7 +67,8 @@
       },
       reset() {
         this.searchCondition = {
-          orgId: ''
+          billingModelName: '',
+          billingModelTemplate: ''
         };
         this.$emit('search', this.searchCondition);
       },

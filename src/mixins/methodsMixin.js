@@ -35,7 +35,11 @@ export default {
     queryCostItem(query) {
       let params = {keyWord: query};
       costItem.query(params).then(res => {
-        this.costItemList = res.data.list;
+        if (res.data.code === 200) {
+          this.costItemList = res.data.data.list;
+        } else {
+          this.costItemList = [];
+        }
       });
     }
   }

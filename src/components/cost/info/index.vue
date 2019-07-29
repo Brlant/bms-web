@@ -13,8 +13,9 @@
                  :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="10">模型名称</el-col>
-        <el-col :span="6">模型类型</el-col>
+        <el-col :span="6">模型名称</el-col>
+        <el-col :span="4">模型类型</el-col>
+        <el-col :span="6">计费项</el-col>
         <el-col :span="2">状态</el-col>
         <el-col :span="6">操作</el-col>
       </el-row>
@@ -31,11 +32,14 @@
         </el-col>
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
-        <div :class="[{'active':currentItemId===item.id}]" class="order-list-item order-list-item-bg"
+        <div :class="[{'active':currentItemId===item.billingModelId}]" class="order-list-item order-list-item-bg no-pointer"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="10">{{item.billingModelName}}</el-col>
-            <el-col :span="6">{{item.billingModelTemplate === '0' ? '普通计费模型' : '计费模板'}}</el-col>
+            <el-col :span="6">{{item.billingModelName}}</el-col>
+            <el-col :span="4">{{item.billingModelTemplate === '0' ? '普通计费模型' : '计费模板'}}</el-col>
+            <el-col :span="6">
+
+            </el-col>
             <el-col :span="2">
               {{item.billingModelState === '0' ? '停用': '启用'}}
             </el-col>
@@ -87,8 +91,8 @@
           0: addForm,
         },
         orgType: {
-          1: {'title': '正常', 'num': 0, 'billingModelState': '1'},
-          2: {'title': '停用', 'num': 0, 'billingModelState': '0'}
+          0: {'title': '正常', 'num': 0, 'billingModelState': '1'},
+          1: {'title': '停用', 'num': 0, 'billingModelState': '0'}
         },
         defaultPageRight: {'width': '700px', 'padding': 0}
       };
@@ -140,10 +144,9 @@
       },
       queryStatusNum: function (params) {
         costModel.queryStateNum(params).then(res => {
-          let data = res.data;
-          this.orgType[0].num = data['all'];
-          this.orgType[1].num = data['valid'];
-          this.orgType[2].num = data['stop'];
+          let data = res.data.data;
+          this.orgType[0].num = data['enableState'];
+          this.orgType[1].num = data['disableState'];
         });
       },
       add() {
@@ -152,15 +155,15 @@
       },
       edit(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.billingModelId;
         this.form = item;
         this.showPart(0);
       },
       start(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.billingModelId;
         this.$confirmOpera(`是否启用计费模型"${item.contractName}"`, () => {
-          this.$httpRequestOpera(costModel.start(item.id), {
+          this.$httpRequestOpera(costModel.start(item), {
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
@@ -175,9 +178,9 @@
       },
       stop(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.billingModelId;
         this.$confirmOpera(`是否停用计费模型"${item.contractName}"`, () => {
-          this.$httpRequestOpera(costModel.stop(item.id), {
+          this.$httpRequestOpera(costModel.stop(item), {
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {

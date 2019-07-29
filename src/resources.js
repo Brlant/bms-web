@@ -121,7 +121,7 @@ export const costModel = resource('/bms-bm', http, {
     return http.post('/bms-bm/add-billing-model', obj);
   },
   queryStateNum: (params) => {
-    return http.get('/bms-bm/count', {params});
+    return http.post('/bms-bm/count', params);
   },
   start(obj) {
     return http.put('/bms-bm/enable-billing-model', obj);
