@@ -13,9 +13,8 @@
                  :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="6">模型名称</el-col>
-        <el-col :span="4">模型类型</el-col>
-        <el-col :span="6">计费项</el-col>
+        <el-col :span="10">模型名称</el-col>
+        <el-col :span="6">模型类型</el-col>
         <el-col :span="2">状态</el-col>
         <el-col :span="6">操作</el-col>
       </el-row>
@@ -32,14 +31,12 @@
         </el-col>
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
-        <div :class="[{'active':currentItemId===item.billingModelId}]" class="order-list-item order-list-item-bg no-pointer"
+        <div :class="[{'active':currentItemId===item.billingModelId}]"
+             class="order-list-item order-list-item-bg" @click="showDetail(item)"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="6">{{item.billingModelName}}</el-col>
-            <el-col :span="4">{{item.billingModelTemplate === '0' ? '普通计费模型' : '计费模板'}}</el-col>
-            <el-col :span="6">
-
-            </el-col>
+            <el-col :span="10">{{item.billingModelName}}</el-col>
+            <el-col :span="6">{{item.billingModelTemplate === '0' ? '普通计费模型' : '计费模板'}}</el-col>
             <el-col :span="2">
               {{item.billingModelState === '0' ? '停用': '启用'}}
             </el-col>
@@ -75,6 +72,7 @@
   import addForm from './form/add-form.vue';
   import CommonMixin from '@/mixins/commonMixin';
   import {costModel} from '@/resources';
+  import Detail from './detail.vue';
 
   export default {
     components: {
@@ -89,6 +87,7 @@
         },
         dialogComponents: {
           0: addForm,
+          1: Detail
         },
         orgType: {
           0: {'title': '正常', 'num': 0, 'billingModelState': '1'},
@@ -136,6 +135,12 @@
         this.$nextTick(() => {
           this.showIndex = index;
         });
+      },
+      showDetail(item){
+        this.currentItem = item;
+        this.currentItemId = item.billingModelId;
+        this.form = item;
+        this.showPart(1)
       },
       queryList(pageNo) {
         const http = costModel.query;
