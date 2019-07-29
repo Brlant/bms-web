@@ -98,7 +98,7 @@ export const costItem = resource('/bms-billing-item/add-billing-item', http, {
     return http.post('/bms-billing-item/add-billing-item', obj);
   },
   queryStateNum: (params) => {
-    return http.get('/bms-billing-item/count', {params});
+    return http.post('/bms-billing-item/count', params);
   },
   start(obj) {
     return http.put('/bms-billing-item/enable-billing-item', obj);

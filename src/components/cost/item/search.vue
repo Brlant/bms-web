@@ -14,9 +14,22 @@
     <template slot="content">
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-col :span="8">
-          <oms-form-row label="单位" :span="5">
-            <org-select :list="orgList" :remoteMethod="queryAllOrg"
-                        placeholder="请输入名称搜索单位" v-model="searchCondition.orgId" @change="search"></org-select>
+          <oms-form-row label="名称" :span="5">
+            <oms-input placeholder="请输入计费模型名称" type="input" v-model="searchCondition.billingItemName"/>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="计费类型" :span="5">
+            <el-select placeholder="请选择计费类型" v-model="searchCondition.billingType" clearable>
+              <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in calculateType"></el-option>
+            </el-select>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="业务模型" :span="5">
+            <el-select placeholder="请选择计费类型" v-model="searchCondition.businessType" clearable>
+              <el-option :label="item.label" :value="item.key" :key="item.key" v-for="item in bizType"></el-option>
+            </el-select>
           </oms-form-row>
         </el-col>
       </el-form>
@@ -33,13 +46,26 @@
     data: function () {
       return {
         searchCondition: {
-          orgId: ''
+          billingItemName: '',
+          businessType: '',
+          billingType: ''
         },
         showSearch: false,
         list: [],
         times: [],
         orgList: []
       };
+    },
+    computed: {
+      calculateType() {
+        return this.$getDict('calculateType');
+      },
+      bizType() {
+        return this.$getDict('bizType');
+      },
+      measurementUnitList() {
+        return this.$getDict('measurementUnit');
+      },
     },
     mounted() {
       let no = this.$route.query.no;
@@ -59,7 +85,9 @@
       },
       reset() {
         this.searchCondition = {
-          orgId: ''
+          billingItemName: '',
+          businessType: '',
+          billingType: ''
         };
         this.$emit('search', this.searchCondition);
       },

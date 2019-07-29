@@ -8,16 +8,19 @@
         </el-button>
       </template>
     </search-part>
-    <status-list :activeStatus="filters.status" :statusList="orgType"
+    <status-list :activeStatus="filters.billingItemState" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="6">名称</el-col>
-        <el-col :span="5">计费类型</el-col>
-        <el-col :span="4">业务类型</el-col>
-        <el-col :span="3">是否阶梯</el-col>
-        <el-col :span="3">状态</el-col>
+        <el-col :span="3">名称</el-col>
+        <el-col :span="2">计费类型</el-col>
+        <el-col :span="2">业务类型</el-col>
+        <el-col :span="2">是否阶梯</el-col>
+        <el-col :span="2">单位</el-col>
+        <el-col :span="5">单价/上限/下限</el-col>
+        <el-col :span="3">计费规则</el-col>
+        <el-col :span="2">状态</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
@@ -33,19 +36,26 @@
         </el-col>
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
-        <div :class="[{'active':currentItemId===item.id}]" class="order-list-item order-list-item-bg"
+        <div class="order-list-item order-list-item-bg no-pointer"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="6">{{item.billingTypeName}}</el-col>
+            <el-col :span="3">{{item.billingItemName}}</el-col>
+            <el-col :span="2">
+              <dict :dict-group="'calculateType'" :dict-key="item.billingType"></dict>
+            </el-col>
+            <el-col :span="2">
+              <dict :dict-group="'bizType'" :dict-key="item.businessType"></dict>
+            </el-col>
+            <el-col :span="2">{{item.ladderState === '0' ? '否' : '是'}}</el-col>
+            <el-col :span="2">{{item.billingUnit}}</el-col>
             <el-col :span="5">
-              {{item.billingType}}
+              {{item.unitPrice}}
+              <span>上限：{{item.upperLimit}}</span>
+              <span> 下限：{{item.lowerLimit}}</span>
             </el-col>
-            <el-col :span="4">
-              {{item.businessType}}
-            </el-col>
-            <el-col :span="3">{{item.ladderState === '0' ? '否' : '是'}}</el-col>
-            <el-col :span="3">
-              {{item.billingItemState === '0' ? '停用': '启用'}}
+            <el-col :span="3">{{item.billingRules}}</el-col>
+            <el-col :span="2">
+              {{item.billingItemState === '0' ? '停用': '正常'}}
             </el-col>
             <el-col :span="3" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
@@ -89,14 +99,14 @@
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {
-          billingItemState: ''
+          billingItemState: '1'
         },
         dialogComponents: {
           0: addForm,
         },
         orgType: {
-          1: {'title': '正常', 'num': 0, 'billingItemState': '1'},
-          2: {'title': '停用', 'num': 0, 'billingItemState': '0'}
+          0: {'title': '正常', 'num': 0, 'billingItemState': '1'},
+          1: {'title': '停用', 'num': 0, 'billingItemState': '0'}
         },
         defaultPageRight: {'width': '700px', 'padding': 0}
       };
@@ -148,10 +158,9 @@
       },
       queryStatusNum: function (params) {
         costItem.queryStateNum(params).then(res => {
-          let data = res.data;
-          this.orgType[0].num = data['all'];
-          this.orgType[1].num = data['valid'];
-          this.orgType[2].num = data['stop'];
+          let data = res.data.data;
+          this.orgType[0].num = data['enableState'];
+          this.orgType[1].num = data['disableState'];
         });
       },
       add() {
@@ -160,20 +169,21 @@
       },
       edit(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
+        this.currentItemId = item.billingItemId;
         this.form = item;
         this.showPart(0);
       },
       start(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
-        this.$confirmOpera(`是否启用计费项"${item.contractName}"`, () => {
-          this.$httpRequestOpera(costItem.start(item.id), {
+        this.currentItemId = item.billingItemId;
+        this.$confirmOpera(`是否启用计费项"${item.billingItemName}"`, () => {
+          this.$httpRequestOpera(costItem.start(item), {
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
               if (res.data.code === 200) {
                 item.billingItemState = '1';
+                this.queryList(this.pager.currentPage);
               } else {
                 this.$notify.error({message: res.data.msg});
               }
@@ -183,14 +193,15 @@
       },
       stop(item) {
         this.currentItem = item;
-        this.currentItemId = item.id;
-        this.$confirmOpera(`是否停用计费项"${item.contractName}"`, () => {
-          this.$httpRequestOpera(costItem.stop(item.id), {
+        this.currentItemId = item.billingItemId;
+        this.$confirmOpera(`是否停用计费项"${item.billingItemName}"`, () => {
+          this.$httpRequestOpera(costItem.stop(item), {
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {
               if (res.data.code === 200) {
                 item.billingItemState = '0';
+                this.queryList(this.pager.currentPage);
               } else {
                 this.$notify.error({message: res.data.msg});
               }

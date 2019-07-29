@@ -25,6 +25,24 @@
             <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="单价" prop="unitPrice">
+          <oms-input placeholder="请输入单价" type="input" v-model="form.unitPrice"  @blur="formatPrice"/>
+        </el-form-item>
+        <el-form-item label="上限">
+          <oms-input placeholder="请输入上限" type="input" v-model="form.upperLimit"  @blur="formatUpperPrice"/>
+        </el-form-item>
+        <el-form-item label="下限">
+          <oms-input placeholder="请输入下限" type="input" v-model="form.lowerLimit"  @blur="formatLowerPrice"/>
+        </el-form-item>
+        <el-form-item label="单位" prop="billingUnit">
+          <el-select type="text" placeholder="请选择单位" v-model.trim="form.billingUnit">
+            <el-option :value="item.key" :key="item.key" :label="item.label"
+                       v-for="item in measurementUnitList"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="计费规则">
+          <oms-input placeholder="请输入计费规则" type="input" v-model="form.billingRules"  @blur="formatPrice"/>
+        </el-form-item>
       </el-form>
     </template>
   </dialog-template>
@@ -32,6 +50,7 @@
 <script>
   import {costItem} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
+  import utils from '@/tools/utils';
 
   export default {
     mixins: [methodsMixin],
@@ -68,28 +87,44 @@
       },
       bizType() {
         return this.$getDict('bizType');
-      }
+      },
+      measurementUnitList() {
+        return this.$getDict('measurementUnit');
+      },
     },
     watch: {
       index: function (val) {
         this.$refs['form'].clearValidate();
-        if (this.formItem.id) {
-          this.orgList = [
-            {name: this.formItem.orgName, id: this.formItem.orgId}
-          ];
+        if (this.formItem.billingItemId) {
           this.actionType = '编辑';
+          this.form = Object.assign({}, this.formItem);
         } else {
           this.form = {
             billingItemName: '',
             billingModelTemplate: '',
             companyDepartment: '',
-            businessManageId: ''
+            businessManageId: '',
+            ladderState: '0',
+            unitPrice: '',
+            upperLimit: '',
+            lowerLimit: '',
+            billingRules: '',
+            billingUnit: ''
           };
           this.actionType = '添加';
         }
       }
     },
     methods: {
+      formatPrice() {// 格式化单价，保留两位小数
+        this.form.unitPrice = utils.autoformatDecimalPoint(this.form.unitPrice);
+      },
+      formatUpperPrice() {// 格式化单价，保留两位小数
+        this.form.upperLimit = utils.autoformatDecimalPoint(this.form.upperLimit);
+      },
+      formatLowerPrice() {// 格式化单价，保留两位小数
+        this.form.lowerLimit = utils.autoformatDecimalPoint(this.form.lowerLimit);
+      },
       queryDepartmentUserNew(query) {
         if (!this.form.companyDepartment) {
           this.departmentUserList = [];
@@ -108,7 +143,7 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            if (!this.form.id) {
+            if (!this.form.billingItemId) {
               this.doing = true;
               this.$httpRequestOpera(costItem.save(this.form), {
                 errorTitle: '添加失败',
