@@ -59,7 +59,13 @@
     watch: {
       index: function (val) {
         if (this.formItem.billingModelId) {
-          this.form = Object.assign({}, this.formItem);
+          this.form = Object.assign({}, this.formItem, {billingItemIds: []});
+          this.$http.get(`/bms-billing-item/query-item/${this.formItem.billingModelId}`).then(res => {
+            if (res.data.code === 200) {
+              this.form.billingItemIds = res.data.data.map(m => m.billingItemId);
+              this.costItemList = res.data.data;
+            }
+          });
           this.actionType = '编辑';
         } else {
           this.form = {
