@@ -92,6 +92,23 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// 合同关联计费模型
+export const contractCostModel = resource('/bms-cbmi', http, {
+  save(obj) {
+    return http.post('/bms-cbmi/add-contract-billing-model-item', obj);
+  },
+  update(obj) {
+    return http.put('/bms-cbmi/edit-contract-billing-model-item', obj);
+  },
+  query(obj) {
+    return http.post('/bms-cbmi/query-contract-billing-model-page', obj);
+  },
+  queryDetail(obj) {
+    return http.post('/bms-cbmi/query-contract-billing-model-item', obj);
+  }
+});
+
+
 // 计费项
 export const costItem = resource('/bms-billing-item/add-billing-item', http, {
   save(obj) {

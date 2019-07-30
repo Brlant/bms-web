@@ -1,4 +1,4 @@
-import {costItem, Department} from '@/resources';
+import {Contact, costItem, costModel, Department} from '@/resources';
 
 
 export default {
@@ -7,7 +7,9 @@ export default {
       orgList: [],
       departmentList: [],
       departmentUserList: [],
-      costItemList: []
+      costItemList: [],
+      costModelList: [],
+      contractList: []
     };
   },
   methods: {
@@ -39,6 +41,26 @@ export default {
           this.costItemList = res.data.data.list;
         } else {
           this.costItemList = [];
+        }
+      });
+    },
+    queryCostModelList(query) {
+      let params = typeof query === 'object' ? query : {keyWord: query};
+      costModel.query(params).then(res => {
+        if (res.data.code === 200) {
+          this.costModelList = res.data.data.list;
+        } else {
+          this.costModelList = [];
+        }
+      });
+    },
+    queryContractList(query) {
+      let params = {keyWord: query};
+      Contact.query(params).then(res => {
+        if (res.data.code === 200) {
+          this.contractList = res.data.data.list;
+        } else {
+          this.contractList = [];
         }
       });
     }

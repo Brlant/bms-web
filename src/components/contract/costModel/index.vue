@@ -8,18 +8,13 @@
         </el-button>
       </template>
     </search-part>
-    <status-list :activeStatus="filters.contractState" :statusList="orgType"
+    <status-list :activeStatus="filters.status" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="5">合同名称</el-col>
-        <el-col :span="3">合同编号</el-col>
-        <el-col :span="3">业务员</el-col>
-        <el-col :span="3">所属部门</el-col>
-        <el-col :span="5">合同日期</el-col>
-        <el-col :span="2">状态</el-col>
-        <el-col :span="3">操作</el-col>
+        <el-col :span="18">模型名称</el-col>
+        <el-col :span="6">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -34,25 +29,13 @@
         </el-col>
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
-        <div :class="[{'active':currentItemId===item.contractId}]"
-             class="order-list-item order-list-item-bg no-pointer"
+        <div :class="[{'active':currentItemId===item.billingModelId}]"
+             class="order-list-item order-list-item-bg" @click="showDetail(item)"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="5">{{item.contractName}}</el-col>
-            <el-col :span="3">{{item.contractNo}}</el-col>
-            <el-col :span="3" class="R">{{item.businessManageName}}</el-col>
-            <el-col :span="3">{{item.companyDepartmentName}}</el-col>
-            <el-col :span="5">
-              始 {{item.contractSignTime | date}}
-              <div>终 {{item.contractOverTime | date}}</div>
-            </el-col>
-            <el-col :span="2">
-              {{item.contractState === '0' ? '停用': '启用'}}
-            </el-col>
-            <el-col :span="3" class="opera-btn">
+            <el-col :span="18">{{item.billingModelName}}</el-col>
+            <el-col :span="6" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.contractState === '0'">启用</des-btn>
-              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.contractState === '1'">停用</des-btn>
             </el-col>
           </el-row>
         </div>
@@ -80,7 +63,8 @@
   import SearchPart from './search';
   import addForm from './form/add-form.vue';
   import CommonMixin from '@/mixins/commonMixin';
-  import {Contact} from '@/resources';
+  import {contractCostModel} from '@/resources';
+  import Detail from './detail.vue';
 
   export default {
     components: {
@@ -91,16 +75,17 @@
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {
-          contractState: '1'
+          billingModelState: ''
         },
         dialogComponents: {
           0: addForm,
+          1: Detail
         },
         orgType: {
-          0: {'title': '正常', 'num': 0, 'contractState': '1'},
-          1: {'title': '停用', 'num': 0, 'contractState': '0'}
+          0: {'title': '正常', 'num': 0, 'billingModelState': '1'},
+          1: {'title': '停用', 'num': 0, 'billingModelState': '0'}
         },
-        defaultPageRight: {'width': '700px', 'padding': 0},
+        defaultPageRight: {'width': '700px', 'padding': 0}
       };
     },
     watch: {
@@ -116,14 +101,14 @@
     },
     methods: {
       changeType(item, key) {
-        this.filters.contractState = item.contractState;
+        this.filters.billingModelState = item.billingModelState;
       },
       isShowIcon(item, key, activeStatus) {
-        return item.contractState === activeStatus;
+        return item.billingModelState === activeStatus;
       },
       formatClass(item, key, activeStatus) {
         return {
-          'active': item.contractState === activeStatus
+          'active': item.billingModelState === activeStatus
         };
       },
       showRecordDate: function (data) {
@@ -136,7 +121,6 @@
       resetRightBox() {
         this.defaultPageRight.width = '700px';
         this.showIndex = -1;
-        this.currentItemId = '';
       },
       showPart(index) {
         this.currentPart = this.dialogComponents[index];
@@ -144,17 +128,15 @@
           this.showIndex = index;
         });
       },
-      queryList(pageNo) {
-        const http = Contact.query;
-        const params = this.queryUtil(http, pageNo);
-        this.queryStatusNum(params);
+      showDetail(item){
+        this.currentItem = item;
+        this.currentItemId = item.billingModelId;
+        this.form = item;
+        this.showPart(1)
       },
-      queryStatusNum: function (params) {
-        Contact.queryStateNum(params).then(res => {
-          let data = res.data.data;
-          this.orgType[0].num = data['enableState'];
-          this.orgType[1].num = data['disableState'];
-        });
+      queryList(pageNo) {
+        const http = contractCostModel.query;
+        const params = this.queryUtil(http, pageNo);
       },
       add() {
         this.form = {};
@@ -162,22 +144,22 @@
       },
       edit(item) {
         this.currentItem = item;
-        this.currentItemId = item.contractId;
+        this.currentItemId = item.billingModelId;
         this.form = item;
         this.showPart(0);
       },
       start(item) {
         this.currentItem = item;
-        this.currentItemId = item.contractId;
-        this.$confirmOpera(`是否启用合同"${item.contractName}"`, () => {
-          this.$httpRequestOpera(Contact.start(item), {
+        this.currentItemId = item.billingModelId;
+        this.$confirmOpera(`是否启用计费模型"${item.contractName}"`, () => {
+          this.$httpRequestOpera(contractCostModel.start(item), {
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
-              if (res.data.code === 200) {
-                item.contractState = '1';
+              if(res.data.code === 200) {
+                item.billingModelState = '1';
               } else {
-                this.$notify.error({message: res.data.msg});
+                this.$notify.error({message: res.data.msg})
               }
             }
           });
@@ -185,16 +167,16 @@
       },
       stop(item) {
         this.currentItem = item;
-        this.currentItemId = item.contractId;
-        this.$confirmOpera(`是否停用合同"${item.contractName}"`, () => {
-          this.$httpRequestOpera(Contact.stop(item), {
+        this.currentItemId = item.billingModelId;
+        this.$confirmOpera(`是否停用计费模型"${item.contractName}"`, () => {
+          this.$httpRequestOpera(contractCostModel.stop(item), {
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {
-              if (res.data.code === 200) {
-                item.contractState = '0';
+              if(res.data.code === 200) {
+                item.billingModelState = '0';
               } else {
-                this.$notify.error({message: res.data.msg});
+                this.$notify.error({message: res.data.msg})
               }
             }
           });

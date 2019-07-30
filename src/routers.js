@@ -48,9 +48,9 @@ export const routes = [
           },
           {
             path: '/contract/cost',
-            component: () => import('./components/test.vue'),
-            meta: {moduleId: 'monitoring', title: '合同计费', perm: 'ccs-monitordev-scan', type: 1}
-          },
+            component: () => import('./components/contract/costModel/index.vue'),
+            meta: {moduleId: 'monitoring', title: '合同计费模型管理', perm: 'ccs-monitordev-scan', type: 1}
+          }
         ]
       },
       {
