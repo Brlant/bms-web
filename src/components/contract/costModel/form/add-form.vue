@@ -11,71 +11,79 @@
                        v-for="item in contractList"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="计费模型名称" prop="billingModelName"
+                      :rules="[{required: true, message: '请输入计费模型名称', trigger: 'blur'}]">
+          <oms-input placeholder="请输入计费模型名称" type="input" v-model="form.billingModelName"/>
+        </el-form-item>
         <el-form-item label="" prop="billingModelTemplate">
           <el-radio-group v-model="form.billingModelTemplate" size="small" @change="billingModelTemplateChange">
-            <el-radio-button label="0">普通计费模型</el-radio-button>
-            <el-radio-button label="1">计费模板</el-radio-button>
+            <el-radio-button label="0">从计费模型模板选择</el-radio-button>
+            <el-radio-button label="1">手动添加</el-radio-button>
           </el-radio-group>
         </el-form-item>
       </el-form>
       <el-form :model="currentItem" label-width="120px" ref="addForm">
-        <el-form-item label="计费模型名称" prop="contractName" v-if="form.billingModelTemplate === '1'"
-                      :rules="[{required: true, message: '请输入计费模型名称', trigger: 'blur'}]">
-          <oms-input placeholder="请输入计费模型名称" type="input" v-model="currentItem.contractName"/>
-        </el-form-item>
-        <el-form-item :label="`计费模${title}`" prop="billingItemIds"
-                      :rules="[{required: true, message: `请选择计费模${title}`, trigger: 'change'}]">
-          <el-select :placeholder="`请选择计费模${title}`" v-model="currentItem.billingItemIds"
-                     filterable clearable remote :remote-method="queryCostModelListNew">
-            <el-option :label="item.billingModelName" :value="item.billingModelId" :key="item.billingModelId"
-                       v-for="item in costModelList"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="计费项" prop="billingItemIds"
-                      :rules="[{required: true, message: '请选择计费项', trigger: 'change'}]">
-          <el-select placeholder="请选择计费项" v-model="currentItem.billingItemIds"
-                     filterable clearable multiple remote :remote-method="queryCostItem">
-            <el-option :label="item.billingItemName" :value="item.billingItemId" :key="item.billingItemId"
-                       v-for="item in costItemList"></el-option>
-          </el-select>
-        </el-form-item>
+        <div v-if="form.billingModelTemplate === '0'">
+          <el-form-item label="计费模型模板" prop="billingItemIds"
+                        :rules="[{required: true, message: '计费模型模板', trigger: 'change'}]">
+            <el-select placeholder="计费模型模板" v-model="currentItem.billingItemIds"
+                       filterable clearable remote :remote-method="queryCostModelListNew">
+              <el-option :label="item.billingModelName" :value="item.billingModelId" :key="item.billingModelId"
+                         v-for="item in costModelList"></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div v-else>
+          <cost-form-util :currentItem="currentItem"/>
+        </div>
         <el-form-item label="">
           <el-button type="primary" @click="addItem">添加</el-button>
         </el-form-item>
-        <el-table :data="form.billingModelItemRelations" border class="clearfix" ref="orderDetail">
-          <el-table-column prop="operationTime" label="计费模型" width="200">
-            <template slot-scope="scope">{{scope.row.name}}</template>
-          </el-table-column>
-          <el-table-column prop="actionType" label="计费项">
-            <template slot-scope="scope">{{scope.row.name}}</template>
-          </el-table-column>
-        </el-table>
+        <cost-table-util :data="form.costItemList"/>
       </el-form>
-
     </template>
   </dialog-template>
 </template>
 <script>
   import {costModel} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
+  import utils from '@/tools/utils';
+  import costFormUtil from '../../../cost/info/costFormUtil';
+  import costTableUtil from '../../../cost/info/costTableUtil';
 
   export default {
     mixins: [methodsMixin],
-
+    components: {costFormUtil, costTableUtil},
     data() {
       return {
         form: {
           contractId: '',
           billingModelTemplate: '0',
-          billingModelItemRelations: []
+          billingModelName: '',
+          costItemList: []
         },
         doing: false,
         actionType: '添加',
         orgList: [],
         currentItem: {
-          billingModelName: '',
-          billingModelId: '',
-          billingItemIds: []
+          businessType: '',
+          billingType: '',
+          billingItemId: '',
+          billingItemName: '',
+          billingModelTemplate: '',
+          companyDepartment: '',
+          businessManageId: '',
+          ladderState: '0',
+          unitPrice: '',
+          upperLimit: '',
+          lowerLimit: '',
+          billingRules: '',
+          billingUnit: '',
+          billingItemNo: ''
+        },
+        currentCostType: {
+          bizTypes: [],
+          items: []
         }
       };
     },
@@ -84,8 +92,8 @@
       index: Number
     },
     computed: {
-      title() {
-        return this.form.billingModelTemplate === '0' ? '型' : '板';
+      costTypes() {
+        return this.$store.state.costTypes;
       }
     },
     watch: {
@@ -97,7 +105,8 @@
           this.form = {
             contractId: '',
             billingModelTemplate: '0',
-            billingModelItemRelations: []
+            billingModelName: '',
+            costItemList: []
           };
           this.actionType = '添加';
         }
@@ -107,6 +116,16 @@
       }
     },
     methods: {
+      billingTypeChange(val) {
+        if (!val) {
+          return;
+        }
+        this.currentCostType = this.costTypes.find(f => f.id === val);
+        this.currentItem.ladderState = this.currentCostType.ladderState ? '1' : '0';
+      },
+      formatPrice() {// 格式化单价，保留两位小数
+        this.currentItem.unitPrice = utils.autoformatDecimalPoint(this.currentItem.unitPrice);
+      },
       queryCostModelListNew(query) {
         let params = {
           keyWord: query,

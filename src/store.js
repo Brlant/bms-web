@@ -22,7 +22,92 @@ const state = {
   bodyHeight: 0,
   bottomLoading: false,
   menuParentIds: [], // 所有非叶子节点菜单
-  requestingDictAry: []
+  requestingDictAry: [],
+  costTypes: [
+    {
+      id: '订单处理',
+      name: '订单处理',
+      bizTypes: [],
+      ladderState: false,
+      items: [
+        {name: '订单总单处理', id: 'A1', unit: '元/张', rule: '订单总单数量 X 计费单价'},
+        {name: '订单细单处理', id: 'A2', unit: '元/条', rule: '订单细单数量 X 计费单价'}
+      ]
+    },
+    {
+      id: '入库作业',
+      name: '入库作业',
+      ladderState: false,
+      bizTypes: [
+        {name: '采购入库', id: '1-0'},
+        {name: '销退入库', id: '1-1'},
+        {name: '调拨入库', id: '1-3'},
+      ],
+      items: [
+        {name: '整件入库货品体积', id: 'A3', unit: '元/m³', rule: '每个品种的体积总数 X 计费单价'},
+        {name: '整件入库货品体积', id: 'A4', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价'},
+        {name: '散件入库基本单位数', id: 'A5', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价'}
+      ]
+    },
+    {
+      id: '出库作业',
+      name: '出库作业',
+      ladderState: false,
+      bizTypes: [
+        {name: '销售出库', id: '2-0'},
+        {name: '调拨出库', id: '2-3'},
+        {name: '采退出库', id: '2-1'},
+      ],
+      items: [
+        {name: '整件出库货品体积', id: 'A6', unit: '元/m³', rule: '每个品种的体积总数 X 计费单价'},
+        {name: '整件出库整件数量', id: 'A7', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价'},
+        {name: '散件出库基本单位数', id: 'A8', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价'},
+        {name: '散件出库周转（包装）箱数', id: 'A9', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价'}
+      ]
+    },
+    {
+      id: '库内作业',
+      name: '库内作业',
+      ladderState: false,
+      bizTypes: [
+        {name: '扫码复核', id: '0'},
+        {name: '拆零作业', id: '1'},
+      ],
+      items: [
+        {name: '扫码复核费', id: 'A10', unit: '元/个', rule: '每个品种的码总数 X 计费单价'},
+        {name: '拆零作业', id: 'A11', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价'},
+      ]
+    },
+    {
+      id: '耗材使用',
+      name: '耗材使用',
+      ladderState: false,
+      bizTypes: [
+        {name: '保温箱', id: '0'},
+        {name: '温度计', id: '1'},
+      ],
+      items: [
+        {name: '保温箱', id: 'A12', unit: '元/个', rule: '保温箱总数 X 计费单价'},
+        {name: '温度计', id: 'A13', unit: '元/个', rule: '温度计使用总数 X 计费单价'},
+      ]
+    },
+    {
+      id: '库内存储',
+      name: '库内存储',
+      ladderState: true,
+      bizTypes: [
+        {name: '合格', id: '0'},
+        {name: '不合格', id: '1'},
+      ],
+      items: [
+        {name: '存储整件货位数', id: 'B1', unit: '元/个', rule: '每个品种的整件货位总数 X 计费单价'},
+        {name: '存储整件货位体积', id: 'B2', unit: '元/m³', rule: '每个品种的整件体积 X 计费单价'},
+        {name: '存储整件包装数', id: 'B3', unit: '元/箱', rule: '每个品种的整件包装数 X 计费单价'},
+        {name: '存储整件包装数', id: 'B4', unit: '元/个', rule: '每个品种的散件货位总数 X 计费单价'},
+        {name: '存储散件货位体积', id: 'B5', unit: '元/m³', rule: '每个品种的散件体积 X 计费单价'}
+      ]
+    }
+  ]
 };
 
 const mutations = {

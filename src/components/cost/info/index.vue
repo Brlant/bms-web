@@ -93,7 +93,7 @@
           0: {'title': '正常', 'num': 0, 'billingModelState': '1'},
           1: {'title': '停用', 'num': 0, 'billingModelState': '0'}
         },
-        defaultPageRight: {'width': '700px', 'padding': 0}
+        defaultPageRight: {'width': '900px', 'padding': 0}
       };
     },
     watch: {
@@ -127,7 +127,7 @@
         this.filters = Object.assign({}, this.filters, search);
       },
       resetRightBox() {
-        this.defaultPageRight.width = '700px';
+        this.defaultPageRight.width = '900px';
         this.showIndex = -1;
       },
       showPart(index) {
@@ -139,6 +139,7 @@
       showDetail(item){
         this.currentItem = item;
         this.currentItemId = item.billingModelId;
+        this.defaultPageRight.width = '900px';
         this.form = item;
         this.showPart(1)
       },

@@ -5,23 +5,17 @@
       <el-button :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
     </template>
     <template slot="content">
-      <el-form :model="form" :rules="rules" label-width="140px" ref="form">
-        <el-form-item label="计费模型名称" prop="billingModelName">
-          <oms-input placeholder="请输入计费模型名称" type="input" v-model="form.billingModelName"/>
+      <el-form :model="form" :rules="rules" label-width="120px" ref="form">
+        <el-form-item label="计费模板名称" prop="billingModelName">
+          <oms-input placeholder="请输入计费模板名称" type="input" v-model="form.billingModelName"/>
         </el-form-item>
-        <el-form-item label="计费模型类型" prop="billingModelTemplate">
-          <el-radio-group v-model="form.billingModelTemplate" size="small" @change="billingModelTemplateChange">
-            <el-radio-button label="0">普通计费模型</el-radio-button>
-            <el-radio-button label="1">计费模板</el-radio-button>
-          </el-radio-group>
+      </el-form>
+      <el-form :model="currentItem" :rules="rules" label-width="100px" ref="form">
+        <cost-form-util :currentItem="currentItem"/>
+        <el-form-item>
+          <el-button type="primary" @click="addItem">添加</el-button>
         </el-form-item>
-        <el-form-item label="计费项" v-if="form.billingModelTemplate === '1'" prop="billingItemIds">
-          <el-select placeholder="请选择计费项" v-model="form.billingItemIds"
-                     filterable clearable multiple remote :remote-method="queryCostItem">
-            <el-option :label="item.billingItemName" :value="item.billingItemId" :key="item.billingItemId"
-                       v-for="item in costItemList"></el-option>
-          </el-select>
-        </el-form-item>
+        <cost-table-util :data="form.costItemList"/>
       </el-form>
     </template>
   </dialog-template>
@@ -29,27 +23,41 @@
 <script>
   import {costModel} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
-
+  import costFormUtil from '../costFormUtil';
+  import costTableUtil from '../costTableUtil';
   export default {
     mixins: [methodsMixin],
-
+    components: {costFormUtil, costTableUtil},
     data() {
       return {
-        form: {},
+        form: {
+          billingModelName: '',
+          costItemList: []
+        },
         doing: false,
         rules: {
           billingModelName: [
-            {required: true, message: '请输入计费模型名称', trigger: 'blur'}
-          ],
-          billingModelTemplate: [
-            {required: true, message: '请输入计费模型类型', trigger: 'change'}
-          ],
-          billingItemIds: [
-            {required: true, type: 'array', message: '请选择计费项', trigger: 'change'}
+            {required: true, message: '名称', trigger: 'blur'}
           ]
         },
         actionType: '添加',
-        orgList: []
+        orgList: [],
+        currentItem: {
+          businessType: '',
+          billingType: '',
+          billingItemId: '',
+          billingItemName: '',
+          billingModelTemplate: '',
+          companyDepartment: '',
+          businessManageId: '',
+          ladderState: '0',
+          unitPrice: '',
+          upperLimit: '',
+          lowerLimit: '',
+          billingRules: '',
+          billingUnit: '',
+          billingItemNo: ''
+        },
       };
     },
     props: {
@@ -59,21 +67,12 @@
     watch: {
       index: function (val) {
         if (this.formItem.billingModelId) {
-          this.form = Object.assign({}, this.formItem, {billingItemIds: []});
-          this.$http.get(`/bms-billing-item/query-item/${this.formItem.billingModelId}`).then(res => {
-            if (res.data.code === 200) {
-              this.form.billingItemIds = res.data.data.map(m => m.billingItemId);
-              this.costItemList = res.data.data;
-            }
-          });
+          this.form = Object.assign({}, this.formItem);
           this.actionType = '编辑';
         } else {
           this.form = {
             billingModelName: '',
-            billingModelTemplate: '',
-            companyDepartment: '',
-            businessManageId: '',
-            contractTime: ''
+            costItemList: []
           };
           this.actionType = '添加';
         }
@@ -83,8 +82,11 @@
       }
     },
     methods: {
-      billingModelTemplateChange(val) {
-        this.$refs['form'].clearValidate();
+      addItem() {
+        this.$refs.addForm.valid(v => {
+          if (!v) return;
+
+        });
       },
       save(formName) {
         this.$refs[formName].validate((valid) => {
