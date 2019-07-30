@@ -24,12 +24,11 @@
           </oms-form-row>
         </el-col>
         <el-col :span="8">
-          <oms-form-row label="所属部门" :span="5">
-            <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
-                       :clearable="true" v-model="searchCondition.companyDepartment" popperClass="good-selects"
-                       @change="companyDepartmentChange">
-              <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in departmentList">
-              </el-option>
+          <oms-form-row label="业务员" :span="5">
+            <el-select placeholder="请选择业务员" v-model="searchCondition.businessManageId"
+                       filterable clearable remote :remote-method="queryDepartmentUserNew">
+              <el-option :label="item.name" :value="item.id" :key="item.id"
+                         v-for="item in departmentUserList"></el-option>
             </el-select>
           </oms-form-row>
         </el-col>
@@ -39,6 +38,16 @@
                        filterable clearable remote :remote-method="queryDepartmentUserNew">
               <el-option :label="item.name" :value="item.id" :key="item.id"
                          v-for="item in departmentUserList"></el-option>
+            </el-select>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="所属部门" :span="5">
+            <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
+                       :clearable="true" v-model="searchCondition.companyDepartment" popperClass="good-selects"
+                       @change="companyDepartmentChange">
+              <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in departmentList">
+              </el-option>
             </el-select>
           </oms-form-row>
         </el-col>

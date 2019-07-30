@@ -12,6 +12,11 @@
         <el-form-item label="合同编号" prop="contractNo">
           <oms-input placeholder="请输入合同编号" type="input" v-model="form.contractNo"/>
         </el-form-item>
+        <el-form-item label="甲方" prop="orgId">
+          <org-select :list="orgList" @change="orgIdChange"
+                      :remoteMethod="queryAllOrg"
+                      placeholder="请输入名称搜索甲方" v-model="form.orgId"></org-select>
+        </el-form-item>
         <el-form-item label="所属部门" prop="companyDepartment">
           <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
                      :clearable="true" v-model="form.companyDepartment" popperClass="good-selects"
@@ -82,6 +87,9 @@
           this.departmentList = [
             {id: this.formItem.companyDepartment, name: this.formItem.companyDepartmentName}
           ];
+          this.orgList = [
+            {id: this.formItem.orgId, name: this.formItem.orgName}
+          ];
           this.form = Object.assign({}, this.formItem, {
             contractTime: [this.formItem.contractSignTime, this.formItem.contractOverTime]
           });
@@ -113,6 +121,14 @@
       companyDepartmentChange(val) {
         this.departmentUserList = [];
         this.form.businessManageId = '';
+      },
+      orgIdChange(val) {
+        if (!val) {
+          this.form.orgName = '';
+          return;
+        }
+        let item = this.orgList.find(f => f.id === val);
+        this.form.orgName = item.name;
       },
       save(formName) {
         this.$refs[formName].validate((valid) => {
