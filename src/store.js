@@ -25,7 +25,7 @@ const state = {
   requestingDictAry: [],
   costTypes: [
     {
-      id: '订单处理',
+      id: '0',
       name: '订单处理',
       bizTypes: [],
       ladderState: false,
@@ -35,7 +35,7 @@ const state = {
       ]
     },
     {
-      id: '入库作业',
+      id: '1',
       name: '入库作业',
       ladderState: false,
       bizTypes: [
@@ -50,7 +50,7 @@ const state = {
       ]
     },
     {
-      id: '出库作业',
+      id: '2',
       name: '出库作业',
       ladderState: false,
       bizTypes: [
@@ -66,7 +66,7 @@ const state = {
       ]
     },
     {
-      id: '库内作业',
+      id: '3',
       name: '库内作业',
       ladderState: false,
       bizTypes: [
@@ -79,7 +79,7 @@ const state = {
       ]
     },
     {
-      id: '耗材使用',
+      id: '4',
       name: '耗材使用',
       ladderState: false,
       bizTypes: [
@@ -92,7 +92,7 @@ const state = {
       ]
     },
     {
-      id: '库内存储',
+      id: '5',
       name: '库内存储',
       ladderState: true,
       bizTypes: [

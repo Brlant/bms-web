@@ -135,22 +135,25 @@ export const costItem = resource('/bms-billing-item/add-billing-item', http, {
 // 计费模型
 export const costModel = resource('/bms-bm', http, {
   save(obj) {
-    return http.post('/bms-bm/add-billing-model', obj);
+    return http.post('/bms-bm/add', obj);
   },
   queryStateNum: (params) => {
     return http.post('/bms-bm/count', params);
   },
   start(obj) {
-    return http.put('/bms-bm/enable-billing-model', obj);
+    return http.put('/bms-bm/enable', obj);
   },
   stop(obj) {
-    return http.put('/bms-bm/disable-billing-model', obj);
+    return http.put('/bms-bm/disable', obj);
   },
   update(obj) {
-    return http.put('/bms-bm/edit-billing-model', obj);
+    return http.put('/bms-bm/edit', obj);
   },
   query(obj) {
     return http.post('/bms-bm/query-billing-model/page', obj);
+  },
+  queryDetail(obj) {
+    return http.post('/bms-bm/query/info', obj);
   }
 });
 
