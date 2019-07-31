@@ -11,6 +11,7 @@
       > h3 {
         left: $leftWidth;
       }
+
       padding-left: 10px;
       padding-right: 10px;
       left: $leftWidth;
@@ -20,6 +21,7 @@
   .oms-row {
     margin-bottom: 10px;
   }
+
   .detail-title {
     margin: 0 0 10px 0;
     padding: 0 10px;
@@ -41,26 +43,29 @@
           <oms-row label="合同日期" :span="6">
             {{formItem.contractSignTime | date}}~{{formItem.contractOverTime | date}}
           </oms-row>
-          <oms-row label="业务员/部门" :span="6">{{formItem.businessManageName}} {{formItem.companyDepartmentName}}</oms-row>
+          <oms-row label="业务员/部门" :span="6">{{formItem.businessManageName}}/{{formItem.companyDepartmentName}}</oms-row>
           <oms-row label="状态" :span="6">{{formItem.contractState === '0' ? '停用': '启用'}}</oms-row>
         </el-col>
       </el-row>
-      <h2 class="detail-title">甲方货品</h2>
-      <oms-row label="项目" :span="3">{{formItem.contractName}}</oms-row>
-      <el-table :data="billingItemList" border class="clearfix mb-10" ref="orderDetail">
-        <el-table-column prop="operationTime" label="货主货品">
-          <template slot-scope="scope">{{scope.row.name}}</template>
-        </el-table-column>
-      </el-table>
-      <el-table :data="billingItemList" border class="clearfix" ref="orderDetail">
-        <el-table-column prop="operationTime" label="计费模型">
-          <template slot-scope="scope">{{scope.row.name}}</template>
-        </el-table-column>
-      </el-table>
+      <div v-if="data.projectId">
+        <h2 class="detail-title">绑定货品</h2>
+        <oms-row label="项目" :span="3">{{data.projectName}}</oms-row>
+        <oms-row label="计费模型" :span="3">{{data.billingModelName}}</oms-row>
+
+        <cost-table-util class="mb-10" :data="billingItems" :showBtn="false"/>
+
+        <el-table :data="data.orgGoodsList" border class="clearfix " ref="orderDetail">
+          <el-table-column prop="orgGoodsName" label="货品"/>
+          <el-table-column prop="goodsSpecification" label="规格" width="200px"/>
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
 <script>
+  import {contractBindGoods, costModel} from '@/resources';
+  import costTableUtil from '../../cost/info/costTableUtil';
+
   export default {
     props: {
       formItem: {
@@ -69,23 +74,31 @@
       },
       index: Number
     },
+    components: {costTableUtil},
     watch: {
       index(val) {
-        if (val !== 1) return;
+        if (val !== 2) return;
         this.queryItems();
       }
     },
     data() {
       return {
-        billingItemList: []
+        data: {},
+        billingItems: []
       };
     },
     methods: {
       queryItems() {
-        if (this.formItem.billingModelTemplate === '0') return;
-        this.$http.get(`/bms-billing-item/query-item/${this.formItem.billingModelId}`).then(res => {
-          if (res.data.code === 200) {
-            this.billingItemList = res.data.data;
+        this.data = {
+          orgGoodsList: []
+        };
+        this.billingItems = [];
+        contractBindGoods.query({contractId: this.formItem.contractId}).then(res => {
+          if (res.data.data.projectId) {
+            this.data = res.data.data;
+            costModel.queryDetail(this.data).then(res => {
+              this.billingItems = res.data.data.billingItems;
+            });
           }
         });
       }

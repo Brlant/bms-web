@@ -97,6 +97,16 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// 合同绑定货品
+export const contractBindGoods = resource('', http, {
+  save(obj) {
+    return http.post('/bms-cgbm/add', obj);
+  },
+  query(obj) {
+    return http.post('/bms-cgbm/query', obj);
+  }
+});
+
 // 合同关联计费模型
 export const contractCostModel = resource('/bms-cbmi', http, {
   save(obj) {
@@ -190,7 +200,7 @@ export const project = resource('/bms-project', http, {
     return http.post('/bms-project/add-project', obj);
   },
   queryStateNum: (params) => {
-    return http.get('/bms-project/count', {params});
+    return http.post('/bms-project/count', params);
   },
   start(obj) {
     return http.put('/bms-project/enable-project', obj);

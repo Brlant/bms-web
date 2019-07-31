@@ -35,13 +35,15 @@
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
         <div :class="[{'active':currentItemId===item.contractId}]"
-             class="order-list-item order-list-item-bg no-pointer"
+             class="order-list-item order-list-item-bg"
              v-for="item in dataList" @click="showDetail(item)">
           <el-row>
             <el-col :span="3">{{item.contractName}}</el-col>
             <el-col :span="3">{{item.contractNo}}</el-col>
             <el-col :span="3">{{item.orgName}}</el-col>
-            <el-col :span="3" class="R">{{item.businessManageName}} {{item.companyDepartmentName}}</el-col>
+            <el-col :span="3" class="R">
+              {{item.businessManageName}}/{{item.companyDepartmentName}}
+            </el-col>
             <el-col :span="4">
               始 {{item.contractSignTime | date}}
               <div>终 {{item.contractOverTime | date}}</div>

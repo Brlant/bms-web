@@ -9,24 +9,39 @@
         <el-form-item label="合同名称">{{formItem.contractName}}</el-form-item>
         <el-form-item label="合同编号">{{formItem.contractNo}}</el-form-item>
         <el-form-item label="甲方">{{formItem.orgName}}</el-form-item>
-        <el-form-item label="货品" prop="orgGoodsIds">
+        <el-form-item label="货品" prop="orgGoodsIdList">
           <el-select filterable remote multiple placeholder="请输入名称搜货品" :remote-method="queryOrgGoodsListNew"
-                     :clearable="true" v-model="form.orgGoodsIds" popperClass="good-selects">
-            <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in orgGoodsList">
+                     :clearable="true" v-model="form.orgGoodsIdList" popperClass="good-selects">
+            <el-option v-for="item in orgGoodsList" :key="item.orgGoodsDto.id"
+                       :label="item.orgGoodsDto.name"
+                       :value="item.orgGoodsDto.id">
+              <div style="overflow: hidden">
+                <span class="pull-left">{{item.orgGoodsDto.name}}</span>
+              </div>
+              <div style="overflow: hidden">
+                <span class="select-other-info pull-left"><span
+                  v-show="item.orgGoodsDto.goodsNo">货品编号:</span>{{item.orgGoodsDto.goodsNo}}
+                </span>
+                <span class="select-other-info pull-left"><span
+                  v-show="item.orgGoodsDto.salesFirmName">供货厂商:</span>{{ item.orgGoodsDto.salesFirmName }}
+                </span>
+              </div>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="计费模型" prop="costModelIds">
-          <el-select filterable remote placeholder="请输入名称搜计费模型" :remote-method="queryCostModelList"
-                     :clearable="true" v-model="form.costModelIds" popperClass="good-selects">
-            <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in costModelList">
+        <el-form-item label="计费模型" prop="billingModelId">
+          <el-select filterable remote placeholder="请输入名称搜计费模型" :remote-method="queryContractCostModelList"
+                     :clearable="true" v-model="form.billingModelId" popperClass="good-selects">
+            <el-option :label="item.billingModelName" :value="item.billingModelId" :key="item.billingModelId"
+                       v-for="item in contractCostModelList">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="项目" prop="projectId">
-          <el-select filterable remote  placeholder="请选择项目" :remote-method="queryProjectList"
+          <el-select filterable remote placeholder="请选择项目" :remote-method="queryProjectList"
                      :clearable="true" v-model="form.projectId" popperClass="good-selects">
-            <el-option :label="item.projectName" :value="item.projectId" :key="item.projectId" v-for="item in projectList">
+            <el-option :label="item.projectName" :value="item.projectId" :key="item.projectId"
+                       v-for="item in projectList">
             </el-option>
           </el-select>
         </el-form-item>
@@ -35,7 +50,7 @@
   </dialog-template>
 </template>
 <script>
-  import {Contact} from '@/resources';
+  import {contractBindGoods} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
 
   export default {
@@ -43,17 +58,17 @@
     data() {
       return {
         form: {
-          orgGoodsIds: [],
-          costModelIds: [],
+          orgGoodsIdList: [],
+          billingModelId: '',
           projectId: ''
         },
         doing: false,
         rules: {
-          orgGoodsIds: [
+          orgGoodsIdList: [
             {required: true, type: 'array', message: '请选择货主货品', trigger: 'change'}
           ],
-          costModelIds: [
-            {required: true, type: 'array', message: '请选择计费模型', trigger: 'change'}
+          billingModelId: [
+            {required: true, message: '请选择计费模型', trigger: 'change'}
           ],
           projectId: [
             {required: true, message: '请选择项目', trigger: 'change'}
@@ -68,32 +83,49 @@
     },
     watch: {
       index: function (val) {
-        this.$refs['form'].clearValidate();
-        if (this.formItem.contractId) {
-          this.actionType = '编辑';
-        } else {
-          this.form = {
-            orgGoodsIds: [],
-            costModelIds: [],
-            projectId: ''
-          };
-          this.actionType = '添加';
-        }
+        if (val !== 1) return;
+        this.form = {
+          orgGoodsIdList: [],
+          billingModelId: '',
+          projectId: ''
+        };
+        this.$nextTick(() => {
+          this.$refs['form'].clearValidate();
+        });
+        contractBindGoods.query({contractId: this.formItem.contractId}).then(res => {
+          if (!res.data.data.projectId) return;
+          this.orgGoodsList = [];
+          res.data.data.orgGoodsList.forEach(i => {
+            this.orgGoodsList.push({
+              orgGoodsDto: {id: i.orgGoodsId, name: i.orgGoodsName}
+            });
+          });
+          res.data.data.orgGoodsIdList = res.data.data.orgGoodsList.map(m => m.orgGoodsId);
+          this.projectList = [
+            {projectName: res.data.data.projectName, projectId: res.data.data.projectId}
+          ];
+          this.costModelList = [
+            {billingModelName: res.data.data.billingModelName, billingModelId: res.data.data.billingModelId}
+          ];
+          this.form = res.data.data;
+        });
       }
     },
     methods: {
       queryOrgGoodsListNew(query) {
         let params = {
-          keyWord: query
+          orgId: this.formItem.orgId,
+          keyWord: query,
+          auditedStatus: '1'
         };
-        this.queryOrgGoodsList(params)
+        this.queryOrgGoodsList(params);
       },
       queryCostModelListNew(query) {
         let params = {
           id: this.formItem.contractId,
           keyWord: query
         };
-        this.queryCostModelList(params)
+        this.queryCostModelList(params);
       },
       companyDepartmentChange(val) {
         this.departmentUserList = [];
@@ -102,42 +134,23 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            this.form.contractSignTime = this.form.contractTime[0];
-            this.form.contractOverTime = this.form.contractTime[1];
-            if (!this.form.contractId) {
-              this.doing = true;
-              this.$httpRequestOpera(Contact.save(this.form), {
-                errorTitle: '添加失败',
-                success: res => {
-                  if (res.data.code === 200) {
-                    this.$notify.success({message: '添加成功'});
-                    this.doing = false;
-                    this.$emit('change', res.data);
-                  } else {
-                    this.doing = false;
-                  }
-                },
-                error: () => {
+            this.doing = true;
+            this.form.contractId = this.formItem.contractId;
+            this.$httpRequestOpera(contractBindGoods.save(this.form), {
+              errorTitle: '绑定失败',
+              success: res => {
+                if (res.data.code === 200) {
+                  this.$notify.success({message: '绑定成功'});
+                  this.doing = false;
+                  this.$emit('change', res.data);
+                } else {
                   this.doing = false;
                 }
-              });
-            } else {
-              this.$httpRequestOpera(Contact.update(this.form), {
-                errorTitle: '修改失败',
-                success: res => {
-                  if (res.data.code === 200) {
-                    this.$notify.success({message: '修改成功'});
-                    this.doing = false;
-                    this.$emit('change', res.data);
-                  } else {
-                    this.doing = false;
-                  }
-                },
-                error: () => {
-                  this.doing = false;
-                }
-              });
-            }
+              },
+              error: () => {
+                this.doing = false;
+              }
+            });
           }
         });
       }

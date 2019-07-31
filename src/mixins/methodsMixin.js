@@ -1,4 +1,4 @@
-import {Contact, costItem, costModel, Department, OrgGoods, project} from '@/resources';
+import {Contact, costItem, costModel, Department, OrgGoods, project, contractCostModel} from '@/resources';
 
 
 export default {
@@ -11,7 +11,8 @@ export default {
       costItemList: [],
       costModelList: [],
       contractList: [],
-      projectList: []
+      projectList: [],
+      contractCostModelList: []
     };
   },
   methods: {
@@ -56,6 +57,12 @@ export default {
         }
       });
     },
+    queryContractCostModelList(query) {
+      let params = typeof query === 'object' ? query : {keyWord: query};
+      contractCostModel.query(params).then(res => {
+        this.contractCostModelList = res.data.data.list;
+      });
+    },
     queryContractList(query) {
       let params = {keyWord: query};
       Contact.query(params).then(res => {
@@ -72,7 +79,7 @@ export default {
       });
     },
     queryProjectList(query) {
-      let params = {keyWord: query};
+      let params = {keyWord: query, projectState: '1'};
       project.query(params).then(res => {
         if (res.data.code === 200) {
           this.projectList = res.data.data.list;
