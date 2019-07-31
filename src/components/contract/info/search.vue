@@ -76,7 +76,8 @@
           companyDepartment: '',
           businessManageId: '',
           contractSignTime: '',
-          contractOverTime: ''
+          contractOverTime: '',
+          orgId: ''
         },
         contractTime: '',
         showSearch: false,
@@ -101,7 +102,8 @@
           companyDepartment: '',
           businessManageId: '',
           contractSignTime: '',
-          contractOverTime: ''
+          contractOverTime: '',
+          orgId: ''
         };
         this.contractTime = '';
         this.$emit('search', this.searchCondition);

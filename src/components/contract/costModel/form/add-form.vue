@@ -103,7 +103,12 @@
     watch: {
       index: function (val) {
         if (this.formItem.billingModelId) {
-          this.form = Object.assign({}, this.formItem);
+          this.contractList = [
+            {contractId: this.formItem.contractId, contractName: this.formItem.contractName}
+          ];
+          contractCostModel.queryDetail(this.formItem).then(res => {
+            this.form = Object.assign({}, res.data.data, {billingModelTemplate: '0'});
+          });
           this.actionType = '编辑';
         } else {
           this.form = {

@@ -109,7 +109,7 @@ export const contractCostModel = resource('/bms-cbmi', http, {
     return http.post('/bms-cbmi/query/page', obj);
   },
   queryDetail(obj) {
-    return http.post('/bms-cbmi/query', obj);
+    return http.post(`/bms-cbmi/query/${obj.contractBillingModelId}`);
   }
 });
 

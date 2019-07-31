@@ -31,7 +31,7 @@
         {{formItem.billingModelState === '0' ? '停用': '启用'}}
       </oms-row>
       <h2>计费项</h2>
-      <cost-table-util :data="data.billingItems"/>
+      <cost-table-util :data="data.billingItems" :showBtn="false"/>
     </div>
   </div>
 </template>

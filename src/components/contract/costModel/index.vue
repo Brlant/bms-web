@@ -120,6 +120,8 @@
       resetRightBox() {
         this.defaultPageRight.width = '900px';
         this.showIndex = -1;
+        this.currentItemId = '';
+        this.currentItem = {};
       },
       showPart(index) {
         this.currentPart = this.dialogComponents[index];
