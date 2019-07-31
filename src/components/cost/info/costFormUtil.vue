@@ -25,7 +25,7 @@
     </el-form-item>
     <el-row v-show="currentItem.billingItemNo">
       <el-col :span="14">
-        <el-form-item label="计费规则" label-width="80px">{{currentItem.billingRules}}</el-form-item>
+        <el-form-item label="计费规则">{{currentItem.billingRules}}</el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="单位" label-width="80px">{{currentItem.billingUnit}}</el-form-item>
@@ -35,8 +35,8 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="6">
-        <el-form-item label="单价" prop="unitPrice" label-width="100px"
+      <el-col :span="7">
+        <el-form-item label="单价" prop="unitPrice" label-width="120px"
                       :rules="[{required: true, message: '请输入单价', trigger: 'blur'}]">
           <oms-input placeholder="请输入单价" type="input" v-model="currentItem.unitPrice" @blur="formatPrice"/>
         </el-form-item>
@@ -49,14 +49,14 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-      <el-col :span="6" v-if="currentItem.ladderState === '1'">
+      <el-col :span="5" v-if="currentItem.ladderState === '1'">
         <el-form-item label="上限" label-width="80px" :rules="[{required: true, message: '请输入上限', trigger: 'blur'}]">
-          <oms-input placeholder="请输入单价上限" type="input" v-model="currentItem.upperLimit"/>
+          <oms-input placeholder="请输入上限" type="input" v-model="currentItem.upperLimit"/>
         </el-form-item>
       </el-col>
-      <el-col :span="6" v-if="currentItem.ladderState === '1'">
+      <el-col :span="5" v-if="currentItem.ladderState === '1'">
         <el-form-item label="下限" label-width="80px" :rules="[{required: true, message: '请输入下限', trigger: 'blur'}]">
-          <oms-input placeholder="请输入单价下限" type="input" v-model="currentItem.lowerLimit"/>
+          <oms-input placeholder="请输入下限" type="input" v-model="currentItem.lowerLimit"/>
         </el-form-item>
       </el-col>
     </el-row>

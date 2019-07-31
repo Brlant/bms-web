@@ -8,12 +8,10 @@
         </el-button>
       </template>
     </search-part>
-    <status-list :activeStatus="filters.status" :statusList="orgType"
-                 :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
-                 :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="18">模型名称</el-col>
+        <el-col :span="9">计费模型名称</el-col>
+        <el-col :span="9">合同</el-col>
         <el-col :span="6">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
@@ -33,7 +31,8 @@
              class="order-list-item order-list-item-bg" @click="showDetail(item)"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="18">{{item.billingModelName}}</el-col>
+            <el-col :span="9">{{item.billingModelName}}</el-col>
+            <el-col :span="9">{{item.contractName}}</el-col>
             <el-col :span="6" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
             </el-col>

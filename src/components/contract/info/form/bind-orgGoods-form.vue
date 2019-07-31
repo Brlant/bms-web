@@ -9,15 +9,15 @@
         <el-form-item label="合同名称">{{formItem.contractName}}</el-form-item>
         <el-form-item label="合同编号">{{formItem.contractNo}}</el-form-item>
         <el-form-item label="甲方">{{formItem.orgName}}</el-form-item>
-        <el-form-item label="甲方货品" prop="orgGoodsIds">
-          <el-select filterable remote multiple placeholder="请输入名称搜甲方货品" :remote-method="queryOrgGoodsListNew"
+        <el-form-item label="货品" prop="orgGoodsIds">
+          <el-select filterable remote multiple placeholder="请输入名称搜货品" :remote-method="queryOrgGoodsListNew"
                      :clearable="true" v-model="form.orgGoodsIds" popperClass="good-selects">
             <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in orgGoodsList">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="计费模型" prop="costModelIds">
-          <el-select filterable remote multiple placeholder="请输入名称搜计费模型" :remote-method="queryCostModelList"
+          <el-select filterable remote placeholder="请输入名称搜计费模型" :remote-method="queryCostModelList"
                      :clearable="true" v-model="form.costModelIds" popperClass="good-selects">
             <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in costModelList">
             </el-option>
@@ -84,7 +84,6 @@
     methods: {
       queryOrgGoodsListNew(query) {
         let params = {
-          id: this.formItem.orgId,
           keyWord: query
         };
         this.queryOrgGoodsList(params)

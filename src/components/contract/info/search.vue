@@ -24,12 +24,10 @@
           </oms-form-row>
         </el-col>
         <el-col :span="8">
-          <oms-form-row label="业务员" :span="5">
-            <el-select placeholder="请选择业务员" v-model="searchCondition.businessManageId"
-                       filterable clearable remote :remote-method="queryDepartmentUserNew">
-              <el-option :label="item.name" :value="item.id" :key="item.id"
-                         v-for="item in departmentUserList"></el-option>
-            </el-select>
+          <oms-form-row label="甲方" :span="5">
+            <org-select :list="orgList"
+                        :remoteMethod="queryAllOrg"
+                        placeholder="请输入名称搜索甲方" v-model="searchCondition.orgId"></org-select>
           </oms-form-row>
         </el-col>
         <el-col :span="8">

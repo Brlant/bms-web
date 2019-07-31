@@ -27,9 +27,9 @@
     <el-table-column prop="actionType" label="单位">
       <template slot-scope="scope">{{scope.row.billingUnit}}</template>
     </el-table-column>
-    <el-table-column prop="actionType" label="操作" width="150px" fixed="right" v-if="showBtn">
+    <el-table-column prop="actionType" label="操作" :width="isShowEdit ? '150px' : '100px'" fixed="right" v-if="showBtn">
       <template slot-scope="scope">
-        <des-btn icon="edit" @click="$emit('edit', scope.row)">编辑</des-btn>
+        <des-btn icon="edit" v-if="isShowEdit" @click="$emit('edit', scope.row)">编辑</des-btn>
         <des-btn icon="delete" @click="$emit('remove', scope.row)">删除</des-btn>
       </template>
     </el-table-column>
@@ -40,6 +40,10 @@
     props: {
       data: Array,
       showBtn: {
+        type: Boolean,
+        default: true
+      },
+      isShowEdit: {
         type: Boolean,
         default: true
       }

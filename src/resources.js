@@ -10,14 +10,20 @@ export const http = axios.create({
   withCredentials: true
 });
 
+function isNewReturnType(data) {
+  let keys = Object.keys(data);
+  if (keys.length !== 3) return false;
+  return ['code', 'data', 'msg'].every(e => keys.includes(e));
+}
+
 http.interceptors.response.use(response => {
-  if (response.data.code) {
+  if (isNewReturnType(response.data)) {
     switch (response.data.code) {
       case 200 :
         return response;
       case 401:
         window.location.href = '#/login';
-        return response;
+        return Promise.reject({response});
       case 403:
         Notification.error({
           message: '您没有权限请求信息，请联系管理员。',
@@ -25,12 +31,11 @@ http.interceptors.response.use(response => {
             window.localStorage.removeItem('noticeError');
           }
         });
-        return response;
+        return Promise.reject({response});
       case 400:
-        Notification.error({
-          message: response.data.msg,
-        });
-        return response;
+        return Promise.reject({response});
+      default:
+        return Promise.reject({response});
     }
   } else {
     return response;
@@ -95,16 +100,16 @@ Vue.prototype.$http = http;
 // 合同关联计费模型
 export const contractCostModel = resource('/bms-cbmi', http, {
   save(obj) {
-    return http.post('/bms-cbmi/add-contract-billing-model-item', obj);
+    return http.post('/bms-cbmi/add', obj);
   },
   update(obj) {
-    return http.put('/bms-cbmi/edit-contract-billing-model-item', obj);
+    return http.put('/bms-cbmi/edit', obj);
   },
   query(obj) {
-    return http.post('/bms-cbmi/query-contract-billing-model-page', obj);
+    return http.post('/bms-cbmi/query/page', obj);
   },
   queryDetail(obj) {
-    return http.post('/bms-cbmi/query-contract-billing-model-item', obj);
+    return http.post('/bms-cbmi/query', obj);
   }
 });
 

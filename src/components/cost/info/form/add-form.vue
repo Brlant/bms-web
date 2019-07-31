@@ -1,16 +1,16 @@
 <template>
-  <dialog-template :btnSavePosition="100">
+  <dialog-template :btnSavePosition="120">
     <template slot="title">{{actionType}}计费模板</template>
     <template slot="btnSave">
       <el-button class="mt-10" :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
     </template>
     <template slot="content">
-      <el-form :model="form" :rules="rules" label-width="100px" ref="form">
+      <el-form :model="form" :rules="rules" label-width="120px" ref="form">
         <el-form-item label="模板名称" prop="billingModelName">
           <oms-input placeholder="请输入计费模板名称" type="input" v-model="form.billingModelName"/>
         </el-form-item>
       </el-form>
-      <el-form :model="currentItem" :rules="rules" label-width="100px" ref="addForm">
+      <el-form :model="currentItem" :rules="rules" label-width="120px" ref="addForm">
         <cost-form-util ref="costUtil" :currentItem="currentItem"/>
         <el-form-item>
           <el-button type="primary" @click="addItem">添加</el-button>
@@ -127,6 +127,9 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
+            if(!this.form.billingItems.length) {
+              return this.$notify.info({message: '请添加计费项'})
+            }
             if (!this.form.billingModelId) {
               this.doing = true;
               this.$httpRequestOpera(costModel.save(this.form), {

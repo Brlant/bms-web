@@ -19,11 +19,12 @@
           </oms-form-row>
         </el-col>
         <el-col :span="12">
-          <oms-form-row label="计费模型类型" :span="5">
-            <el-radio-group v-model="searchCondition.billingModelTemplate" size="small">
-              <el-radio-button label="0">普通计费模型</el-radio-button>
-              <el-radio-button label="1">计费模板</el-radio-button>
-            </el-radio-group>
+          <oms-form-row label="合同" :span="5">
+            <el-select placeholder="请输入名称搜索合同" v-model="searchCondition.contractId"
+                       filterable clearable remote :remote-method="queryContractList">
+              <el-option :label="item.contractName" :value="item.contractId" :key="item.contractId"
+                         v-for="item in contractList"></el-option>
+            </el-select>
           </oms-form-row>
         </el-col>
       </el-form>
