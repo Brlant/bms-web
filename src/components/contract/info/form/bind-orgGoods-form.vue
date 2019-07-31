@@ -104,7 +104,7 @@
           this.projectList = [
             {projectName: res.data.data.projectName, projectId: res.data.data.projectId}
           ];
-          this.costModelList = [
+          this.contractCostModelList = [
             {billingModelName: res.data.data.billingModelName, billingModelId: res.data.data.billingModelId}
           ];
           this.form = res.data.data;

@@ -195,7 +195,7 @@
             errorTitle: '启用失败',
             success: (res) => {
               if (res.data.code === 200) {
-                item.contractState = '1';
+                this.queryList(this.pager.currentPage);
               } else {
                 this.$notify.error({message: res.data.msg});
               }
@@ -212,7 +212,7 @@
             errorTitle: '停用失败',
             success: (res) => {
               if (res.data.code === 200) {
-                item.contractState = '0';
+                this.queryList(this.pager.currentPage);
               } else {
                 this.$notify.error({message: res.data.msg});
               }
