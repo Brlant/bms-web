@@ -68,6 +68,8 @@
 </template>
 <script>
   import utils from '@/tools/utils';
+  import {closeAccount} from '@/resources';
+
   export default {
     props: {
       data: Array,
@@ -92,7 +94,18 @@
         index > -1 && this.data.splice(index, 1);
       },
       save() {
-
+        let list = this.data.map(m => ({
+          billingOfAccountId: m.billingOfAccountId,
+          statementAmount: m.statementAmount
+        }));
+        this.$httpRequestOpera(closeAccount.batchCreate(list), {
+          errorTitle: '生成结算单完成',
+          success: res => {
+            this.$emit('change');
+          },
+          error: () => {
+          }
+        });
       }
     }
   };

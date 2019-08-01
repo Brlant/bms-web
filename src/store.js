@@ -107,6 +107,11 @@ const state = {
         {name: '存储散件货位体积', id: 'B5', unit: '元/m³', rule: '每个品种的散件体积 X 计费单价'}
       ]
     }
+  ],
+  invoiceTypes: [
+    {key: '0', label: '增值税普通发票'},
+    {key: '1', label: '增值税专用发票'},
+    {key: '2', label: '增值税电子普通发票'}
   ]
 };
 

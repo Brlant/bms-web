@@ -8,35 +8,36 @@
     <el-table :data="dataList" v-loading="loadingData"
               :row-style="{cursor: 'pointer'}" @row-click="showDetail"
               border class="clearfix mt-20" ref="orderDetail">
-      <el-table-column prop="customerName" label="甲方">
+      <el-table-column prop="customerName" label="甲方" width="200">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
       </el-table-column>
-      <el-table-column prop="contractName" label="合同">
+      <el-table-column prop="contractName" label="合同" width="200">
         <template slot-scope="scope">{{scope.row.contractName}}</template>
       </el-table-column>
-      <el-table-column prop="accountCheckNo" label="结算单号">
-        <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
+      <el-table-column prop="accountCheckNo" label="结算单号" width="150">
+        <template slot-scope="scope">{{scope.row.statementNo}}</template>
       </el-table-column>
-      <el-table-column prop="accountCheckAmount" label="结算单金额" width="200">
-        <template slot-scope="scope">{{scope.row.accountCheckAmount}}</template>
+      <el-table-column prop="accountCheckAmount" label="结算单金额" width="120">
+        <template slot-scope="scope">{{scope.row.statementAmount}}</template>
       </el-table-column>
-      <el-table-column prop="unreturnedAmount" label="待回款金额" width="200">
+      <el-table-column prop="unreturnedAmount" label="待回款金额" width="120">
         <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
       </el-table-column>
-      <el-table-column prop="unreturnedAmount" label="结算日期" width="200">
-        <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+      <el-table-column prop="unreturnedAmount" label="结算日期" width="170">
+        <template slot-scope="scope">{{scope.row.statementTime | time}}</template>
       </el-table-column>
-      <el-table-column prop="unreturnedAmount" label="回款日期" width="200">
-        <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+      <el-table-column prop="unreturnedAmount" label="回款日期" width="170">
+        <template slot-scope="scope">{{scope.row.backAmountTime | time}}</template>
       </el-table-column>
       <el-table-column prop="accountCheckType" label="状态" width="120">
         <template slot-scope="scope">
-          {{orgType[scope.row.accountCheckType].title}}
+          {{orgType[scope.row.statementType].title}}
         </template>
       </el-table-column>
-      <el-table-column prop="operate" label="操作" width="120" v-if="filters.accountCheckType === '0'">
+      <el-table-column prop="operate" label="操作" width="120" v-if="filters.accountCheckType < 2" fixed="right">
         <template slot-scope="scope">
-          <des-btn icon="edit" @click="edit(scope.row)">编辑</des-btn>
+          <des-btn icon="edit" @click="edit(scope.row, 0)" v-show="filters.accountCheckType === '0'">编辑</des-btn>
+          <des-btn icon="edit" @click="edit(scope.row, 1)" v-show="filters.accountCheckType === '1'">录入发票</des-btn>
         </template>
       </el-table-column>
     </el-table>
@@ -52,7 +53,7 @@
 
     <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
       <component :formItem="form" :index="showIndex" :orgType="orgType" :is="currentPart" @change="change"
-                 @right-close="resetRightBox"/>
+                 @right-close="resetRightBox" :addType="addType"/>
     </page-right>
 
   </div>
@@ -80,13 +81,15 @@
           1: Detail
         },
         orgType: {
-          0: {'title': '待确定', 'num': 0, 'accountCheckType': '0'},
+          0: {'title': '待审核', 'num': 0, 'accountCheckType': '0'},
           1: {'title': '待开票', 'num': 0, 'accountCheckType': '1'},
           2: {'title': '待回款', 'num': 0, 'accountCheckType': '2'},
           3: {'title': '已回款', 'num': 0, 'accountCheckType': '3'},
+          4: {'title': '审核未通过', 'num': 0, 'accountCheckType': '9'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
-        billItems: []
+        billItems: [],
+        addType: -1
       };
     },
     watch: {
@@ -138,6 +141,7 @@
         this.showIndex = -1;
         this.currentItemId = '';
         this.currentItem = {};
+        this.addType = -1;
       },
       showPart(index) {
         this.currentPart = this.dialogComponents[index];
@@ -161,21 +165,23 @@
       queryStatusNum: function (params) {
         closeAccount.queryStateNum(params).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['toBeConfirmed'];
-          this.orgType[1].num = data['noCheck'];
-          this.orgType[2].num = data['checkedNum'];
-          this.orgType[3].num = data['checkedNum'];
+          this.orgType[0].num = data['checkPending'];
+          this.orgType[1].num = data['checkMakeInvoice'];
+          this.orgType[2].num = data['checkReturnMoney'];
+          this.orgType[3].num = data['alreadyReturnMoney'];
+          this.orgType[4].num = data['noPassNum'];
         });
       },
       add() {
         this.form = {};
         this.showPart(0);
       },
-      edit(item) {
+      edit(item, addType) {
         this.currentItem = item;
         this.currentItemId = item.billingModelId;
         this.form = item;
         this.defaultPageRight.width = '600px';
+        this.addType = addType;
         this.showPart(0);
       },
       change() {

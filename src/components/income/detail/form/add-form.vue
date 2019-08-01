@@ -39,8 +39,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="批号" prop="batchNumber"
-                          :rules="[{required: true, message: '请输入选择批号', trigger: 'change'}]">
+            <el-form-item label="批号">
               <el-select filterable placeholder="请输入名称搜索批号" :clearable="true"
                          remote :remote-method="queryBatchNumberListNew"
                          v-model="form.batchNumber" popperClass="good-selects">

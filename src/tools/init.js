@@ -156,23 +156,23 @@ export function init(Vue) {
             duration: 2000,
             message: successTitle
           });
-          success(res);
+          success && success(res);
         } else {
-          error(res);
+          error && error(res);
         }
       } else {
         successTitle && this.$notify.success({
           duration: 2000,
           message: successTitle
         });
-        success(res);
+        success && success(res);
       }
     }).catch(e => {
       this.$notify.error({
         duration: 2000,
         message: e.response && e.response.data && e.response.data.msg || errorTitle || '操作失败'
       });
-      error(e);
+      error && error(e);
     });
   };
 
