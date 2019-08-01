@@ -112,7 +112,8 @@ const state = {
     {key: '0', label: '增值税普通发票'},
     {key: '1', label: '增值税专用发票'},
     {key: '2', label: '增值税电子普通发票'}
-  ]
+  ],
+  billItemList: []
 };
 
 const mutations = {
@@ -182,6 +183,9 @@ const mutations = {
   initRequestingDictAry(state, data) {
     state.requestingDictAry = data;
   },
+  initBillItemList(state, data) {
+    state.billItemList = data;
+  }
 };
 
 export default new Vuex.Store({

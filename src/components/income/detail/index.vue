@@ -126,7 +126,6 @@
           2: {'title': '已回款', 'num': 0, 'attachmentType': '2'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
-        billItems: [],
         selectList: [],
         dySelectList: []
       };
@@ -140,9 +139,6 @@
       }
     },
     mounted() {
-      this.$store.state.costTypes.forEach(i => {
-        this.billItems.push(...i.items);
-      });
       this.queryList(1);
     },
     methods: {
@@ -169,7 +165,7 @@
         this.showPart(2);
       },
       formatBillingItemName(item) {
-        let bill = this.billItems.find(f => f.id === item.billingItemName);
+        let bill = this.$store.state.billItemList.find(f => f.id === item.billingItemName);
         if (!bill) return;
         return bill.name;
       },

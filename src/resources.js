@@ -113,9 +113,11 @@ export const closeAccount = resource('', http, {
   },
   update(obj) {
     return http.put('/bms-statement/edit', obj);
+  },
+  queryDetail(obj) {
+    return http.post('/bms-sd/query', obj);
   }
 });
-
 
 
 // 对账单

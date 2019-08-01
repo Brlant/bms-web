@@ -46,6 +46,7 @@
     .el-scrollbar__wrap {
       overflow-x: hidden;
     }
+
     .app-content-view {
       padding: 0 10px;
     }
@@ -98,6 +99,11 @@
         this.setBodyHeight();
       });
       this.setBodyHeight();
+      let list = [];
+      this.$store.state.costTypes.forEach(i => {
+        list.push(...i.items);
+      });
+      this.$store.commit('initBillItemList', list);
     }
   };
 </script>
