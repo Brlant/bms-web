@@ -6,12 +6,21 @@
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
+        <el-button @click="batchCreate" plain size="small" v-has="''" v-show="filters.attachmentType === '0'">
+          <f-a class="icon-small" name="allot"></f-a>
+          批量生产对账单
+        </el-button>
       </template>
     </search-part>
     <status-list :activeStatus="filters.attachmentType" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
-    <el-table :data="dataList" border class="clearfix mt-20" ref="orderDetail">
+    <el-table :data="dataList" @selection-change="selectionChange"
+              border class="clearfix mt-20" ref="orderDetail">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column prop="contractName" label="合同" width="100">
         <template slot-scope="scope">{{scope.row.contractName}}</template>
       </el-table-column>
@@ -75,7 +84,7 @@
   import SearchPart from './search';
   import addForm from './form/add-form.vue';
   import CommonMixin from '@/mixins/commonMixin';
-  import {contractAccountDetail} from '@/resources';
+  import {accountBill, contractAccountDetail} from '@/resources';
   import Detail from './detail.vue';
 
   export default {
@@ -99,7 +108,8 @@
           2: {'title': '已回款', 'num': 0, 'attachmentType': '2'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
-        billItems: []
+        billItems: [],
+        selectList: []
       };
     },
     watch: {
@@ -117,6 +127,24 @@
       this.queryList(1);
     },
     methods: {
+      selectionChange(val) {
+        this.selectList = val;
+      },
+      batchCreate() {
+        if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
+        this.$confirmOpera('是否批量生成勾选的计费明细的对账单', () => {
+          let data = {
+            idList: this.selectList.map(m => m.billingOfAccountId)
+          };
+          this.$httpRequestOpera(accountBill.batchCreateBill(data), {
+            successTitle: '生成成功',
+            errorTitle: '生成失败',
+            success: (res) => {
+              this.queryList(this.pager.currentPage);
+            }
+          });
+        });
+      },
       formatBillingItemName(item) {
         let bill = this.billItems.find(f => f.id === item.billingItemName);
         if (!bill) return;
@@ -171,6 +199,7 @@
         this.showPart(1);
       },
       queryList(pageNo) {
+        this.selectList = [];
         const http = contractAccountDetail.query;
         const params = this.queryUtil(http, pageNo);
         this.queryStatusNum(params);
