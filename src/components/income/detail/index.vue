@@ -15,7 +15,7 @@
     <status-list :activeStatus="filters.attachmentType" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
-    <el-table :data="dataList" @selection-change="selectionChange"
+    <el-table :data="dataList" @selection-change="selectionChange" v-loading="loadingData"
               border class="clearfix mt-20" ref="orderDetail">
       <el-table-column
         type="selection"
@@ -32,6 +32,9 @@
       </el-table-column>
       <el-table-column prop="actionType" label="订单号" width="140">
         <template slot-scope="scope">{{scope.row.orderNumber}}</template>
+      </el-table-column>
+      <el-table-column prop="actionType" label="对账单号" width="150">
+        <template slot-scope="scope">{{scope.row.accountingRecordNo}}</template>
       </el-table-column>
       <el-table-column prop="actionType" label="货品" width="200">
         <template slot-scope="scope">
@@ -54,7 +57,8 @@
       <el-table-column prop="billingTotal" label="计费合计">
         <template slot-scope="scope">{{scope.row.billingTotal}}</template>
       </el-table-column>
-      <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计" fixed="right">
+      <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计"
+                       :fixed="filters.attachmentType === '0' ? 'right' : ''">
         <template slot-scope="scope">
           <oms-input v-if="scope.row.attachmentType === '0'" v-model="scope.row.realityBillingTotal"
                      @blur="editItem(scope.row)"/>
@@ -133,10 +137,7 @@
       batchCreate() {
         if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
         this.$confirmOpera('是否批量生成勾选的计费明细的对账单', () => {
-          let data = {
-            idList: this.selectList.map(m => m.billingOfAccountId)
-          };
-          this.$httpRequestOpera(accountBill.batchCreateBill(data), {
+          this.$httpRequestOpera(accountBill.batchCreateBill(this.selectList.map(m => m.billingOfAccountId)), {
             successTitle: '生成成功',
             errorTitle: '生成失败',
             success: (res) => {
@@ -221,42 +222,6 @@
         this.currentItemId = item.billingModelId;
         this.form = item;
         this.showPart(0);
-      },
-      start(item) {
-        this.currentItem = item;
-        this.currentItemId = item.billingModelId;
-        this.$confirmOpera(`是否启用计费模板"${item.billingModelName}"`, () => {
-          this.$httpRequestOpera(contractAccountDetail.start(item), {
-            successTitle: '启用成功',
-            errorTitle: '启用失败',
-            success: (res) => {
-              if (res.data.code === 200) {
-                this.queryList(this.pager.currentPage);
-                this.resetRightBox();
-              } else {
-                this.$notify.error({message: res.data.msg});
-              }
-            }
-          });
-        });
-      },
-      stop(item) {
-        this.currentItem = item;
-        this.currentItemId = item.billingModelId;
-        this.$confirmOpera(`是否停用计费模板"${item.billingModelName}"`, () => {
-          this.$httpRequestOpera(contractAccountDetail.stop(item), {
-            successTitle: '停用完成',
-            errorTitle: '停用失败',
-            success: (res) => {
-              if (res.data.code === 200) {
-                this.queryList(this.pager.currentPage);
-                this.resetRightBox();
-              } else {
-                this.$notify.error({message: res.data.msg});
-              }
-            }
-          });
-        });
       },
       change() {
         this.resetRightBox();

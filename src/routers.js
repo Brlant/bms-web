@@ -71,7 +71,7 @@ export const routes = [
           },
           {
             path: '/income/billing/manager',
-            component: () => import('./components/test.vue'),
+            component: () => import('./components/income/bill/index.vue'),
             meta: {moduleId: 'monitoring', title: '对账单管理', perm: 'ccs-monitordev-scan', type: 1}
           },
           {

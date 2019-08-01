@@ -102,18 +102,21 @@ export const accountBill = resource('', http, {
   batchCreateBill(obj) {
     return http.post('/bms-ac/account-check', obj);
   },
-  save(obj) {
-    return http.post('/bms-boa/add-billing-of-account', obj);
-  },
-  update(obj) {
-    return http.put('/bms-boa/edit-billing-of-account', obj);
-  },
   query(obj) {
-    return http.post('/bms-boa/query-billing-of-account', obj);
+    return http.post('/bms-ac/query-account-check', obj);
   },
   queryStateNum: (params) => {
-    return http.post('/bms-boa/count', params);
-  }
+    return http.post('/bms-ac/count', params);
+  },
+  confirm(obj) {
+    return http.post('/bms-ac/confirm', obj);
+  },
+  audit(obj) {
+    return http.post('/bms-ac/audit', obj);
+  },
+  update(obj) {
+    return http.put('/bms-ac/edit-account-check', obj);
+  },
 });
 
 

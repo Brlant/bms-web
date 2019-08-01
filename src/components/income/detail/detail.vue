@@ -26,10 +26,6 @@
   <div class="content-part">
     <div class="content-right min-gutter">
       <h3 class="clearfix">详情</h3>
-      <oms-row label="模型名称" :span="5">{{ formItem.billingModelName }}</oms-row>
-      <oms-row label="状态" :span="5">
-        {{formItem.billingModelState === '0' ? '停用': '启用'}}
-      </oms-row>
     </div>
   </div>
 </template>

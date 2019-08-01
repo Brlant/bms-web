@@ -22,11 +22,7 @@
     margin-bottom: 10px;
   }
 
-  .detail-title {
-    margin: 0 0 10px 0;
-    padding: 0 10px;
-    border-left: 4px solid $activeColor;
-  }
+
 </style>
 <template>
   <div class="content-part">

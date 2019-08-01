@@ -194,6 +194,7 @@
           if (valid && this.doing === false) {
             this.form.customerId = this.contractItem.orgId;
             this.form.projectId = this.contractItem.projectId;
+            this.doing = true;
             this.$httpRequestOpera(contractAccountDetail.save(this.form), {
               errorTitle: '添加失败',
               success: res => {

@@ -30,11 +30,6 @@
           </oms-form-row>
         </el-col>
         <el-col :span="8">
-          <oms-form-row label="订单号" :span="5">
-            <oms-input placeholder="请输入订单号" type="input" v-model="searchCondition.orderNumber"/>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
           <oms-form-row label="对账单号" :span="5">
             <oms-input placeholder="请输入对账单号" type="input" v-model="searchCondition.accountCheckNo"/>
           </oms-form-row>
@@ -55,8 +50,7 @@
         searchCondition: {
           contractId: '',
           customerId: '',
-          accountCheckNo: '',
-          orderNumber: ''
+          accountCheckNo: ''
         },
         showSearch: false,
         list: [],
@@ -84,8 +78,7 @@
         this.searchCondition = {
           contractId: '',
           customerId: '',
-          accountCheckNo: '',
-          orderNumber: ''
+          accountCheckNo: ''
         };
         this.$emit('search', this.searchCondition);
       },
