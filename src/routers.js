@@ -76,7 +76,7 @@ export const routes = [
           },
           {
             path: '/income/settle/manager',
-            component: () => import('./components/test.vue'),
+            component: () => import('./components/income/close/index.vue'),
             meta: {moduleId: 'monitoring', title: '结算单管理', perm: 'ccs-monitordev-scan', type: 1}
           },
           {

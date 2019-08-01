@@ -97,6 +97,27 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// 结算单
+export const closeAccount = resource('', http, {
+  batchCreate(obj) {
+    return http.post('/bms-sd/race-blending', obj);
+  },
+  query(obj) {
+    return http.post('/bms-statement/query-page', obj);
+  },
+  queryStateNum: (params) => {
+    return http.post('/bms-statement/count', params);
+  },
+  audit(obj) {
+    return http.post('/bms-statement/audit', obj);
+  },
+  update(obj) {
+    return http.put('/bms-statement/edit', obj);
+  }
+});
+
+
+
 // 对账单
 export const accountBill = resource('', http, {
   batchCreateBill(obj) {

@@ -10,6 +10,11 @@
           <f-a class="icon-small" name="allot"></f-a>
           批量生产对账单
         </el-button>
+        <el-button @click="batchCreateCloseAccount" plain size="small" v-has="''"
+                   v-show="filters.attachmentType === '1'">
+          <f-a class="icon-small" name="allot"></f-a>
+          批量生产结算单
+        </el-button>
       </template>
     </search-part>
     <status-list :activeStatus="filters.attachmentType" :statusList="orgType"
@@ -54,11 +59,17 @@
       <el-table-column prop="billingQuantity" label="数量">
         <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
       </el-table-column>
+      <el-table-column prop="unreturnedAmount" label="待回款金额" width="120">
+        <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+      </el-table-column>
+      <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120">
+        <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
+      </el-table-column>
       <el-table-column prop="billingTotal" label="计费合计">
         <template slot-scope="scope">{{scope.row.billingTotal}}</template>
       </el-table-column>
       <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计"
-                       :fixed="filters.attachmentType === '0' ? 'right' : ''">
+                       :fixed="filters.attachmentType === '0' ? 'right' : false">
         <template slot-scope="scope">
           <oms-input v-if="scope.row.attachmentType === '0'" v-model="scope.row.realityBillingTotal"
                      @blur="editItem(scope.row)"/>
@@ -77,8 +88,8 @@
     </div>
 
     <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
-      <component :formItem="form" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change"
-                 @right-close="resetRightBox"/>
+      <component :formItem="form" :data="dySelectList" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change"
+                 @right-close="resetRightBox" :formatBillingItemName="formatBillingItemName"/>
     </page-right>
 
   </div>
@@ -90,10 +101,12 @@
   import CommonMixin from '@/mixins/commonMixin';
   import {accountBill, contractAccountDetail} from '@/resources';
   import Detail from './detail.vue';
+  import CloseAccount from './closeAccount';
 
   export default {
     components: {
-      SearchPart
+      SearchPart,
+      CloseAccount
     },
     mixins: [CommonMixin],
     data() {
@@ -104,7 +117,8 @@
         },
         dialogComponents: {
           0: addForm,
-          1: Detail
+          1: Detail,
+          2: CloseAccount
         },
         orgType: {
           0: {'title': '未对账', 'num': 0, 'attachmentType': '0'},
@@ -113,7 +127,8 @@
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
         billItems: [],
-        selectList: []
+        selectList: [],
+        dySelectList: []
       };
     },
     watch: {
@@ -145,6 +160,13 @@
             }
           });
         });
+      },
+      batchCreateCloseAccount() {
+        if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
+        let list = JSON.parse(JSON.stringify(this.selectList));
+        list.forEach(i => i.statementAmount = i.unliquidatedAmount);
+        this.dySelectList = list;
+        this.showPart(2);
       },
       formatBillingItemName(item) {
         let bill = this.billItems.find(f => f.id === item.billingItemName);
@@ -185,6 +207,7 @@
         this.showIndex = -1;
         this.currentItemId = '';
         this.currentItem = {};
+        this.dySelectList = [];
       },
       showPart(index) {
         this.currentPart = this.dialogComponents[index];

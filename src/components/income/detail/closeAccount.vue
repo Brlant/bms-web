@@ -1,0 +1,99 @@
+<template>
+  <dialog-template :btnSavePosition="120">
+    <template slot="title">生成结算单</template>
+    <template slot="btnSave">
+      <el-button class="mt-10" :disabled="doing" @click="save" plain type="primary">生成结算单</el-button>
+    </template>
+    <template slot="content">
+      <el-table :data="data" border class="clearfix mt-20" ref="orderDetail">
+        <el-table-column prop="contractName" label="合同" width="100">
+          <template slot-scope="scope">{{scope.row.contractName}}</template>
+        </el-table-column>
+        <el-table-column prop="customerName" label="甲方" width="140">
+          <template slot-scope="scope">{{scope.row.customerName}}</template>
+        </el-table-column>
+        <el-table-column prop="actionType" label="项目" width="140">
+          <template slot-scope="scope">{{scope.row.projectName}}</template>
+        </el-table-column>
+        <el-table-column prop="actionType" label="订单号" width="140">
+          <template slot-scope="scope">{{scope.row.orderNumber}}</template>
+        </el-table-column>
+        <el-table-column prop="actionType" label="对账单号" width="150">
+          <template slot-scope="scope">{{scope.row.accountingRecordNo}}</template>
+        </el-table-column>
+        <el-table-column prop="actionType" label="货品" width="200">
+          <template slot-scope="scope">
+            {{scope.row.orgGoodsName}}
+            <div>规格：{{scope.row.goodsSpecification}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="batchNumber" label="批号" width="120">
+          <template slot-scope="scope">{{scope.row.batchNumber}}</template>
+        </el-table-column>
+        <el-table-column prop="billingItemName" label="计费项" width="200">
+          <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
+        </el-table-column>
+        <el-table-column prop="billingUntilPrice" label="单价" width="150px">
+          <template slot-scope="scope">{{scope.row.billingUntilPrice}}</template>
+        </el-table-column>
+        <el-table-column prop="billingQuantity" label="数量">
+          <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
+        </el-table-column>
+
+        <el-table-column prop="billingTotal" label="计费合计">
+          <template slot-scope="scope">{{scope.row.billingTotal}}</template>
+        </el-table-column>
+        <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计">
+        </el-table-column>
+
+        <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
+          <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+        </el-table-column>
+        <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
+          <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
+        </el-table-column>
+        <el-table-column prop="realityBillingTotal" width="120px" label="结算金额" fixed="right">
+          <template slot-scope="scope">
+            <oms-input v-model="scope.row.statementAmount" @blur="editItem(scope.row)"/>
+          </template>
+        </el-table-column>
+        <el-table-column prop="operate" label="操作" width="120" fixed="right" v-if="data.length > 1">
+          <template slot-scope="scope">
+            <des-btn icon="delete" @click="deleteItem(scope.row)">删除</des-btn>
+          </template>
+        </el-table-column>
+      </el-table>
+    </template>
+  </dialog-template>
+</template>
+<script>
+  import utils from '@/tools/utils';
+  export default {
+    props: {
+      data: Array,
+      formatBillingItemName: Function
+    },
+    data() {
+      return {
+        doing: false
+      };
+    },
+    methods: {
+      formatPrice(item) {
+      },
+      editItem(item) {
+        if (item.statementAmount > item.unliquidatedAmount) {
+          item.statementAmount = item.unliquidatedAmount;
+        }
+        item.statementAmount = utils.autoformatDecimalPoint(item.statementAmount);
+      },
+      deleteItem(item) {
+        let index = this.data.indexOf(item);
+        index > -1 && this.data.splice(index, 1);
+      },
+      save() {
+
+      }
+    }
+  };
+</script>
