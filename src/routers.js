@@ -61,12 +61,12 @@ export const routes = [
       },
       {
         path: '/income',
-        component: () => import('./components/test.vue'),
+        component: () => import('./components/common/parent-route.vue'),
         meta: {moduleId: 'monitoring', title: '收入计费', icon: 'xiaoshouxiansuo', perm: 'ccs-monitordev-scan', type: 1},
         children: [
           {
             path: '/income/detail/manager',
-            component: () => import('./components/test.vue'),
+            component: () => import('./components/income/detail/index.vue'),
             meta: {moduleId: 'monitoring', title: '计费明细管理', perm: 'ccs-monitordev-scan', type: 1}
           },
           {

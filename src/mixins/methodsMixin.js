@@ -12,7 +12,8 @@ export default {
       costModelList: [],
       contractList: [],
       projectList: [],
-      contractCostModelList: []
+      contractCostModelList: [],
+      batchNumberList: []
     };
   },
   methods: {
@@ -76,6 +77,12 @@ export default {
     queryOrgGoodsList(params) {
       OrgGoods.query(params).then(res => {
         this.orgGoodsList = res.data.list;
+      });
+    },
+    queryBatchNumberList(query) {
+      let params = typeof query === 'object' ? query : {keyWord: query};
+      this.$http.get('/batch-number/pager', {params}).then(res => {
+        this.batchNumberList = res.data.list;
       });
     },
     queryProjectList(query) {
