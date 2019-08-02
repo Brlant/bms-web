@@ -131,7 +131,7 @@
     methods: {
       queryDetail() {
         closeAccount.queryDetail(this.formItem).then(res => {
-          // this.billAccountList = res.data.data;
+          this.billAccountList = res.data.data;
         });
       },
       formatBillingItemName(item) {

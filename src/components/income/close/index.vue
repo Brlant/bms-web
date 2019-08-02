@@ -37,7 +37,7 @@
       <el-table-column prop="operate" label="操作" width="120" v-if="filters.accountCheckType < 2" fixed="right">
         <template slot-scope="scope">
           <des-btn icon="edit" @click="edit(scope.row, 0)" v-show="filters.accountCheckType === '0'">编辑</des-btn>
-          <des-btn icon="edit" @click="edit(scope.row, 1)" v-show="filters.accountCheckType === '1'">录入发票</des-btn>
+          <des-btn icon="edit" @click="edit(scope.row, 1)" v-show="filters.accountCheckType === '1'">开具发票</des-btn>
         </template>
       </el-table-column>
     </el-table>

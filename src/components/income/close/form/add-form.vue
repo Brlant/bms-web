@@ -1,6 +1,6 @@
 <template>
   <dialog-template :btnSavePosition="120">
-    <template slot="title">{{addType === '0' ? '编辑对账单' : '录入发票'}}</template>
+    <template slot="title">{{addType === '0' ? '编辑对账单' : '开具发票'}}</template>
     <template slot="btnSave">
       <el-button class="mt-10" :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
     </template>
