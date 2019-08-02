@@ -1,6 +1,10 @@
 <template>
   <div class="order-page">
     <search-part @search="searchResult">
+      <el-button  slot="btn" @click="add" plain size="small" v-has="''">
+        <f-a class="icon-small" name="plus"></f-a>
+        添加
+      </el-button>
     </search-part>
     <el-table :data="dataList" v-loading="loadingData"
               border class="clearfix mt-20" ref="orderDetail">
@@ -34,6 +38,10 @@
                      layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
     </div>
+    <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
+      <component :formItem="form" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change"
+                 @right-close="resetRightBox"/>
+    </page-right>
   </div>
 </template>
 <script>
@@ -41,6 +49,7 @@
   import SearchPart from './search';
   import CommonMixin from '@/mixins/commonMixin';
   import {preRecords} from '@/resources';
+  import addForm from './form/add-form.vue';
 
   export default {
     components: {
@@ -51,6 +60,9 @@
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {},
+        dialogComponents: {
+          0: addForm,
+        },
         defaultPageRight: {'width': '700px', 'padding': 0}
       };
     },

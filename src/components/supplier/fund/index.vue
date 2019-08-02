@@ -1,18 +1,18 @@
 <template>
   <div class="order-page">
     <search-part @search="searchResult">
-      <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="perms[0]">
-          <f-a class="icon-small" name="plus"></f-a>
-          添加
-        </el-button>
-      </template>
+<!--      <template slot="btn">-->
+<!--        <el-button @click="add" plain size="small" v-has="perms[0]">-->
+<!--          <f-a class="icon-small" name="plus"></f-a>-->
+<!--          添加-->
+<!--        </el-button>-->
+<!--      </template>-->
     </search-part>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="10">单位名称</el-col>
+        <el-col :span="16">单位名称</el-col>
         <el-col :span="8">账户余额</el-col>
-        <el-col :span="6">操作</el-col>
+<!--        <el-col :span="6">操作</el-col>-->
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -31,12 +31,12 @@
              class="order-list-item order-list-item-bg no-pointer"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="10" class="R">{{item.orgName}}</el-col>
+            <el-col :span="16" class="R">{{item.orgName}}</el-col>
             <el-col :span="8" class="R">{{item.balance | formatMoney}}</el-col>
-            <el-col :span="6" class="opera-btn">
-              <des-btn @click="edit(item)" icon="edit" v-has="perms[1]">编辑</des-btn>
-              <des-btn @click="deleteItem(item)" icon="delete" v-has="perms[2]">删除</des-btn>
-            </el-col>
+<!--            <el-col :span="6" class="opera-btn">-->
+<!--              <des-btn @click="edit(item)" icon="edit" v-has="perms[1]">编辑</des-btn>-->
+<!--              <des-btn @click="deleteItem(item)" icon="delete" v-has="perms[2]">删除</des-btn>-->
+<!--            </el-col>-->
           </el-row>
         </div>
       </div>
