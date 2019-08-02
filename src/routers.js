@@ -85,9 +85,14 @@ export const routes = [
             meta: {moduleId: 'monitoring', title: '收款作业', perm: 'ccs-monitordev-scan', type: 1}
           },
           {
-            path: '/income/pre/receive/task',
+            path: '/income/pre/receive/balance',
             component: () => import('./components/test.vue'),
-            meta: {moduleId: 'monitoring', title: '预收款作业', perm: 'ccs-monitordev-scan', type: 1}
+            meta: {moduleId: 'monitoring', title: '预收款余额管理', perm: 'ccs-monitordev-scan', type: 1}
+          },
+          {
+            path: '/income/pre/receive/records',
+            component: () => import('./components/test.vue'),
+            meta: {moduleId: 'monitoring', title: '预收款作业记录', perm: 'ccs-monitordev-scan', type: 1}
           }
         ]
       },
