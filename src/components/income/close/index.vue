@@ -1,7 +1,7 @@
 <template>
   <div class="order-page">
     <search-part @search="searchResult">
-      <el-button slot="btn" @click="batchCreateReceiveTask" plain size="small" v-has="''"
+      <el-button slot="btn" v-has="'batch-collection-jobs-statement'" @click="batchCreateReceiveTask" plain size="small"
                  v-show="filters.statementType === '2'">
         <f-a class="icon-small" name="allot"></f-a>
         批量生成收货作业
@@ -43,8 +43,8 @@
       </el-table-column>
       <el-table-column prop="operate" label="操作" width="120" v-if="filters.statementType < 2" fixed="right">
         <template slot-scope="scope">
-          <des-btn icon="edit" @click="edit(scope.row, 0)" v-show="filters.statementType === '0'">编辑</des-btn>
-          <des-btn icon="edit" @click="edit(scope.row, 1)" v-show="filters.statementType === '1'">开具发票</des-btn>
+          <des-btn icon="edit" v-has="'edit-statement'" @click="edit(scope.row, 0)" v-show="filters.statementType === '0'">编辑</des-btn>
+          <des-btn icon="edit" v-has="'edit-statement'" @click="edit(scope.row, 1)" v-show="filters.statementType === '1'">开具发票</des-btn>
         </template>
       </el-table-column>
     </el-table>

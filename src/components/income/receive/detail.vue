@@ -104,7 +104,7 @@
     methods: {
       queryDetail() {
         receiveTask.queryDetail({collectionJobsId: this.formItem.collectionJobsId}).then(res => {
-          this.closeAccountList = res.data.data;
+          this.closeAccountList = res.data.data.map(m => Object.assign(m.statement, {collectionAmount: m.collectionAmount}));
         });
       },
       formatBillingItemName(item) {

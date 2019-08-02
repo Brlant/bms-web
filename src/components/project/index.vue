@@ -2,7 +2,7 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="''">
+        <el-button @click="add" plain size="small" v-has="'add-project'">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
@@ -44,9 +44,9 @@
               {{item.projectState === '0' ? '停用': '启用'}}
             </el-col>
             <el-col :span="4" class="opera-btn">
-              <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.projectState === '0'">启用</des-btn>
-              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.projectState === '1'">停用</des-btn>
+              <des-btn @click="edit(item)" icon="edit" v-has="'edit-project'">编辑</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="'enable-project'" v-show="item.projectState === '0'">启用</des-btn>
+              <des-btn @click="stop(item)" icon="stop" v-has="'enable-project'" v-show="item.projectState === '1'">停用</des-btn>
             </el-col>
           </el-row>
         </div>

@@ -98,7 +98,7 @@
         <el-table-column prop="statementAmount" width="120px" label="结算金额" fixed="right">
         </el-table-column>
       </el-table>
-      <div style="margin-left: 50px;margin-top: 20px">
+      <div style="margin-left: 50px;margin-top: 20px" v-has="'statement-audit'">
         <el-button type="success" @click="confirm" v-if="formItem.statementType === '0'">审核通过</el-button>
         <el-button type="primary" @click="noPass" v-if="formItem.statementType === '0'">审核不通过</el-button>
       </div>

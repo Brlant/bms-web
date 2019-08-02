@@ -45,8 +45,10 @@
         </el-col>
       </el-row>
       <div style="margin-left: 50px">
-        <el-button type="primary" @click="confirm" v-if="formItem.accountCheckType === '0'">确认帐单</el-button>
-        <el-button type="primary" @click="audit" v-if="formItem.accountCheckType === '1'">审核帐单</el-button>
+        <el-button type="primary" v-has="'account-check-confirm'" @click="confirm"
+                   v-if="formItem.accountCheckType === '0'">确认帐单</el-button>
+        <el-button type="primary" v-has="'account-check-audit'"
+                   @click="audit" v-if="formItem.accountCheckType === '1'">审核帐单</el-button>
       </div>
     </div>
   </div>

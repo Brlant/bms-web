@@ -2,7 +2,7 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="''">
+        <el-button @click="add" plain size="small" v-has="'add-contract-billing-model'">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
@@ -34,7 +34,7 @@
             <el-col :span="9">{{item.billingModelName}}</el-col>
             <el-col :span="9">{{item.contractName}}</el-col>
             <el-col :span="6" class="opera-btn">
-              <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
+              <des-btn @click="edit(item)" icon="edit" v-has="'edit-contract-billing-model'">编辑</des-btn>
             </el-col>
           </el-row>
         </div>

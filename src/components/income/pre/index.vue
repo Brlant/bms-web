@@ -1,7 +1,7 @@
 <template>
   <div class="order-page">
     <search-part @search="searchResult">
-      <el-button  slot="btn" @click="add" plain size="small" v-has="''">
+      <el-button  slot="btn" @click="add" plain size="small" v-has="'add-advance-collection-jobs'">
         <f-a class="icon-small" name="plus"></f-a>
         添加
       </el-button>

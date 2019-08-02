@@ -2,7 +2,7 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="''">
+        <el-button @click="add" plain size="small" v-has="'add-contract'">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
@@ -52,10 +52,10 @@
               {{item.contractState === '0' ? '停用': '启用'}}
             </el-col>
             <el-col :span="6" class="opera-btn">
-              <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
-              <des-btn @click="bind(item)" icon="allot" v-has="''">绑定货品</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.contractState === '0'">启用</des-btn>
-              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.contractState === '1'">停用</des-btn>
+              <des-btn @click="edit(item)" icon="edit" v-has="'edit-contract'">编辑</des-btn>
+              <des-btn @click="bind(item)" icon="allot" v-has="'add-contract-goods-model'">绑定货品</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="'enable-contract'" v-show="item.contractState === '0'">启用</des-btn>
+              <des-btn @click="stop(item)" icon="stop" v-has="'disable-contract'" v-show="item.contractState === '1'">停用</des-btn>
             </el-col>
           </el-row>
         </div>

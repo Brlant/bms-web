@@ -2,7 +2,7 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="''">
+        <el-button @click="add" plain size="small" v-has="'add-billing-model'">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
@@ -39,9 +39,10 @@
               {{item.billingModelState === '0' ? '停用': '启用'}}
             </el-col>
             <el-col :span="6" class="opera-btn">
-              <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.billingModelState === '0'">启用</des-btn>
-              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.billingModelState === '1'">停用</des-btn>
+              <des-btn @click="edit(item)" icon="edit" v-has="'edit-billing-model'">编辑</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="'启用计费模型模板'" v-show="item.billingModelState === '0'">启用</des-btn>
+              <des-btn @click="stop(item)" icon="stop" v-has="'disable-billing-model'"
+                       v-show="item.billingModelState === '1'">停用</des-btn>
             </el-col>
           </el-row>
         </div>

@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column prop="operate" label="操作" width="120" v-if="filters.accountCheckType === '0'">
         <template slot-scope="scope">
-          <des-btn icon="edit" @click="edit(scope.row)">编辑</des-btn>
+          <des-btn icon="edit" v-has="'edit-account-check'" @click="edit(scope.row)">编辑</des-btn>
         </template>
       </el-table-column>
     </el-table>

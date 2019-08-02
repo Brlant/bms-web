@@ -1,5 +1,5 @@
 <style lang="scss" scoped="">
-  @import "../../.././assets/scss/mixins";
+  @import "../../../assets/scss/mixins";
 
   $leftWidth: 0;
   .min-gutter {
@@ -109,7 +109,9 @@
         <oms-row label="备注" :span="5">{{ data.remarks }}</oms-row>
       </el-row>
       <oms-row :span="5" label="">
-        <el-button type="primary" v-show="!data.deleteFlag && data.auditDto && data.auditDto.baseInfoStatus === '0'" @click="auditBaseInfo">审核</el-button>
+        <el-button type="primary" v-has="'biz-quick-audit'"
+                   v-show="!data.deleteFlag && data.auditDto && data.auditDto.baseInfoStatus === '0'"
+                   @click="auditBaseInfo">审核</el-button>
       </oms-row>
     </div>
   </div>
@@ -141,7 +143,7 @@
     },
     methods: {
       auditBaseInfo() {
-        this.$confirm('确认审核通过"' + this.data.name + '"的基础信息、单位证照和经营范围等信息?', '', {
+        this.$confirm('确认审核通过"' + this.data.name + '"的基础信息?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -149,15 +151,16 @@
           BaseInfo.auditBaseInfo(this.data.id, {status: '1'}).then(res => {
             this.data.auditedStatus = '1';
             this.data.auditDto.baseInfoStatus = '1';
+            this.$emit('change');
             this.$notify.success({
               duration: 2000,
               name: '成功',
-              message: '审核"' + this.data.name + '"的基础信息、单位证照和经营范围等信息成功'
+              message: '审核"' + this.data.name + '"的基础信息成功'
             });
           }).catch(error => {
             this.$notify.error({
               duration: 2000,
-              message: error.response.data && error.response.data.msg || '审核"' + this.data.name + '"的基础信息、单位证照和经营范围等信息失败'
+              message: error.response.data && error.response.data.msg || '审核"' + this.data.name + '"的基础信息失败'
             });
           });
         }).catch(() => {

@@ -2,15 +2,15 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="''">
+        <el-button @click="add" plain size="small" v-has="'增加计费明细'">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
-        <el-button @click="batchCreate" plain size="small" v-has="''" v-show="filters.attachmentType === '0'">
+        <el-button @click="batchCreate" plain size="small" v-has="'create-account-check'" v-show="filters.attachmentType === '0'">
           <f-a class="icon-small" name="allot"></f-a>
           批量生成对账单
         </el-button>
-        <el-button @click="batchCreateCloseAccount" plain size="small" v-has="''"
+        <el-button @click="batchCreateCloseAccount" plain size="small" v-has="'race-blending'"
                    v-show="filters.attachmentType === '1'">
           <f-a class="icon-small" name="allot"></f-a>
           批量生成结算单
@@ -71,8 +71,11 @@
       <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计"
                        :fixed="filters.attachmentType === '0' ? 'right' : false">
         <template slot-scope="scope">
-          <oms-input v-if="scope.row.attachmentType === '0'" v-model="scope.row.realityBillingTotal"
-                     @blur="editItem(scope.row)"/>
+          <div v-if="$_has('edit-billing-of-account')">
+            <oms-input v-if="scope.row.attachmentType === '0'" v-model="scope.row.realityBillingTotal"
+                       @blur="editItem(scope.row)"/>
+            <span v-else>{{scope.row.realityBillingTotal}}</span>
+          </div>
           <span v-else>{{scope.row.realityBillingTotal}}</span>
         </template>
       </el-table-column>
