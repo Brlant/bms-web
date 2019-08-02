@@ -97,6 +97,22 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// 预收款余额
+export const preBalance = resource('', http, {
+  save(obj) {
+    return http.post('/bms-acb/add', obj);
+  },
+  query(obj) {
+    return http.post('/bms-acb/query/page', obj);
+  },
+  update(obj) {
+    return http.put('/bms-acb/edit', obj);
+  },
+  delete(id) {
+    return http.delete(`/bms-sd/query/${id}`);
+  }
+});
+
 // 结算单
 export const closeAccount = resource('', http, {
   batchCreate(obj) {
