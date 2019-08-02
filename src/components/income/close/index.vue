@@ -2,7 +2,7 @@
   <div class="order-page">
     <search-part @search="searchResult">
     </search-part>
-    <status-list :activeStatus="filters.accountCheckType" :statusList="orgType"
+    <status-list :activeStatus="filters.statementType" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
     <el-table :data="dataList" v-loading="loadingData"
@@ -29,15 +29,15 @@
       <el-table-column prop="unreturnedAmount" label="回款日期" width="170">
         <template slot-scope="scope">{{scope.row.backAmountTime | time}}</template>
       </el-table-column>
-      <el-table-column prop="accountCheckType" label="状态" width="120">
+      <el-table-column prop="statementType" label="状态" width="120">
         <template slot-scope="scope">
           {{orgType[scope.row.statementType].title}}
         </template>
       </el-table-column>
-      <el-table-column prop="operate" label="操作" width="120" v-if="filters.accountCheckType < 2" fixed="right">
+      <el-table-column prop="operate" label="操作" width="120" v-if="filters.statementType < 2" fixed="right">
         <template slot-scope="scope">
-          <des-btn icon="edit" @click="edit(scope.row, 0)" v-show="filters.accountCheckType === '0'">编辑</des-btn>
-          <des-btn icon="edit" @click="edit(scope.row, 1)" v-show="filters.accountCheckType === '1'">开具发票</des-btn>
+          <des-btn icon="edit" @click="edit(scope.row, 0)" v-show="filters.statementType === '0'">编辑</des-btn>
+          <des-btn icon="edit" @click="edit(scope.row, 1)" v-show="filters.statementType === '1'">开具发票</des-btn>
         </template>
       </el-table-column>
     </el-table>
@@ -74,18 +74,18 @@
     data() {
       return {
         filters: {
-          accountCheckType: '0'
+          statementType: '0'
         },
         dialogComponents: {
           0: addForm,
           1: Detail
         },
         orgType: {
-          0: {'title': '待审核', 'num': 0, 'accountCheckType': '0'},
-          1: {'title': '待开票', 'num': 0, 'accountCheckType': '1'},
-          2: {'title': '待回款', 'num': 0, 'accountCheckType': '2'},
-          3: {'title': '已回款', 'num': 0, 'accountCheckType': '3'},
-          9: {'title': '审核未通过', 'num': 0, 'accountCheckType': '9'},
+          0: {'title': '待审核', 'num': 0, 'statementType': '0'},
+          1: {'title': '待开票', 'num': 0, 'statementType': '1'},
+          2: {'title': '待回款', 'num': 0, 'statementType': '2'},
+          3: {'title': '已回款', 'num': 0, 'statementType': '3'},
+          9: {'title': '审核未通过', 'num': 0, 'statementType': '9'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
         billItems: [],
@@ -119,14 +119,14 @@
         });
       },
       changeType(item, key) {
-        this.filters.accountCheckType = item.accountCheckType;
+        this.filters.statementType = item.statementType;
       },
       isShowIcon(item, key, activeStatus) {
-        return item.accountCheckType === activeStatus;
+        return item.statementType === activeStatus;
       },
       formatClass(item, key, activeStatus) {
         return {
-          'active': item.accountCheckType === activeStatus
+          'active': item.statementType === activeStatus
         };
       },
       showRecordDate: function (data) {
