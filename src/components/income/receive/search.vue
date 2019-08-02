@@ -14,24 +14,10 @@
     <template slot="content">
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-col :span="8">
-          <oms-form-row label="合同" :span="5">
-            <el-select placeholder="请输入名称搜索合同" v-model="searchCondition.contractId"
-                       filterable clearable remote :remote-method="queryContractList">
-              <el-option :label="item.contractName" :value="item.contractId" :key="item.contractId"
-                         v-for="item in contractList"></el-option>
-            </el-select>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
           <oms-form-row label="甲方" :span="5">
             <org-select :list="orgList"
                         :remoteMethod="queryAllOrg"
                         placeholder="请输入名称搜索甲方" v-model="searchCondition.customerId"></org-select>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
-          <oms-form-row label="结算单号" :span="5">
-            <oms-input placeholder="请输入结算单号" type="input" v-model="searchCondition.statementNo"/>
           </oms-form-row>
         </el-col>
       </el-form>

@@ -103,11 +103,8 @@ export const receiveTask = resource('', http, {
   query(obj) {
     return http.post('/bms-cj/query-collection-jobs', obj);
   },
-  save(obj) {
-    return http.post('/bms-cj/add-collection-jobs', obj);
-  },
-  update(obj) {
-    return http.put('/bms-cj/edit-collection-jobs', obj);
+  queryDetail(obj) {
+    return http.post('/bms-cj/query-info', obj);
   },
   batchCreate(obj) {
     return http.post('/bms-cjs/batch', obj)

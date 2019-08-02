@@ -3,12 +3,13 @@
     <search-part @search="searchResult">
     </search-part>
     <el-table :data="dataList" v-loading="loadingData"
+              :row-style="{cursor: 'pointer'}" @row-click="showDetail"
               border class="clearfix mt-20" ref="orderDetail">
       <el-table-column prop="customerName" label="甲方" min-width="200">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
       </el-table-column>
       <el-table-column prop="accountCheckNo" label="结算方式" width="120">
-        <template slot-scope="scope">{{scope.row.statementMode}}</template>
+        <template slot-scope="scope">{{closeTypes[scope.row.statementMode].label}}</template>
       </el-table-column>
       <el-table-column prop="unreturnedAmount" label="回款日期" width="120">
         <template slot-scope="scope">{{scope.row.backAmountTime | date}}</template>
@@ -74,6 +75,11 @@
           this.queryList(1);
         },
         deep: true
+      }
+    },
+    computed: {
+      closeTypes() {
+        return this.$store.state.closeTypes;
       }
     },
     mounted() {
