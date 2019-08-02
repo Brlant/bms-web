@@ -132,7 +132,7 @@
         let list = JSON.parse(JSON.stringify(this.selectList));
         list.forEach(i => {
           i.collectionAmount = i.unreturnedAmount;
-          i.collectionType = i.advanceCollectionType ? '1' : '0';
+          i.collectionType = i.advanceCollectionType ? '0' : '1';
         });
         this.dySelectList = list;
         this.showPart(2);

@@ -34,9 +34,8 @@
           <template slot-scope="scope">
             <span v-if="!scope.row.advanceCollectionType">否</span>
             <el-switch
-              v-else
-              v-model="scope.row.collectionType"
-              active-text="是" inactive-text="否" active-value="1" inactive-value="0">
+              v-else v-model="scope.row.collectionType"
+              active-text="是" inactive-text="否" active-value="0" inactive-value="1">
             </el-switch>
           </template>
         </el-table-column>
