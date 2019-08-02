@@ -4,11 +4,26 @@
     </search-part>
     <el-table :data="dataList" v-loading="loadingData"
               border class="clearfix mt-20" ref="orderDetail">
-      <el-table-column prop="customerName" label="单位名称">
+      <el-table-column prop="customerName" label="甲方">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
       </el-table-column>
-      <el-table-column prop="contractName" label="预收余额" width="200">
-        <template slot-scope="scope">{{scope.row.advanceBalance | formatMoney}}</template>
+      <el-table-column label="预收金额" width="200">
+        <template slot-scope="scope">{{scope.row.advanceAmount}}</template>
+      </el-table-column>
+      <el-table-column label="发票号" width="200">
+        <template slot-scope="scope">{{scope.row.invoiceNumber}}</template>
+      </el-table-column>
+      <el-table-column label="回款日期" width="200">
+        <template slot-scope="scope">{{scope.row.backAmountTime | formatMoney}}</template>
+      </el-table-column>
+      <el-table-column label="发票日期" width="200">
+        <template slot-scope="scope">{{scope.row.invoiceTime | formatMoney}}</template>
+      </el-table-column>
+      <el-table-column label="创建日期" width="200">
+        <template slot-scope="scope">{{scope.row.advanceBalance}}</template>
+      </el-table-column>
+      <el-table-column label="银行名称" width="200">
+        <template slot-scope="scope">{{scope.row.bankName}}</template>
       </el-table-column>
     </el-table>
     <div class="text-center" v-show="(dataList.length || pager.currentPage !== 1) && !loadingData">
@@ -25,7 +40,7 @@
   import utils from '@/tools/utils';
   import SearchPart from './search';
   import CommonMixin from '@/mixins/commonMixin';
-  import {preBalance} from '@/resources';
+  import {preRecords} from '@/resources';
 
   export default {
     components: {
@@ -74,7 +89,7 @@
         });
       },
       queryList(pageNo) {
-        const http = preBalance.query;
+        const http = preRecords.query;
         const params = this.queryUtil(http, pageNo);
       },
       add() {

@@ -85,7 +85,7 @@
           1: {'title': '待开票', 'num': 0, 'accountCheckType': '1'},
           2: {'title': '待回款', 'num': 0, 'accountCheckType': '2'},
           3: {'title': '已回款', 'num': 0, 'accountCheckType': '3'},
-          4: {'title': '审核未通过', 'num': 0, 'accountCheckType': '9'},
+          9: {'title': '审核未通过', 'num': 0, 'accountCheckType': '9'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
         billItems: [],
@@ -169,7 +169,7 @@
           this.orgType[1].num = data['checkMakeInvoice'];
           this.orgType[2].num = data['checkReturnMoney'];
           this.orgType[3].num = data['alreadyReturnMoney'];
-          this.orgType[4].num = data['noPassNum'];
+          this.orgType[9].num = data['noPassNum'];
         });
       },
       add() {

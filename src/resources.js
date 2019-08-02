@@ -97,6 +97,13 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// 预收款记录
+export const preRecords = resource('', http, {
+  query(obj) {
+    return http.post('/bms-acj/query-advance-collection-jobs', obj);
+  }
+});
+
 // 预收款余额
 export const preBalance = resource('', http, {
   save(obj) {
