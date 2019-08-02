@@ -14,9 +14,14 @@
     <template slot="content">
       <el-form class="advanced-query-form" onsubmit="return false">
         <el-col :span="8">
-          <oms-form-row label="单位" :span="5">
+          <oms-form-row label="甲方" :span="5">
             <org-select :list="orgList" :remoteMethod="queryAllOrg"
-                        placeholder="请输入名称搜索单位" v-model="searchCondition.customerId" @change="search"></org-select>
+                        placeholder="请输入名称搜索甲方" v-model="searchCondition.customerId" @change="search"></org-select>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="发票号" :span="5">
+            <oms-input placeholder="请输入发票号" type="input" v-model="searchCondition.invoiceNumber"/>
           </oms-form-row>
         </el-col>
       </el-form>
@@ -33,7 +38,8 @@
     data: function () {
       return {
         searchCondition: {
-          customerId: ''
+          customerId: '',
+          invoiceNumber: ''
         },
         showSearch: false,
         list: [],
@@ -59,7 +65,8 @@
       },
       reset() {
         this.searchCondition = {
-          customerId: ''
+          customerId: '',
+          invoiceNumber: ''
         };
         this.$emit('search', this.searchCondition);
       },

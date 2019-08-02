@@ -8,25 +8,22 @@
     </search-part>
     <el-table :data="dataList" v-loading="loadingData"
               border class="clearfix mt-20" ref="orderDetail">
-      <el-table-column prop="customerName" label="甲方">
+      <el-table-column prop="customerName" label="甲方" width="200">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
       </el-table-column>
-      <el-table-column label="预收金额" width="200">
-        <template slot-scope="scope">{{scope.row.advanceAmount}}</template>
+      <el-table-column label="预收金额" width="220">
+        <template slot-scope="scope">{{scope.row.advanceAmount | formatMoney}}</template>
       </el-table-column>
       <el-table-column label="发票号" width="200">
         <template slot-scope="scope">{{scope.row.invoiceNumber}}</template>
       </el-table-column>
-      <el-table-column label="回款日期" width="200">
-        <template slot-scope="scope">{{scope.row.backAmountTime | formatMoney}}</template>
+      <el-table-column label="发票日期" width="100">
+        <template slot-scope="scope">{{scope.row.invoiceTime | date}}</template>
       </el-table-column>
-      <el-table-column label="发票日期" width="200">
-        <template slot-scope="scope">{{scope.row.invoiceTime | formatMoney}}</template>
+      <el-table-column label="回款日期" width="100">
+        <template slot-scope="scope">{{scope.row.backAmountTime | date}}</template>
       </el-table-column>
-      <el-table-column label="创建日期" width="200">
-        <template slot-scope="scope">{{scope.row.advanceBalance}}</template>
-      </el-table-column>
-      <el-table-column label="银行名称" width="200">
+      <el-table-column label="银行名称">
         <template slot-scope="scope">{{scope.row.bankName}}</template>
       </el-table-column>
     </el-table>

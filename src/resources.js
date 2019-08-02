@@ -101,6 +101,9 @@ Vue.prototype.$http = http;
 export const preRecords = resource('', http, {
   query(obj) {
     return http.post('/bms-acj/query-advance-collection-jobs', obj);
+  },
+  save(obj) {
+    return http.post('/bms-acj/add-advance-collection-jobs', obj)
   }
 });
 

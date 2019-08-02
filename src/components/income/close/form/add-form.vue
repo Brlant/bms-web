@@ -38,7 +38,7 @@
             <oms-input placeholder="请输入发票号" type="input" v-model="form.invoiceNo"/>
           </el-form-item>
           <el-form-item label="发票金额" label-width="120px" prop="invoiceAmount"
-                        :rules="[{required: true, message: '请输入invoiceAmount', trigger: 'blur'}]">
+                        :rules="[{required: true, message: '请输入发票金额', trigger: 'blur'}]">
             <oms-input placeholder="请输入发票金额" type="input" v-model="form.invoiceAmount"
                        @blur="formatInvoiceAmountPrice"/>
           </el-form-item>

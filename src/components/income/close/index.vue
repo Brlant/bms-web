@@ -18,10 +18,10 @@
         <template slot-scope="scope">{{scope.row.statementNo}}</template>
       </el-table-column>
       <el-table-column prop="accountCheckAmount" label="结算单金额" width="120">
-        <template slot-scope="scope">{{scope.row.statementAmount}}</template>
+        <template slot-scope="scope">{{scope.row.statementAmount | formatMoney}}</template>
       </el-table-column>
       <el-table-column prop="unreturnedAmount" label="待回款金额" width="120">
-        <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+        <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
       </el-table-column>
       <el-table-column prop="unreturnedAmount" label="结算日期" width="170">
         <template slot-scope="scope">{{scope.row.statementTime | time}}</template>
