@@ -50,7 +50,7 @@
         </el-col>
       </el-row>
       <h2 class="detail-title">计费明细</h2>
-      <el-table :data="billAccountList" border class="clearfix mt-20" ref="orderDetail">
+      <el-table :data="billAccountList" v-loading="loading" border class="clearfix mt-20" ref="orderDetail">
         <el-table-column prop="contractName" label="合同" width="100">
           <template slot-scope="scope">{{scope.row.contractName}}</template>
         </el-table-column>
@@ -119,7 +119,8 @@
     },
     data() {
       return {
-        billAccountList: []
+        billAccountList: [],
+        loading: false
       };
     },
     watch: {
@@ -130,8 +131,10 @@
     },
     methods: {
       queryDetail() {
-        closeAccount.queryDetail(this.formItem).then(res => {
-          this.billAccountList = res.data.data;
+        this.loading = true;
+        closeAccount.queryDetail({statementId: this.formItem.statementId}).then(res => {
+          this.loading = false;
+          this.billAccountList = res.data.data.map(m => Object.assign(m.billingOfAccount, {statementAmount: m.statementAmount}));
         });
       },
       formatBillingItemName(item) {

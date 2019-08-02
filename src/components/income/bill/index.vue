@@ -97,17 +97,6 @@
       this.queryList(1);
     },
     methods: {
-      editItem(item) {
-        item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
-        this.$httpRequestOpera(accountBill.update(item), {
-          errorTitle: '修改失败',
-          success: res => {
-            this.$notify.success({message: '修改成功'});
-          },
-          error: () => {
-          }
-        });
-      },
       changeType(item, key) {
         this.filters.accountCheckType = item.accountCheckType;
       },

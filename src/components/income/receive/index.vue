@@ -2,43 +2,19 @@
   <div class="order-page">
     <search-part @search="searchResult">
     </search-part>
-    <status-list :activeStatus="filters.accountCheckType" :statusList="orgType"
-                 :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
-                 :formatClass="formatClass"></status-list>
     <el-table :data="dataList" v-loading="loadingData"
-              :row-style="{cursor: 'pointer'}" @row-click="showDetail"
               border class="clearfix mt-20" ref="orderDetail">
-      <el-table-column prop="customerName" label="甲方" width="200">
+      <el-table-column prop="customerName" label="甲方" min-width="200">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
       </el-table-column>
-      <el-table-column prop="contractName" label="合同" width="200">
-        <template slot-scope="scope">{{scope.row.contractName}}</template>
+      <el-table-column prop="accountCheckNo" label="结算方式" width="120">
+        <template slot-scope="scope">{{scope.row.statementMode}}</template>
       </el-table-column>
-      <el-table-column prop="accountCheckNo" label="结算单号" width="150">
-        <template slot-scope="scope">{{scope.row.statementNo}}</template>
+      <el-table-column prop="unreturnedAmount" label="回款日期" width="120">
+        <template slot-scope="scope">{{scope.row.backAmountTime | date}}</template>
       </el-table-column>
-      <el-table-column prop="accountCheckAmount" label="结算单金额" width="120">
-        <template slot-scope="scope">{{scope.row.statementAmount}}</template>
-      </el-table-column>
-      <el-table-column prop="unreturnedAmount" label="待回款金额" width="120">
-        <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
-      </el-table-column>
-      <el-table-column prop="unreturnedAmount" label="结算日期" width="170">
-        <template slot-scope="scope">{{scope.row.statementTime | time}}</template>
-      </el-table-column>
-      <el-table-column prop="unreturnedAmount" label="回款日期" width="170">
-        <template slot-scope="scope">{{scope.row.backAmountTime | time}}</template>
-      </el-table-column>
-      <el-table-column prop="accountCheckType" label="状态" width="120">
-        <template slot-scope="scope">
-          {{orgType[scope.row.statementType].title}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="operate" label="操作" width="120" v-if="filters.accountCheckType < 2" fixed="right">
-        <template slot-scope="scope">
-          <des-btn icon="edit" @click="edit(scope.row, 0)" v-show="filters.accountCheckType === '0'">编辑</des-btn>
-          <des-btn icon="edit" @click="edit(scope.row, 1)" v-show="filters.accountCheckType === '1'">开具发票</des-btn>
-        </template>
+      <el-table-column prop="accountCheckNo" label="银行名称" min-width="150">
+        <template slot-scope="scope">{{scope.row.bankName}}</template>
       </el-table-column>
     </el-table>
 
@@ -63,7 +39,7 @@
   import SearchPart from './search';
   import addForm from './form/add-form.vue';
   import CommonMixin from '@/mixins/commonMixin';
-  import {closeAccount} from '@/resources';
+  import {receiveTask} from '@/resources';
   import Detail from './detail.vue';
 
   export default {
@@ -109,7 +85,7 @@
     methods: {
       editItem(item) {
         item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
-        this.$httpRequestOpera(closeAccount.update(item), {
+        this.$httpRequestOpera(receiveTask.update(item), {
           errorTitle: '修改失败',
           success: res => {
             this.$notify.success({message: '修改成功'});
@@ -158,12 +134,12 @@
       },
       queryList(pageNo) {
         this.selectList = [];
-        const http = closeAccount.query;
+        const http = receiveTask.query;
         const params = this.queryUtil(http, pageNo);
-        this.queryStatusNum(params);
+        // this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        closeAccount.queryStateNum(params).then(res => {
+        receiveTask.queryStateNum(params).then(res => {
           let data = res.data.data;
           this.orgType[0].num = data['checkPending'];
           this.orgType[1].num = data['checkMakeInvoice'];

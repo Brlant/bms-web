@@ -97,13 +97,31 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+
+// 收款作业
+export const receiveTask = resource('', http, {
+  query(obj) {
+    return http.post('/bms-cj/query-collection-jobs', obj);
+  },
+  save(obj) {
+    return http.post('/bms-cj/add-collection-jobs', obj);
+  },
+  update(obj) {
+    return http.put('/bms-cj/edit-collection-jobs', obj);
+  },
+  batchCreate(obj) {
+    return http.post('/bms-cjs/batch', obj)
+  }
+});
+
+
 // 预收款记录
 export const preRecords = resource('', http, {
   query(obj) {
     return http.post('/bms-acj/query-advance-collection-jobs', obj);
   },
   save(obj) {
-    return http.post('/bms-acj/add-advance-collection-jobs', obj)
+    return http.post('/bms-acj/add-advance-collection-jobs', obj);
   }
 });
 

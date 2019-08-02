@@ -8,12 +8,12 @@
         </el-button>
         <el-button @click="batchCreate" plain size="small" v-has="''" v-show="filters.attachmentType === '0'">
           <f-a class="icon-small" name="allot"></f-a>
-          批量生产对账单
+          批量生成对账单
         </el-button>
         <el-button @click="batchCreateCloseAccount" plain size="small" v-has="''"
                    v-show="filters.attachmentType === '1'">
           <f-a class="icon-small" name="allot"></f-a>
-          批量生产结算单
+          批量生成结算单
         </el-button>
       </template>
     </search-part>

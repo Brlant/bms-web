@@ -81,7 +81,7 @@ export const routes = [
           },
           {
             path: '/income/receive/task',
-            component: () => import('./components/test.vue'),
+            component: () => import('./components/income/receive/index.vue'),
             meta: {moduleId: 'monitoring', title: '收款作业', perm: 'ccs-monitordev-scan', type: 1}
           },
           {

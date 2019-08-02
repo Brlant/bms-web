@@ -113,6 +113,11 @@ const state = {
     {key: '1', label: '增值税专用发票'},
     {key: '2', label: '增值税电子普通发票'}
   ],
+  closeTypes: [
+    {key: '0', label: '电汇'},
+    {key: '1', label: '支票'},
+    {key: '2', label: '现金'}
+  ],
   billItemList: []
 };
 
