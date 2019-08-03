@@ -145,6 +145,9 @@ export default {
    */
   autoformatDecimalPoint: function (v) {
     if (!v) return '';
+    if (typeof v === 'number') {
+      v = v.toString();
+    }
     v = v.replace(/[^0-9\.]*/g, '');
     if (v === '') {
       v = '0.00';
