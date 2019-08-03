@@ -2,7 +2,7 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="'增加计费明细'">
+        <el-button @click="add" plain size="small" v-has="'add-billing-of-account'">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
