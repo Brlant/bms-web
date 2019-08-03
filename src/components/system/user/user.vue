@@ -296,7 +296,7 @@
           text: '拼命导出中'
         });
         let params = {
-          objectId: 'wms-system', type: 0
+          objectId: 'bms-system', type: 0
         };
         this.$http.get('/access/statement/role/export', {params}).then(res => {
           utils.download(res.data.path);
@@ -324,7 +324,7 @@
         let data = Object.assign({}, this.filters, {
           pageNo: pageNo,
           pageSize: this.pager.pageSize,
-          objectId: 'wms-system'
+          objectId: 'bms-system'
         });
         Department.getMembers(data).then(res => {
           this.dataRows = res.data.list;
@@ -338,7 +338,7 @@
           pageNo: pageNo,
           pageSize: this.pager.pageSize,
           companyDepartment: type.id,
-          objectId: 'wms-system'
+          objectId: 'bms-system'
         });
         Department.getOnesMember(type.id, data).then(res => {
           this.dataRows = res.data.list;

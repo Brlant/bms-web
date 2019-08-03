@@ -66,7 +66,7 @@
       this.$nextTick(function () {
         let param = {
           usableStatus: 1,
-          objectId: 'wms-system',
+          objectId: 'bms-system',
           pageNo: 1,
           pageSize: 100
         };
@@ -154,7 +154,7 @@
       },
       getRoleSelect: function () {
         let param = {
-          objectId: 'wms-system'
+          objectId: 'bms-system'
         };
         let self = this;
         Access.query(param).then(res => {
@@ -168,7 +168,7 @@
             return false;
           }
           let formData = JSON.parse(JSON.stringify(this.form));
-          formData.objectId = 'wms-system';
+          formData.objectId = 'bms-system';
           formData.list = self.form.list.map(m => {
             return {
               roleId: m

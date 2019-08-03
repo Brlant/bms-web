@@ -288,7 +288,7 @@
           text: '拼命导出中'
         });
         let params = {
-          objectId: 'wms-system', type: 0
+          objectId: 'bms-system', type: 0
         };
         this.$http.get('/access/statement/permission/export', {params}).then(res => {
           utils.download(res.data.path);
@@ -346,7 +346,7 @@
           pageSize: this.pager.pageSize,
           keyword: this.typeTxt,
           deleteFlag: false,
-          objectId: 'wms-system'
+          objectId: 'bms-system'
         }, this.filters);
         Access.query(param).then(res => {
           if (param.keyword !== this.typeTxt) return;

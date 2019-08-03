@@ -222,7 +222,7 @@
           });
           this.form.permissionList = rolelist;
           if (this.action === 'add') {
-            this.form.objectId = 'wms-system';
+            this.form.objectId = 'bms-system';
             Access.save(this.form).then(() => {
               this.doing = false;
               this.$notify.success({
