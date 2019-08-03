@@ -109,7 +109,7 @@
         <oms-row label="备注" :span="5">{{ data.remarks }}</oms-row>
       </el-row>
       <oms-row :span="5" label="">
-        <el-button type="primary" v-has="'biz-quick-audit'"
+        <el-button type="primary" v-has="'biz-base-info-check'"
                    v-show="!data.deleteFlag && data.auditDto && data.auditDto.baseInfoStatus === '0'"
                    @click="auditBaseInfo">审核</el-button>
       </oms-row>

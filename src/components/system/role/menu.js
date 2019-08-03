@@ -24,7 +24,7 @@ export default [
             label: '启用和停用单位'
           },
           {
-            id: 'biz-quick-audit',
+            id: 'biz-base-info-check',
             label: '审核单位'
           }
         ]
