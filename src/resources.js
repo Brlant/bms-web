@@ -786,9 +786,7 @@ export const BaseInfo = resource('/orgs', http, {
   },
   // 校验名字
   checkName: (name, orgId) => {
-    return http.get('/orgs/name', {
-      params: {name, orgId}
-    });
+    return http.post('/orgs/name', {name, orgId});
   },
   // 校验身份证
   checkCreditCode: (creditCode, orgId) => {
