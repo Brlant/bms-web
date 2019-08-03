@@ -244,18 +244,18 @@ export default [
     ]
   },
   {
-    'id': 'wms-system-config',
+    'id': 'system-config',
     'parentId': null,
     'label': '系统设置',
     'sort': 5,
     'children': [
       {
-        'id': 'wms-access-role-manager',
+        'id': 'access-role-manager',
         'parentId': 'wms-system-config',
         'label': '角色管理',
         'sort': 2,
         'children': [{
-          'id': 'wms-access-role-add',
+          'id': 'access-role-add',
           'parentId': 'wms-access-role-manager',
           'label': '新增角色',
           'sort': null,
@@ -269,14 +269,14 @@ export default [
           'children': null,
           'leaf': true
         }, {
-          'id': 'wms-access-role-edit',
+          'id': 'access-role-edit',
           'parentId': 'wms-access-role-manager',
           'label': '编辑角色',
           'sort': null,
           'children': null,
           'leaf': true
         }, {
-          'id': 'wms-access-role-watch',
+          'id': 'access-role-watch',
           'parentId': 'wms-access-role-manager',
           'label': '查看角色',
           'sort': null,
