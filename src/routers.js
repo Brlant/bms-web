@@ -99,7 +99,7 @@ export const routes = [
       {
         path: '/permission',
         component: () => import('./components/system/index.vue'),
-        meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'ccs-system-config'}, // ccs-system-config
+        meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'wms-system-config'}, // ccs-system-config
         children: [
           {
             path: '/permission/user',
@@ -114,7 +114,7 @@ export const routes = [
           {
             path: '/permission/dict',
             component: () => import('./components/system/dict/dict.vue'),
-            meta: {moduleId: 'permission', title: '数据字典', perm: 'ccs-access-role-watch'} // ccs-access-role-watch
+            meta: {moduleId: 'permission', title: '数据字典', perm: 'oms-access-role-watch'} // ccs-access-role-watch
           },
           {
             path: '/permission/log',
