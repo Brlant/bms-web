@@ -672,7 +672,7 @@ export const OrgUser = resource('/oms/user/org', http, {
 // 角色管理对象
 export const Access = resource('/oms/access', http, {
   getRoleMenus: () => {
-    return http.get('/oms/access/menus/tree', {params: {objectId: 'oms-system'}});
+    return http.get('/oms/access/menus/tree', {params: {objectId: 'bms-system'}});
   },
   getOrgRoleMenus: (orgId) => {
     return http.get('/oms/access/org/' + orgId + '/admin/menus/tree');
@@ -1094,7 +1094,7 @@ export const Auth = {
     }
   },
   permission: () => {
-    return http.get('/oms/access/permissions', {params: {objectId: 'oms-system'}});
+    return http.get('/oms/access/permissions', {params: {objectId: 'bms-system'}});
   }
 };
 
