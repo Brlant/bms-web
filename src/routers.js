@@ -99,22 +99,22 @@ export const routes = [
       {
         path: '/permission',
         component: () => import('./components/system/index.vue'),
-        meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'wms-system-config'}, // ccs-system-config
+        meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'wms-system-config'},
         children: [
           {
             path: '/permission/user',
             component: () => import('./components/system/user/user.vue'),
-            meta: {moduleId: 'permission', title: '用户管理', perm: 'wms-platform-user-watch'} // ccs-platform-user-watch
+            meta: {moduleId: 'permission', title: '用户管理', perm: 'wms-platform-user-watch'}
           },
           {
             path: '/permission/role',
             component: () => import('./components/system/role/role.vue'),
-            meta: {moduleId: 'permission', title: '角色管理', perm: 'wms-access-role-watch'} // ccs-access-role-watch
+            meta: {moduleId: 'permission', title: '角色管理', perm: 'wms-access-role-watch'}
           },
           {
             path: '/permission/dict',
             component: () => import('./components/system/dict/dict.vue'),
-            meta: {moduleId: 'permission', title: '数据字典', perm: 'oms-access-role-watch'} // ccs-access-role-watch
+            meta: {moduleId: 'permission', title: '数据字典', perm: 'oms-dict-group-query'}
           },
           {
             path: '/permission/log',
