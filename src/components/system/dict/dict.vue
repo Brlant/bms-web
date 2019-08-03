@@ -268,8 +268,10 @@
           keyword: this.typeTxt
         });
         this.loadingLeftData = true;
-        //清空右侧数据
-        this.dataRows = [];
+        if(!isContinue) {
+          //清空右侧数据
+          this.dataRows = [];
+        }
         DictGroup.query(param).then(res => {
           if (param.keyword !== this.typeTxt) return;
           this.$store.commit('initBottomLoading', false);
