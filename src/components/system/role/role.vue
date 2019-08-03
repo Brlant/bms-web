@@ -75,7 +75,7 @@
           <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
             <h2 class="header">
                 <span class="pull-right">
-                  <perm label="wms-access-role-add">
+                  <perm label="access-role-add">
                     <a href="#" class="btn-circle" @click.stop.prevent="addType"><i class="el-icon-t-plus"></i> </a>
                   </perm>
                     <a href="#" class="btn-circle" @click.prevent="searchType"><i
@@ -124,7 +124,7 @@
               <h2 class="clearfix">
                 <span class="pull-right">
                  <el-button-group>
-                     <perm label="wms-access-role-edit">
+                     <perm label="access-role-edit">
                        <el-button @click="edit()">
                          <i class="el-icon-t-edit"></i>
                          编辑

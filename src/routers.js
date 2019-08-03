@@ -99,7 +99,7 @@ export const routes = [
       {
         path: '/permission',
         component: () => import('./components/system/index.vue'),
-        meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'wms-system-config'},
+        meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'system-config'},
         children: [
           {
             path: '/permission/user',
@@ -109,7 +109,7 @@ export const routes = [
           {
             path: '/permission/role',
             component: () => import('./components/system/role/role.vue'),
-            meta: {moduleId: 'permission', title: '角色管理', perm: 'wms-access-role-watch'}
+            meta: {moduleId: 'permission', title: '角色管理', perm: 'access-role-watch'}
           },
           {
             path: '/permission/dict',
