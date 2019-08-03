@@ -76,12 +76,12 @@
     }),
     methods: {
       getCurrentMenu(data) {
-        // let menu = [];
-        // menu = this.routesCopy[0].children.filter(f => f.meta.moduleId && data.includes(f.meta.perm));
-        // menu.forEach(i => {
-        //   i.children = i.children.filter(c => data.includes(c.meta.perm));
-        // });
-        return this.routesCopy[0].children;
+        let menu = [];
+        menu = this.routesCopy[0].children.filter(f => f.meta.moduleId && data.includes(f.meta.perm));
+        menu.forEach(i => {
+          i.children = i.children.filter(c => data.includes(c.meta.perm));
+        });
+        return menu;
       },
       queryPermissions(url) {
         this.routesCopy = deepCopy(routes);

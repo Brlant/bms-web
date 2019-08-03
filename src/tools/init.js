@@ -4,9 +4,9 @@ export function init(Vue) {
   //权限指令
   Vue.directive('has', {
     inserted: function (el, binding) {
-      // if (!(Vue.prototype.$_has && Vue.prototype.$_has(binding.value))) {
-      //   el.parentNode && el.parentNode.removeChild(el);
-      // }
+      if (!(Vue.prototype.$_has && Vue.prototype.$_has(binding.value))) {
+        el.parentNode && el.parentNode.removeChild(el);
+      }
     }
   });
   Vue.filter('date', function (dateTime) {
