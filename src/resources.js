@@ -16,6 +16,16 @@ function isNewReturnType(data) {
   return ['code', 'data', 'msg'].every(e => keys.includes(e));
 }
 
+// 添加请求拦截器
+http.interceptors.request.use(function (config) {
+  if(config.method === 'get') {
+    config.paramsSerializer = params => {
+      return qs.stringify(params, {indices: false});
+    }
+  }
+  return config;
+});
+
 http.interceptors.response.use(response => {
   if (isNewReturnType(response.data)) {
     switch (response.data.code) {
