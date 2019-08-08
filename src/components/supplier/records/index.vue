@@ -3,9 +3,10 @@
     <search-part @search="searchResult"></search-part>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="10">单位名称</el-col>
-        <el-col :span="7">金额</el-col>
-        <el-col :span="7">发生时间</el-col>
+        <el-col :span="8">单位名称</el-col>
+        <el-col :span="5">金额</el-col>
+        <el-col :span="5">流水类型</el-col>
+        <el-col :span="6">发生时间</el-col>
       </el-row>
       <el-row v-if="loadingData">
         <el-col :span="24">
@@ -20,12 +21,13 @@
         </el-col>
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
-        <div :class="[{'active':currentItemId===item.id}]" class="order-list-item order-list-item-bg"
+        <div :class="[{'active':currentItemId===item.id}]" class="order-list-item order-list-item-bg no-pointer"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="10" class="R">{{item.orgName}}</el-col>
-            <el-col :span="7" class="R">{{item.changeAmount | formatMoney}}</el-col>
-            <el-col :span="7" class="R">{{item.createTime | time}}</el-col>
+            <el-col :span="8" class="R">{{item.orgName}}</el-col>
+            <el-col :span="5" class="R">{{item.changeAmount | formatMoney}}</el-col>
+            <el-col :span="5" class="R">{{changeTypeDict[item.changeType]}}</el-col>
+            <el-col :span="6" class="R">{{item.createTime | time}}</el-col>
           </el-row>
         </div>
       </div>
@@ -56,6 +58,11 @@
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {
 
+        },
+        changeTypeDict: {
+          1: ' 结算',
+          2: '预收款',
+          3: '收款'
         },
         defaultPageRight: {'width': '700px', 'padding': 0}
       };
