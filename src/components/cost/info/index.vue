@@ -40,7 +40,8 @@
             </el-col>
             <el-col :span="6" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="'edit-billing-model'">编辑</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="'启用计费模型模板'" v-show="item.billingModelState === '0'">启用</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="'enable-billing-model'"
+                       v-show="item.billingModelState === '0'">启用</des-btn>
               <des-btn @click="stop(item)" icon="stop" v-has="'disable-billing-model'"
                        v-show="item.billingModelState === '1'">停用</des-btn>
             </el-col>

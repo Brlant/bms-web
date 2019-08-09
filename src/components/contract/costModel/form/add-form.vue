@@ -138,7 +138,8 @@
       queryCostModelListNew(query) {
         let params = {
           keyWord: query,
-          billingModelTemplate: this.form.billingModelTemplate
+          billingModelTemplate: this.form.billingModelTemplate,
+          billingModelState: '1'
         };
         this.queryCostModelList(params);
       },

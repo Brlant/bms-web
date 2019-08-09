@@ -123,7 +123,8 @@
       queryCostModelListNew(query) {
         let params = {
           id: this.formItem.contractId,
-          keyWord: query
+          keyWord: query,
+          billingModelState: '1'
         };
         this.queryCostModelList(params);
       },

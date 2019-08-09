@@ -39,7 +39,7 @@
         <template slot-scope="scope">{{scope.row.orderNumber}}</template>
       </el-table-column>
       <el-table-column prop="actionType" label="对账单号" width="150">
-        <template slot-scope="scope">{{scope.row.accountingRecordNo}}</template>
+        <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
       </el-table-column>
       <el-table-column prop="actionType" label="货品" width="200">
         <template slot-scope="scope">

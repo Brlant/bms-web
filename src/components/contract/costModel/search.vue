@@ -42,7 +42,7 @@
       return {
         searchCondition: {
           billingModelName: '',
-          billingModelTemplate: ''
+          contractId: ''
         },
         showSearch: false,
         list: [],
@@ -69,7 +69,7 @@
       reset() {
         this.searchCondition = {
           billingModelName: '',
-          billingModelTemplate: ''
+          contractId: ''
         };
         this.$emit('search', this.searchCondition);
       },

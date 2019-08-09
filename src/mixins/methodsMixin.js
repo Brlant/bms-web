@@ -49,7 +49,7 @@ export default {
       });
     },
     queryCostModelList(query) {
-      let params = typeof query === 'object' ? query : {keyWord: query};
+      let params = typeof query === 'object' ? query : {keyWord: query, billingModelState: '1'};
       costModel.query(params).then(res => {
         if (res.data.code === 200) {
           this.costModelList = res.data.data.list;

@@ -45,8 +45,11 @@
             </el-col>
             <el-col :span="4" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="'edit-project'">编辑</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="'enable-project'" v-show="item.projectState === '0'">启用</des-btn>
-              <des-btn @click="stop(item)" icon="stop" v-has="'enable-project'" v-show="item.projectState === '1'">停用</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="'enable-project'" v-show="item.projectState === '0'">
+                启用
+              </des-btn>
+              <des-btn @click="stop(item)" icon="stop" v-has="'enable-project'" v-show="item.projectState === '1'">停用
+              </des-btn>
             </el-col>
           </el-row>
         </div>
@@ -166,10 +169,10 @@
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
-              if(res.data.code === 200) {
-                item.projectState = '1';
+              if (res.data.code === 200) {
+                this.queryList(this.pager.currentPage);
               } else {
-                this.$notify.error({message: res.data.msg})
+                this.$notify.error({message: res.data.msg});
               }
             }
           });
@@ -182,10 +185,10 @@
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {
-              if(res.data.code === 200) {
-                item.projectState = '0';
+              if (res.data.code === 200) {
+                this.queryList(this.pager.currentPage);
               } else {
-                this.$notify.error({message: res.data.msg})
+                this.$notify.error({message: res.data.msg});
               }
             }
           });

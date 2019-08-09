@@ -4,7 +4,7 @@
       <el-button slot="btn" v-has="'batch-collection-jobs-statement'" @click="batchCreateReceiveTask" plain size="small"
                  v-show="filters.statementType === '2'">
         <f-a class="icon-small" name="allot"></f-a>
-        批量生成收货作业
+        批量生成收款作业
       </el-button>
     </search-part>
     <status-list :activeStatus="filters.statementType" :statusList="orgType"

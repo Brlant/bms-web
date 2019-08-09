@@ -215,7 +215,7 @@ export default [
           },
           {
             id: 'batch-collection-jobs-statement',
-            label: '批量生成收货作业'
+            label: '批量生成收款作业'
           },
         ]
       },
