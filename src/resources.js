@@ -218,6 +218,12 @@ export const contractBindGoods = resource('', http, {
   },
   query(obj) {
     return http.post('/bms-cgbm/query', obj);
+  },
+  bindCost(obj) {
+    return http.post('/bms-cgbm/add-binding', obj);
+  },
+  queryCostModel(obj) {
+    return http.post('/bms-cgbm/query-binding', obj)
   }
 });
 

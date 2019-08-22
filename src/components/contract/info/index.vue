@@ -53,7 +53,8 @@
             </el-col>
             <el-col :span="6" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="'edit-contract'">编辑</des-btn>
-              <des-btn @click="bind(item)" icon="allot" v-has="'add-contract-goods-model'">绑定货品</des-btn>
+              <des-btn @click="bind(item)" icon="allot" v-has="'add-contract-goods-model'">绑定货品计费模型</des-btn>
+              <des-btn @click="bindCost(item)" icon="allot" v-has="'add-contract-goods-model'">绑定非货品计费模型</des-btn>
               <des-btn @click="start(item)" icon="start" v-has="'enable-contract'" v-show="item.contractState === '0'">启用</des-btn>
               <des-btn @click="stop(item)" icon="stop" v-has="'disable-contract'" v-show="item.contractState === '1'">停用</des-btn>
             </el-col>
@@ -86,11 +87,13 @@
   import {Contact} from '@/resources';
   import BindOrgGoodsForm from './form/bind-orgGoods-form';
   import DetailPart from './detail';
+  import BindCostModel from './form/bind-cost-model';
   export default {
     components: {
       SearchPart,
       BindOrgGoodsForm,
-      DetailPart
+      DetailPart,
+      BindCostModel
     },
     mixins: [CommonMixin],
     data() {
@@ -102,7 +105,8 @@
         dialogComponents: {
           0: addForm,
           1: BindOrgGoodsForm,
-          2: DetailPart
+          2: DetailPart,
+          3: BindCostModel
         },
         orgType: {
           0: {'title': '正常', 'num': 0, 'contractState': '1'},
@@ -179,6 +183,12 @@
         this.currentItemId = item.contractId;
         this.form = item;
         this.showPart(1);
+      },
+      bindCost(item) {
+        this.currentItem = item;
+        this.currentItemId = item.contractId;
+        this.form = item;
+        this.showPart(3);
       },
       showDetail(item) {
         this.currentItem = item;
