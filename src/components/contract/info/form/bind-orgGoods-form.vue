@@ -30,7 +30,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="计费模型" prop="billingModelId">
-          <el-select filterable remote placeholder="请输入名称搜计费模型" :remote-method="queryContractCostModelList"
+          <el-select filterable remote placeholder="请输入名称搜计费模型" :remote-method="queryContractCostModelListNew"
                      :clearable="true" v-model="form.billingModelId" popperClass="good-selects">
             <el-option :label="item.billingModelName" :value="item.billingModelId" :key="item.billingModelId"
                        v-for="item in contractCostModelList">
@@ -112,6 +112,13 @@
       }
     },
     methods: {
+      queryContractCostModelListNew(query) {
+        let params = {
+          contractId: this.formItem.contractId,
+          keyWord: query
+        };
+        this.queryContractCostModelList(params);
+      },
       queryOrgGoodsListNew(query) {
         let params = {
           orgId: this.formItem.orgId,
@@ -119,14 +126,6 @@
           auditedStatus: '1'
         };
         this.queryOrgGoodsList(params);
-      },
-      queryCostModelListNew(query) {
-        let params = {
-          id: this.formItem.contractId,
-          keyWord: query,
-          billingModelState: '1'
-        };
-        this.queryCostModelList(params);
       },
       companyDepartmentChange(val) {
         this.departmentUserList = [];
