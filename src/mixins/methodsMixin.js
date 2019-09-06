@@ -1,4 +1,4 @@
-import {Contact, costItem, costModel, Department, OrgGoods, project} from '@/resources';
+import {Contact, costItem, costModel, Department, OrgGoods, project, contractCostModel} from '@/resources';
 
 
 export default {
@@ -11,7 +11,9 @@ export default {
       costItemList: [],
       costModelList: [],
       contractList: [],
-      projectList: []
+      projectList: [],
+      contractCostModelList: [],
+      batchNumberList: []
     };
   },
   methods: {
@@ -47,13 +49,19 @@ export default {
       });
     },
     queryCostModelList(query) {
-      let params = typeof query === 'object' ? query : {keyWord: query};
+      let params = typeof query === 'object' ? query : {keyWord: query, billingModelState: '1'};
       costModel.query(params).then(res => {
         if (res.data.code === 200) {
           this.costModelList = res.data.data.list;
         } else {
           this.costModelList = [];
         }
+      });
+    },
+    queryContractCostModelList(query) {
+      let params = typeof query === 'object' ? query : {keyWord: query};
+      contractCostModel.query(params).then(res => {
+        this.contractCostModelList = res.data.data.list;
       });
     },
     queryContractList(query) {
@@ -71,8 +79,14 @@ export default {
         this.orgGoodsList = res.data.list;
       });
     },
+    queryBatchNumberList(query) {
+      let params = typeof query === 'object' ? query : {keyWord: query};
+      this.$http.get('/batch-number/pager', {params}).then(res => {
+        this.batchNumberList = res.data.list;
+      });
+    },
     queryProjectList(query) {
-      let params = {keyWord: query};
+      let params = {keyWord: query, projectState: '1'};
       project.query(params).then(res => {
         if (res.data.code === 200) {
           this.projectList = res.data.data.list;

@@ -25,7 +25,7 @@ const state = {
   requestingDictAry: [],
   costTypes: [
     {
-      id: '订单处理',
+      id: '0',
       name: '订单处理',
       bizTypes: [],
       ladderState: false,
@@ -35,7 +35,7 @@ const state = {
       ]
     },
     {
-      id: '入库作业',
+      id: '1',
       name: '入库作业',
       ladderState: false,
       bizTypes: [
@@ -45,12 +45,12 @@ const state = {
       ],
       items: [
         {name: '整件入库货品体积', id: 'A3', unit: '元/m³', rule: '每个品种的体积总数 X 计费单价'},
-        {name: '整件入库货品体积', id: 'A4', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价'},
+        {name: '整件入库整件数量', id: 'A4', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价'},
         {name: '散件入库基本单位数', id: 'A5', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价'}
       ]
     },
     {
-      id: '出库作业',
+      id: '2',
       name: '出库作业',
       ladderState: false,
       bizTypes: [
@@ -66,7 +66,7 @@ const state = {
       ]
     },
     {
-      id: '库内作业',
+      id: '3',
       name: '库内作业',
       ladderState: false,
       bizTypes: [
@@ -79,7 +79,7 @@ const state = {
       ]
     },
     {
-      id: '耗材使用',
+      id: '4',
       name: '耗材使用',
       ladderState: false,
       bizTypes: [
@@ -92,7 +92,7 @@ const state = {
       ]
     },
     {
-      id: '库内存储',
+      id: '5',
       name: '库内存储',
       ladderState: true,
       bizTypes: [
@@ -103,11 +103,22 @@ const state = {
         {name: '存储整件货位数', id: 'B1', unit: '元/个', rule: '每个品种的整件货位总数 X 计费单价'},
         {name: '存储整件货位体积', id: 'B2', unit: '元/m³', rule: '每个品种的整件体积 X 计费单价'},
         {name: '存储整件包装数', id: 'B3', unit: '元/箱', rule: '每个品种的整件包装数 X 计费单价'},
-        {name: '存储整件包装数', id: 'B4', unit: '元/个', rule: '每个品种的散件货位总数 X 计费单价'},
+        {name: '存储散件货位数', id: 'B4', unit: '元/个', rule: '每个品种的散件货位总数 X 计费单价'},
         {name: '存储散件货位体积', id: 'B5', unit: '元/m³', rule: '每个品种的散件体积 X 计费单价'}
       ]
     }
-  ]
+  ],
+  invoiceTypes: [
+    {key: '0', label: '增值税普通发票'},
+    {key: '1', label: '增值税专用发票'},
+    {key: '2', label: '增值税电子普通发票'}
+  ],
+  closeTypes: [
+    {key: '0', label: '电汇'},
+    {key: '1', label: '支票'},
+    {key: '2', label: '现金'}
+  ],
+  billItemList: []
 };
 
 const mutations = {
@@ -177,6 +188,9 @@ const mutations = {
   initRequestingDictAry(state, data) {
     state.requestingDictAry = data;
   },
+  initBillItemList(state, data) {
+    state.billItemList = data;
+  }
 };
 
 export default new Vuex.Store({

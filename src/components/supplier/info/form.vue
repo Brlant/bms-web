@@ -1,5 +1,5 @@
 <style lang="scss" scoped="">
-  @import "../../.././assets/scss/mixins";
+  @import "../../../assets/scss/mixins";
 
   $leftWidth: 200px;
   .min-gutter {
@@ -135,11 +135,11 @@
         <h3></h3>
         <el-form ref="baseform" :rules="rules" :model="form" label-width="140px" class="min-gutter"
                  @submit.prevent="onSubmit('baseform')" onsubmit="return false" style="padding-right: 20px">
-          <el-form-item label="DHS单位" v-if="!form.id">
-            <el-select filterable remote placeholder="名称/拼音/系统代码搜索单位" v-model="form.dhsOrgId" filterable remote
+          <el-form-item label="DHS单位">
+            <el-select filterable remote placeholder="名称/拼音/系统代码搜索单位" v-model="form.dhsOrgId"
                        :remote-method="filterDhsOrgs"
-                       :clearable="true" popperClass="good-selects" @click.native="filterDhsOrgs('')"
-                       @change="setDhsOrg" @clear="resetDhsOrgInfo">
+                       :clearable="true" popperClass="good-selects"
+                       @change="setDhsOrg" @clear="resetDhsOrgInfo" :disabled="!!form.id">
               <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in dhsOrgList">
                 <div style="overflow: hidden">
                   <span class="pull-left" style="clear: right">{{org.name}}</span>
@@ -152,24 +152,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="DHS单位" v-if="form.id">
-            <el-select filterable remote placeholder="名称/拼音/系统代码搜索单位" v-model="form.dhsOrgId" filterable remote
-                       :remote-method="filterDhsOrgs"
-                       :clearable="true" popperClass="good-selects" @click.native="filterDhsOrgs('')"
-                       @change="setDhsOrg" @clear="resetDhsOrgInfo" disabled>
-              <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in dhsOrgList">
-                <div style="overflow: hidden">
-                  <span class="pull-left" style="clear: right">{{org.name}}</span>
-                </div>
-                <div style="overflow: hidden">
-                      <span class="select-other-info pull-left">
-                        <span>系统代码:</span>{{org.manufacturerCode}}
-                      </span>
-                </div>
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="'DHS单位ID'" v-if="form.dhsOrgId">
+          <el-form-item :label="'DHS单位ID'" v-show="form.dhsOrgId" key="dhsOrgId">
             {{form.dhsOrgId}}
           </el-form-item>
           <el-form-item :label="orgTitle+'名称'" prop="name">
@@ -178,23 +161,25 @@
           <el-form-item :label=" orgTitle+'简称'">
             <oms-input type="text" v-model="form.nameJc" placeholder="请输入简称"></oms-input>
           </el-form-item>
-          <el-form-item :label=" orgTitle+'名称拼音'" prop="namePhonetic" v-if="action==='edit'">
+          <el-form-item :label=" orgTitle+'名称拼音'" prop="namePhonetic" v-if="action==='edit'"
+                        :rules="[{required: true, message: '请输入单位名称拼音', trigger: 'blur'}]">
             <oms-input type="text" v-model="form.namePhonetic" placeholder="请输入通用名称拼音"></oms-input>
           </el-form-item>
-          <el-form-item :label=" orgTitle+'拼音首字母'" prop="nameAcronymy" v-if="action==='edit'">
+          <el-form-item :label=" orgTitle+'拼音首字母'" prop="nameAcronymy" v-if="action==='edit'"
+                        :rules="[{required: true, message: '请输入单位拼音首字母', trigger: 'blur'}]">
             <oms-input type="text" v-model="form.nameAcronymy" placeholder="请输入通用名称拼音首字母"></oms-input>
           </el-form-item>
           <el-form-item label="公司图标">
             <oms-upload-picture :photoUrl="form.orgPhoto" @change="changPhoto"></oms-upload-picture>
           </el-form-item>
           <el-form-item :label="orgTitle+'系统代码'" prop="manufacturerCode">
-            <oms-input type="text" v-model="form.manufacturerCode" placeholder="请输入oms代码"></oms-input>
+            <oms-input type="text" v-model="form.manufacturerCode" placeholder="请输入系统代码"></oms-input>
           </el-form-item>
           <el-form-item label="统一社会信用代码" prop="creditCode">
             <oms-input type="text" v-model="form.creditCode" placeholder="请输入统一社会信用代码"></oms-input>
           </el-form-item>
           <el-form-item label="区域代码" prop="orgAreaCode">
-            <oms-input type="text" v-model="form.orgAreaCode" placeholder="请输入区域代码"></oms-input>
+            <oms-input type="text" :maxlength="10" v-model="form.orgAreaCode" placeholder="请输入区域代码"></oms-input>
           </el-form-item>
           <el-form-item label="是否入库扫码">
             <el-switch v-model="form.orgScanCode" active-text="是" inactive-text="否"
@@ -398,13 +383,13 @@
       };
       let checkManufacturerCode = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入oms代码'));
+          callback(new Error('请输入单位代码'));
         } else {
           BaseInfo.checkManufacturerCode(value, this.form.id).then(function (res) {
             if (res.data.valid) {
               callback();
             } else {
-              callback(new Error('oms代码已经存在'));
+              callback(new Error('单位代码已经存在'));
             }
           });
         }
@@ -444,7 +429,7 @@
             {validator: checkCreditCode, trigger: 'blur'}
           ],
           manufacturerCode: [
-            {required: true, message: '请输入oms代码', trigger: 'blur'},
+            {required: true, message: '请输入单位代码', trigger: 'blur'},
             {validator: checkManufacturerCode, trigger: 'blur'}
           ],
           adminAccount: [
@@ -471,13 +456,7 @@
             {required: true, message: '请选择默认物流中心', trigger: 'blur'}
           ],
           orgRelationTypeList: [
-            {required: true, message: '请选择单位类型', trigger: 'blur'}
-          ],
-          namePhonetic: [
-            {required: true, message: '请输入单位名称拼音', trigger: 'blur'}
-          ],
-          nameAcronymy: [
-            {required: true, message: '请输入单位拼音首字母', trigger: 'blur'}
+            {required: true, type: 'array', message: '请选择单位类型', trigger: 'change'}
           ],
           address: [
             {required: true, message: '请输入单位详细地址', trigger: 'blur'}
@@ -523,6 +502,9 @@
         } else {
           this.resetDhsOrgInfo(val);
         }
+        this.$nextTick(() => {
+          this.$refs.baseform && this.$refs.baseform.clearValidate();
+        });
       },
       'form.selectOptions': function () {
         this.form.province = this.form.selectOptions[0];
@@ -576,9 +558,9 @@
         if (!this.form.dhsOrgId) {
           this.form.dhsOrgId = val.id;
         }
-        this.form.selectOptions.push(this.form.province);
-        this.form.selectOptions.push(this.form.city);
-        this.form.selectOptions.push(this.form.region);
+        this.form.province && this.form.selectOptions.push(this.form.province);
+        this.form.city && this.form.selectOptions.push(this.form.city);
+        this.form.region && this.form.selectOptions.push(this.form.region);
         this.queryLogisticsCompany(this.form.logisticsCompanyName);
       },
       resetDhsOrgInfo: function (val) {
@@ -667,7 +649,7 @@
           licensePlateNumber: '',
           transportTimeLimit: '',
           logisticsDealer: ''
-        }, val.extDto);
+        }, val.extDto || {});
       },
       changPhoto: function (photo) {
         if (photo) {
@@ -697,14 +679,14 @@
         if (index !== -1) this.form.plateList.splice(index, 1);
       },
       onSubmit: function (formName) {
-        if (!this.form.orgRelationTypeList || this.form.orgRelationTypeList.length === 0) {
-          this.$notify.warning({
-            duration: 2000,
-            name: '警告',
-            message: '请选择单位类型'
-          });
-          return;
-        }
+        // if (!this.form.orgRelationTypeList || this.form.orgRelationTypeList.length === 0) {
+        //   this.$notify.warning({
+        //     duration: 2000,
+        //     name: '警告',
+        //     message: '请选择单位类型'
+        //   });
+        //   return;
+        // }
         if (!this.form.city) {
           this.form.city = '';
         }
@@ -718,8 +700,8 @@
           }
           this.doing = true;
           // this.form.orgRelationTypeList = this.orgRelationTypeList;
+          self.form.type = '1';
           if (this.action === 'add') {
-            self.form.type = this.$route.meta.type;
             if (self.form.id) {
               self.form.id = '';
             }

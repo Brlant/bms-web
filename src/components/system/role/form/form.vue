@@ -51,15 +51,6 @@
   .el-tree {
     width: 70%;
   }
-
-  .dialog-template-role_scroll {
-    position: absolute;
-    top: 340px;
-    left: 20px;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-  }
 </style>
 <template>
   <div class="content-part">
@@ -83,7 +74,7 @@
         <el-form-item label="角色名称" prop="title">
           <oms-input type="text" v-model="form.title" placeholder="请输入"></oms-input>
         </el-form-item>
-        <el-form-item label="英文名称" prop="name">
+        <el-form-item label="英文名称" prop="name" class="contact-check">
           <oms-input type="text" v-model="form.name" placeholder="请输入"></oms-input>
         </el-form-item>
         <el-form-item label="角色描述">
@@ -94,17 +85,17 @@
                   placeholder="输入关键字进行过滤"
                   v-model="filterText">
         </el-input>
-        <el-scrollbar tag="div" class="dialog-template-role_scroll">
-          <div class="check-all">
-            <el-checkbox label="全选" v-model="checkAllRoles"
-                         @change="checkAll()"></el-checkbox>
-          </div>
-          <el-tree :data="tree" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current
-                   :default-checked-keys="checkedIdList" :props="defaultProps"
-                   :filter-node-method="filterNode">
-          </el-tree>
-        </el-scrollbar>
-
+        <div class="check-all">
+          <el-checkbox label="全选" v-model="checkAllRoles"
+                       @change="checkAll()"></el-checkbox>
+        </div>
+        <el-tree :data="tree" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current
+                 :default-checked-keys="checkedIdList" :props="defaultProps"
+                 :filter-node-method="filterNode">
+           <span class="custom-tree-node" slot-scope="{ node, data }">
+             <span>{{ data.label }}</span>
+          </span>
+        </el-tree>
       </el-form>
     </div>
   </div>
@@ -130,18 +121,6 @@
     },
     mixins: [roleMixin],
     data: function () {
-      let checkName = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入角色英文名称'));
-        } else {
-          let re = /^[A-Za-z]+$/ig;
-          if (!re.test(value)) {
-            callback(new Error('请输入正确的角色英文名称'));
-          } else {
-            callback();
-          }
-        }
-      };
       return {
         defaultProps: {
           children: 'children',
@@ -158,8 +137,7 @@
             {required: true, message: '请输入角色名称', trigger: 'blur'}
           ],
           name: [
-            {required: true, message: '请输入角色英文名称', trigger: 'blur'},
-            {type: 'name', message: '请输入正确的角色英文名称', validator: checkName, trigger: 'blur'}
+            {required: true, message: '请输入角色英文名称', trigger: 'blur'}
           ],
           remark: [
             {required: true, message: '请输入角色描述', trigger: 'blur'}
@@ -222,7 +200,7 @@
       getCheckedMenu: function (data, menuList) {
         for (let i = 0; i < data.length; i++) {
           if (data[i].indeterminate || data[i].checked) {
-            menuList.push(data[i].key);
+            menuList.push(data[i].data);
           }
           if (data[i].childNodes) {
             this.getCheckedMenu(data[i].childNodes, menuList);
@@ -240,11 +218,11 @@
           let menuList = [];
           this.getCheckedMenu(this.$refs['tree'].root.childNodes, menuList);
           menuList.forEach(val => {
-            rolelist.push({name: val});
+            rolelist.push({name: val.id, title: val.label});
           });
           this.form.permissionList = rolelist;
           if (this.action === 'add') {
-            this.form.objectId = 'ccs-system';
+            this.form.objectId = 'bms-system';
             Access.save(this.form).then(() => {
               this.doing = false;
               this.$notify.success({

@@ -1,34 +1,34 @@
 <template>
-  <el-form :model="form" :rules="rules" label-width="120px" ref="form">
+  <el-form ref="form" :rules="rules" :model="form" label-width="120px">
     <h2 class="clearfix">{{showTitle}}部门</h2>
     <el-form-item label="部门名称" prop="name">
-      <oms-input placeholder="请输入部门名称" type="text" v-model="form.name"></oms-input>
+      <oms-input type="text" v-model="form.name" placeholder="请输入部门名称"></oms-input>
     </el-form-item>
     <el-form-item label="部门编码">
-      <oms-input placeholder="请输入部门编码" type="text" v-model="form.code"></oms-input>
+      <oms-input type="text" v-model="form.code" placeholder="请输入部门编码"></oms-input>
     </el-form-item>
     <el-form-item label="部门电话">
-      <oms-input placeholder="请输入部门电话" type="text" v-model="form.phone"></oms-input>
+      <oms-input type="text" v-model="form.phone" placeholder="请输入部门电话"></oms-input>
     </el-form-item>
     <el-form-item label="部门邮箱">
-      <oms-input placeholder="请输入部门邮箱" type="text" v-model="form.email"></oms-input>
+      <oms-input type="text" v-model="form.email" placeholder="请输入部门邮箱"></oms-input>
     </el-form-item>
     <el-form-item label="部门传真">
-      <oms-input placeholder="请输入部门传真" type="text" v-model="form.fax"></oms-input>
+      <oms-input type="text" v-model="form.fax" placeholder="请输入部门传真"></oms-input>
     </el-form-item>
     <el-form-item label-width="120px">
-      <el-button :disabled="doing" @click="onSubmit('form')" type="primary">保存</el-button>
+      <el-button type="primary" @click="onSubmit('form')" :disabled="doing">保存</el-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
-  import {Department} from '@/resources';
+  import {Department} from '../../../../resources';
 
   export default {
     data: function () {
       let checkEmail = (rule, value, callback) => {
-        if (value === '' || value === null) {
+        if (value === '') {
           callback();
         } else {
           let re = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ig;

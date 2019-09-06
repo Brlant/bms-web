@@ -1,6 +1,9 @@
 <template>
-  <dialog-template :btnSavePosition="100">
+  <dialog-template :btnSavePosition="120">
     <template slot="title">{{actionType}}</template>
+    <template slot="btnSave">
+      <el-button class="mt-10" :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
+    </template>
     <template slot="content">
       <el-form :model="form" label-width="120px" ref="form">
         <el-form-item label="合同" prop="contractId"
@@ -11,7 +14,7 @@
                        v-for="item in contractList"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="计费模型名称" prop="billingModelName"
+        <el-form-item label="计费模型名称" prop="billingModelName" label-width="120px"
                       :rules="[{required: true, message: '请输入计费模型名称', trigger: 'blur'}]">
           <oms-input placeholder="请输入计费模型名称" type="input" v-model="form.billingModelName"/>
         </el-form-item>
@@ -24,9 +27,9 @@
       </el-form>
       <el-form :model="currentItem" label-width="120px" ref="addForm">
         <div v-if="form.billingModelTemplate === '0'">
-          <el-form-item label="计费模型模板" prop="billingItemIds"
+          <el-form-item label="计费模型模板" prop="billingModelId"
                         :rules="[{required: true, message: '计费模型模板', trigger: 'change'}]">
-            <el-select placeholder="计费模型模板" v-model="currentItem.billingItemIds"
+            <el-select placeholder="计费模型模板" v-model="currentItem.billingModelId"
                        filterable clearable remote :remote-method="queryCostModelListNew">
               <el-option :label="item.billingModelName" :value="item.billingModelId" :key="item.billingModelId"
                          v-for="item in costModelList"></el-option>
@@ -39,13 +42,14 @@
         <el-form-item label="">
           <el-button type="primary" @click="addItem">添加</el-button>
         </el-form-item>
-        <cost-table-util :data="form.costItemList"/>
+        <h2>计费项</h2>
+        <cost-table-util :data="form.billingItems" :isShowEdit="false" @remove="remove"/>
       </el-form>
     </template>
   </dialog-template>
 </template>
 <script>
-  import {costModel} from '@/resources';
+  import {contractCostModel, costModel} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
   import utils from '@/tools/utils';
   import costFormUtil from '../../../cost/info/costFormUtil';
@@ -58,9 +62,9 @@
       return {
         form: {
           contractId: '',
-          billingModelTemplate: '0',
           billingModelName: '',
-          costItemList: []
+          billingModelTemplate: '0',
+          billingItems: []
         },
         doing: false,
         actionType: '添加',
@@ -99,14 +103,19 @@
     watch: {
       index: function (val) {
         if (this.formItem.billingModelId) {
-          this.form = Object.assign({}, this.formItem);
+          this.contractList = [
+            {contractId: this.formItem.contractId, contractName: this.formItem.contractName}
+          ];
+          contractCostModel.queryDetail(this.formItem).then(res => {
+            this.form = Object.assign({}, res.data.data, {billingModelTemplate: '0'});
+          });
           this.actionType = '编辑';
         } else {
           this.form = {
             contractId: '',
-            billingModelTemplate: '0',
             billingModelName: '',
-            costItemList: []
+            billingModelTemplate: '0',
+            billingItems: []
           };
           this.actionType = '添加';
         }
@@ -129,29 +138,69 @@
       queryCostModelListNew(query) {
         let params = {
           keyWord: query,
-          billingModelTemplate: this.form.billingModelTemplate
+          billingModelTemplate: this.form.billingModelTemplate,
+          billingModelState: '1'
         };
         this.queryCostModelList(params);
       },
       billingModelTemplateChange(val) {
         this.costModelList = [];
-        this.billingItemIds = [];
-        this.currentItem = {
-          billingModelName: '',
-          billingModelId: '',
-          billingItemIds: []
-        };
-        this.$refs['addForm'].clearValidate();
+        this.billingItems = [];
+        this.resetItem();
       },
       addItem() {
-
+        this.$refs.addForm.validate(v => {
+          if (!v) return;
+          if (this.form.billingModelTemplate === '0') {
+            costModel.queryDetail(this.currentItem).then(res => {
+              res.data.data.billingItems.forEach(i => {
+                let isHas = this.form.billingItems.find(f => f.billingItemId === i.billingItemId);
+                if (!isHas) {
+                  this.form.billingItems.push(i);
+                }
+              });
+              this.resetItem();
+            });
+          } else {
+            this.form.billingItems.push(this.currentItem);
+            this.resetItem();
+          }
+        });
+      },
+      remove(item) {
+        this.form.billingItems = this.form.billingItems.filter(f => f !== item);
+      },
+      resetItem() {
+        this.currentItem = {
+          billingModelId: '',
+          businessType: '',
+          billingType: '',
+          billingItemId: '',
+          billingItemName: '',
+          billingModelTemplate: '',
+          companyDepartment: '',
+          businessManageId: '',
+          ladderState: '0',
+          unitPrice: '',
+          upperLimit: '',
+          lowerLimit: '',
+          billingRules: '',
+          billingUnit: '',
+          billingItemNo: ''
+        };
+        this.$nextTick(() => {
+          this.$refs['addForm'].clearValidate();
+        });
       },
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
+            if (!this.form.billingItems.length) {
+              return this.$notify.info({message: '请添加计费项'});
+            }
             if (!this.form.billingModelId) {
               this.doing = true;
-              this.$httpRequestOpera(costModel.save(this.form), {
+              this.$httpRequestOpera(contractCostModel.save(this.form), {
                 errorTitle: '添加失败',
                 success: res => {
                   if (res.data.code === 200) {
@@ -167,7 +216,7 @@
                 }
               });
             } else {
-              this.$httpRequestOpera(costModel.update(this.form), {
+              this.$httpRequestOpera(contractCostModel.update(this.form), {
                 errorTitle: '修改失败',
                 success: res => {
                   if (res.data.code === 200) {

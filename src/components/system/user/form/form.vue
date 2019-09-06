@@ -18,7 +18,7 @@
         <oms-input type="text" v-model="form.email" placeholder="请输入"></oms-input>
       </el-form-item>
       <el-form-item label="用户角色">
-        <el-select placeholder="请选择" v-model="form.list" multiple>
+        <el-select placeholder="请选择" v-model="form.list" multiple filterable>
           <el-option :label="item.title" :value="item.id" :key="item.id" v-for="item in roleSelect"></el-option>
         </el-select>
       </el-form-item>
@@ -62,11 +62,13 @@
         default: true
       }
     },
-    mounted () {
+    mounted() {
       this.$nextTick(function () {
         let param = {
           usableStatus: 1,
-          objectId: 'mdm-system'
+          objectId: 'bms-system',
+          pageNo: 1,
+          pageSize: 100
         };
         let self = this;
         Access.query(param).then(res => {
@@ -152,7 +154,7 @@
       },
       getRoleSelect: function () {
         let param = {
-          objectId: 'mdm-system'
+          objectId: 'bms-system'
         };
         let self = this;
         Access.query(param).then(res => {
@@ -166,7 +168,7 @@
             return false;
           }
           let formData = JSON.parse(JSON.stringify(this.form));
-          formData.objectId = 'mdm-system';
+          formData.objectId = 'bms-system';
           formData.list = self.form.list.map(m => {
             return {
               roleId: m
@@ -191,7 +193,6 @@
               this.doing = false;
             });
           } else {
-            this.doing = true;
             User.update(self.form.id, formData).then(() => {
               this.doing = false;
               this.$notify.success({
@@ -211,7 +212,7 @@
           }
         });
       },
-      getSelectRoles (formData, roles) {
+      getSelectRoles(formData, roles) {
         return roles.filter(f => formData.list.some(s => s.roleId === f.id)).map(m => {
           return {
             roleId: m.id,

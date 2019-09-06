@@ -2,19 +2,18 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="''">
+        <el-button @click="add" plain size="small" v-has="'add-billing-model'">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
       </template>
     </search-part>
-    <status-list :activeStatus="filters.status" :statusList="orgType"
+    <status-list :activeStatus="filters.billingModelState" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="10">模型名称</el-col>
-        <el-col :span="6">模型类型</el-col>
+        <el-col :span="16">模板名称</el-col>
         <el-col :span="2">状态</el-col>
         <el-col :span="6">操作</el-col>
       </el-row>
@@ -35,15 +34,16 @@
              class="order-list-item order-list-item-bg" @click="showDetail(item)"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="10">{{item.billingModelName}}</el-col>
-            <el-col :span="6">{{item.billingModelTemplate === '0' ? '普通计费模型' : '计费模板'}}</el-col>
+            <el-col :span="16">{{item.billingModelName}}</el-col>
             <el-col :span="2">
               {{item.billingModelState === '0' ? '停用': '启用'}}
             </el-col>
             <el-col :span="6" class="opera-btn">
-              <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.billingModelState === '0'">启用</des-btn>
-              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.billingModelState === '1'">停用</des-btn>
+              <des-btn @click="edit(item)" icon="edit" v-has="'edit-billing-model'">编辑</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="'enable-billing-model'"
+                       v-show="item.billingModelState === '0'">启用</des-btn>
+              <des-btn @click="stop(item)" icon="stop" v-has="'disable-billing-model'"
+                       v-show="item.billingModelState === '1'">停用</des-btn>
             </el-col>
           </el-row>
         </div>
@@ -83,7 +83,7 @@
       return {
         statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {
-          billingModelState: ''
+          billingModelState: '1'
         },
         dialogComponents: {
           0: addForm,
@@ -93,7 +93,7 @@
           0: {'title': '正常', 'num': 0, 'billingModelState': '1'},
           1: {'title': '停用', 'num': 0, 'billingModelState': '0'}
         },
-        defaultPageRight: {'width': '900px', 'padding': 0}
+        defaultPageRight: {'width': '920px', 'padding': 0}
       };
     },
     watch: {
@@ -127,8 +127,10 @@
         this.filters = Object.assign({}, this.filters, search);
       },
       resetRightBox() {
-        this.defaultPageRight.width = '900px';
+        this.defaultPageRight.width = '920px';
         this.showIndex = -1;
+        this.currentItemId = '';
+        this.currentItem = {};
       },
       showPart(index) {
         this.currentPart = this.dialogComponents[index];
@@ -136,12 +138,12 @@
           this.showIndex = index;
         });
       },
-      showDetail(item){
+      showDetail(item) {
         this.currentItem = item;
         this.currentItemId = item.billingModelId;
         this.defaultPageRight.width = '900px';
         this.form = item;
-        this.showPart(1)
+        this.showPart(1);
       },
       queryList(pageNo) {
         const http = costModel.query;
@@ -168,15 +170,16 @@
       start(item) {
         this.currentItem = item;
         this.currentItemId = item.billingModelId;
-        this.$confirmOpera(`是否启用计费模型"${item.contractName}"`, () => {
+        this.$confirmOpera(`是否启用计费模板"${item.billingModelName}"`, () => {
           this.$httpRequestOpera(costModel.start(item), {
             successTitle: '启用成功',
             errorTitle: '启用失败',
             success: (res) => {
-              if(res.data.code === 200) {
-                item.billingModelState = '1';
+              if (res.data.code === 200) {
+                this.queryList(this.pager.currentPage);
+                this.resetRightBox()
               } else {
-                this.$notify.error({message: res.data.msg})
+                this.$notify.error({message: res.data.msg});
               }
             }
           });
@@ -185,15 +188,16 @@
       stop(item) {
         this.currentItem = item;
         this.currentItemId = item.billingModelId;
-        this.$confirmOpera(`是否停用计费模型"${item.contractName}"`, () => {
+        this.$confirmOpera(`是否停用计费模板"${item.billingModelName}"`, () => {
           this.$httpRequestOpera(costModel.stop(item), {
             successTitle: '停用完成',
             errorTitle: '停用失败',
             success: (res) => {
-              if(res.data.code === 200) {
-                item.billingModelState = '0';
+              if (res.data.code === 200) {
+                this.queryList(this.pager.currentPage);
+                this.resetRightBox()
               } else {
-                this.$notify.error({message: res.data.msg})
+                this.$notify.error({message: res.data.msg});
               }
             }
           });

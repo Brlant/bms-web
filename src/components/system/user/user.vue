@@ -5,7 +5,9 @@
     display: block;
   }
 
-
+  .d-table-col-wrap {
+    padding-right: 8px;
+  }
 </style>
 <template>
   <div>
@@ -20,9 +22,10 @@
     <!--</div>-->
     <div class="container d-table">
       <div class="d-table-left">
-        <h2 class="header">
+        <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
+          <h2 class="header">
             <span class="pull-right">
-              <perm label="mdm-department-add">
+              <perm label="wms-department-add">
                 <a href="#" class="btn-circle" @click.stop.prevent="addDepartment">
                   <i class="el-icon-t-plus"></i>
                 </a>
@@ -31,28 +34,26 @@
                   <i class="el-icon-t-search"></i>
                 </a>
             </span>
-          部门信息
-        </h2>
-        <div class="search-left-box" v-show="showTypeSearch">
-          <oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>
-        </div>
-        <div>
-          <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight"
-                        @scroll="scrollLoadingData">
+            部门信息
+          </h2>
+          <div class="search-left-box" v-show="showTypeSearch">
+            <oms-input v-model='typeTxt' placeholder="请输入关键字搜索" :showFocus="showTypeSearch"></oms-input>
+          </div>
+          <div>
             <ul class="show-list">
               <li class="list-item" @click="showAllType(1)" :class="{'active':showAll}">
                 全部
               </li>
               <li v-for="item in showTypeList" class="list-item" @click="showType(item,1)"
                   :class="{'active':item.id==currentItem.id}">
-                  <span class="hover-show">
-                    <perm label="mdm-department-edit">
+                <span class="hover-show">
+                    <perm label="wms-department-edit">
                       <a href="#" @click.stop.prevent="editDepartment(item)"
                          class="pull-right">
                         <i class="el-icon-t-edit"></i>
                       </a>
                     </perm>
-                    <perm label="mdm-department-delete">
+                    <perm label="wms-department-delete">
                       <a href="#" @click.stop.prevent="deleteDepartment(item)"
                          class="pull-right">
                         <i class="el-icon-t-delete"></i>
@@ -62,29 +63,28 @@
                 {{item.name}}
               </li>
             </ul>
-          </el-scrollbar>
-          <div class="btn-left-list-more">
-            <bottom-loading></bottom-loading>
-            <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
-              <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
+            <div class="btn-left-list-more">
+              <bottom-loading></bottom-loading>
+              <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
+                <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="d-table-right">
-        <el-scrollbar tag="div" class="d-table-left_scroll" :style="'height:'+bodyHeight">
-          <div class="scrollbar-content">
-            <div>
-              <div class="order-list-status">
-                <div class="status-item" :class="{'active':item.status==filters.status}"
-                     v-for="(item,key) in orgType"
-                     @click="filters.status=item.status">
-                  <div class="status-bg" :class="['b_color_'+key]"></div>
-                  <div><i class="el-icon-caret-right" v-if="item.status==filters.status"></i>{{item.title}}<span
-                    class="status-num">{{item.num}}</span></div>
-                </div>
-                <span class="btn-group-right">
-                   <perm label="mdm-access-platfrom-role-export">
+        <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
+          <div>
+            <div class="order-list-status">
+              <div class="status-item" :class="{'active':item.status==filters.status}"
+                   v-for="(item,key) in orgType"
+                   @click="filters.status=item.status">
+                <div class="status-bg" :class="['b_color_'+key]"></div>
+                <div><i class="el-icon-caret-right" v-if="item.status==filters.status"></i>{{item.title}}<span
+                  class="status-num">{{item.num}}</span></div>
+              </div>
+              <span class="btn-group-right">
+                   <perm label="wms-access-platfrom-role-export">
                        <span @click.stop.prevent="exportUserRoles">
                            <a href="#" class="btn-circle" @click.prevent=""
                               style="margin-right: 5px"><i
@@ -92,9 +92,9 @@
                       </span>
                   </perm>
                 </span>
-              </div>
             </div>
-            <span class="pull-right">
+          </div>
+          <span class="pull-right">
                 <span class="btn-search-toggle open" v-show="showSearch">
                   <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"
                                 :showFocus="showSearch"></single-input>
@@ -103,77 +103,74 @@
                 <a href="#" class="btn-circle" @click.stop.prevent="showSearch=(!showSearch)" v-show="!showSearch">
                   <i class="el-icon-t-search"></i>
                 </a>
-                    <perm label="mdm-platform-user-add">
+                    <perm label="wms-platform-user-add">
                       <a href="#" class="btn-circle" @click.stop.prevent="add">
                         <i class="el-icon-t-plus"></i>
                       </a>
                     </perm>
                 </span>
-            <div v-if="dataRows.length == 0" class="empty-info">
-              暂无信息
-            </div>
-            <div v-else>
-              <table class="table table-hover">
-                <thead>
-                <tr>
-                  <th>姓名</th>
-                  <th>角色</th>
-                  <th>手机号码</th>
-                  <th>邮箱</th>
-                  <th>状态</th>
-                  <th></th>
-                </tr>
-                </thead>
-                <tbody>
-
-                <tr v-for="row in dataRows">
-                  <td>
-                    {{row.name}}
-                  </td>
-                  <td>
-                    {{ row.list | formatRole }}
-                  </td>
-                  <td>
-                    {{row.phone}}
-                  </td>
-
-                  <td>
-                    {{row.email}}
-                  </td>
-
-                  <td>
-                    <dict :dict-group="'orgUserStatus'" :dict-key="formatStatus(row.status)"></dict>
-                  </td>
-                  <td class="list-op">
-                    <perm label="mdm-platform-user-edit" class="btn-line-block">
-                      <a class="btn-line-block" href="#" @click.stop.prevent="edit(row)"><i class="el-icon-t-edit"></i>编辑</a>
-                      <oms-forbid class="btn-line-block" :item="row" @forbided="forbid"
-                                  :tips='"确认停用平台用户\""+row.name +"\"?"'
-                                  v-show="row.status!== '2'"><i
-                        class="el-icon-t-forbidden"></i>停用
-                      </oms-forbid>
-                      <oms-forbid class="btn-line-block" :item="row" @forbided="useNormal"
-                                  :tips='"确认启用平台用户\""+row.name +"\"?"'
-                                  v-show="row.status=== '2'"><i
-                        class="el-icon-t-start"></i>启用
-                      </oms-forbid>
-                    </perm>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-              <div class="text-center" v-show="dataRows.length">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                               :current-page="pager.currentPage"
-                               :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
-                               layout="total, sizes, prev, pager, next, jumper"
-                               :total="pager.count">
-                </el-pagination>
-              </div>
-            </div>
-
+          <div v-if="dataRows.length == 0" class="empty-info">
+            暂无信息
           </div>
-        </el-scrollbar>
+          <div v-else>
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>姓名</th>
+                <th>角色</th>
+                <th>手机号码</th>
+                <th>邮箱</th>
+                <th>状态</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+
+              <tr v-for="row in dataRows">
+                <td>
+                  {{row.name}}
+                </td>
+                <td>
+                  {{ row.list | formatRole }}
+                </td>
+                <td>
+                  {{row.phone}}
+                </td>
+
+                <td>
+                  {{row.email}}
+                </td>
+
+                <td>
+                  <dict :dict-group="'orgUserStatus'" :dict-key="formatStatus(row.status)"></dict>
+                </td>
+                <td class="list-op">
+                  <perm label="wms-platform-user-edit">
+                    <a href="#" @click.stop.prevent="edit(row)"><i class="el-icon-t-edit"></i>编辑</a>
+                    <oms-forbid :item="row" @forbided="forbid" :tips='"确认停用平台用户\""+row.name +"\"?"'
+                                v-show="row.status!== '2'"><i
+                      class="el-icon-t-forbidden"></i>停用
+                    </oms-forbid>
+                    <oms-forbid :item="row" @forbided="useNormal" :tips='"确认启用平台用户\""+row.name +"\"?"'
+                                v-show="row.status=== '2'"><i
+                      class="el-icon-t-start"></i>启用
+                    </oms-forbid>
+                  </perm>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="text-center" v-show="dataRows.length">
+              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                             :current-page="pager.currentPage"
+                             :page-sizes="[10,20,50,100]" :page-size="pager.pageSize"
+                             layout="total, sizes, prev, pager, next, jumper"
+                             :total="pager.count">
+              </el-pagination>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
     <page-right :show="showRight" @right-close="resetRightBox">
@@ -236,24 +233,22 @@
           pageSize: 20
         },
         typeTxt: '',
-        currentItem: {},
-        loadingLeftData: true,
-        loadingRightData: true
+        currentItem: {}
       };
     },
     mounted() {
       this.getDepartmentPage();
       this.showAllType(1);
     },
-    filters: {
-      formatRole: function (list) {
-        return list.map(m => m.title).join('，');
-      }
-    },
     computed: {
       bodyHeight: function () {
         let height = parseInt(this.$store.state.bodyHeight, 10);
-        return (height - 10) + 'px';
+        return (height) + 'px';
+      }
+    },
+    filters: {
+      formatRole: function (list) {
+        return list.map(m => m.title).join('，');
       }
     },
     watch: {
@@ -272,66 +267,97 @@
       }
     },
     methods: {
-      scrollLoadingData(event) {
-        this.$scrollLoadingData(event);
+      deleteDepartment: function (item) {
+        this.$confirm(`删除部门"${item.name}"会一并清空部门下的成员，确认删除？`, '', {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.delete('/oms/department/' + item.id, {}).then(() => {
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '删除部门"' + item.name + '"成功'
+            });
+            this.getDepartmentPage();
+            this.showAllType(1);
+          }).catch(error => {
+            this.$notify.error({
+              duration: 2000,
+              message: error.response.data && error.response.data.msg || '删除部门"' + item.name + '"失败'
+            });
+          });
+        });
+      },
+      exportUserRoles() {
+        this.$store.commit('initPrint', {
+          isPrinting: true,
+          moduleId: this.$route.path,
+          text: '拼命导出中'
+        });
+        let params = {
+          objectId: 'bms-system', type: 0
+        };
+        this.$http.get('/access/statement/role/export', {params}).then(res => {
+          utils.download(res.data.path);
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: this.$route.path,
+            text: '拼命导出中'
+          });
+        }).catch(error => {
+          this.$store.commit('initPrint', {
+            isPrinting: false,
+            moduleId: this.$route.path,
+            text: '拼命导出中'
+          });
+          this.$notify({
+            duration: 2000,
+            title: '导出失败',
+            message: error.response.data.msg,
+            type: 'error'
+          });
+        });
       },
       showAllType: function (pageNo) {
         this.currentItem = {};
         let data = Object.assign({}, this.filters, {
           pageNo: pageNo,
           pageSize: this.pager.pageSize,
-          objectId: 'mdm-system'
+          objectId: 'bms-system'
         });
-        this.loadingRightData = true;
-        this.nowAllTime = Date.now();
-        let nowTime = this.nowAllTime;
         Department.getMembers(data).then(res => {
-          if (this.nowAllTime > nowTime) return;
           this.dataRows = res.data.list;
           this.pager.count = res.data.count;
-          this.loadingRightData = false;
         });
         this.showAll = true;
-        this.queryStatusNum(data, this.nowAllTime);
+        this.queryStatusNum(data);
       },
       showType: function (type, pageNo) {
-        if (!type.id) {
-          // 清空右侧数据
-          this.dataRows = [];
-          this.orgType[0].num = 0;
-          this.orgType[1].num = 0;
-          this.orgType[2].num = 0;
-          return;
-        }
         let data = Object.assign({}, this.filters, {
           pageNo: pageNo,
           pageSize: this.pager.pageSize,
           companyDepartment: type.id,
-          objectId: 'mdm-system'
+          objectId: 'bms-system'
         });
-        this.loadingRightData = true;
-        this.nowTime = Date.now();
-        let nowTime = this.nowTime;
         Department.getOnesMember(type.id, data).then(res => {
-          if (this.nowTime > nowTime) return;
           this.dataRows = res.data.list;
           this.pager.count = res.data.count;
-          this.loadingRightData = false;
         });
         this.currentItem = type;
         this.showAll = false;
-        this.queryStatusNum(data, nowTime);
+        this.queryStatusNum(data);
       },
-      changeType(item, key) {
-        this.filters.status = item.status;
+      queryStatusNum: function (params) {
+        Department.queryStateNum(params).then(res => {
+          let data = res.data;
+          this.orgType[0].num = data['normal'];
+          this.orgType[1].num = data['not-active'];
+          this.orgType[2].num = data['disable'];
+        });
       },
-      isShowIcon(item, key, activeStatus) {
-        return item.status === activeStatus;
-      },
-      formatClass(item, key, activeStatus) {
-        return {
-          'active': item.status === activeStatus
-        };
+      scrollLoadingData(event) {
+        this.$scrollLoadingData(event);
       },
       handleSizeChange(val) {
         this.pager.pageSize = val;
@@ -366,10 +392,7 @@
           pageSize: this.pager.pageSize,
           keyword: this.typeTxt
         });
-        this.nowLeftTime = Date.now();
-        let nowLeftTime = this.nowLeftTime;
         Department.getPage(param).then(res => {
-          if (this.nowLeftTime > nowLeftTime) return;
           if (param.keyword !== this.typeTxt) return;
           this.$store.commit('initBottomLoading', false);
           if (isContinue) {
@@ -379,17 +402,8 @@
             this.data = Object.assign({}, {'id': ''}, res.data.list[0]);
           }
           this.departmentPager.totalPage = res.data.totalPage;
-          this.queryStatusNum(param);
         });
-      },
-      queryStatusNum: function (params, nowTime) {
-        Department.queryStateNum(params).then(res => {
-          if (nowTime && (this.nowTime > nowTime)) return;
-          let data = res.data;
-          this.orgType[0].num = data['normal'];
-          this.orgType[1].num = data['not-active'];
-          this.orgType[2].num = data['disable'];
-        });
+        // this.queryStatusNum(param);
       },
       add: function () {
         this.action = 'add';
@@ -448,14 +462,8 @@
           }
         });
       },
-      departmentChange: function (data) {
-        if (data.id) {
-          Object.keys(this.currentItem).forEach(k => {
-            this.currentItem[k] = data[k];
-          });
-        } else {
-          this.getDepartmentPage(1);
-        }
+      departmentChange: function () {
+        this.getDepartmentPage(1);
         this.showDepartmentRight = false;
       },
       itemChange: function (formData) {
@@ -487,58 +495,6 @@
       formatStatus: function (value) {
         if (!value) return '';
         return value.toString();
-      },
-      exportUserRoles() {
-        this.$store.commit('initPrint', {
-          isPrinting: true,
-          moduleId: this.$route.path,
-          text: '拼命导出中'
-        });
-        let params = {
-          objectId: 'mdm-system', type: 0
-        };
-        this.$http.get('/access/statement/role/export', {params}).then(res => {
-          utils.download(res.data.path);
-          this.$store.commit('initPrint', {
-            isPrinting: false,
-            moduleId: this.$route.path,
-            text: '拼命导出中'
-          });
-        }).catch(error => {
-          this.$store.commit('initPrint', {
-            isPrinting: false,
-            moduleId: this.$route.path,
-            text: '拼命导出中'
-          });
-          this.$notify({
-            duration: 2000,
-            title: '无法打印',
-            message: error.response.data.msg,
-            type: 'error'
-          });
-        });
-      },
-      deleteDepartment: function (item) {
-        this.$confirm(`删除部门"${item.name}"会一并清空部门下的成员，确认删除？`, '', {
-          confirmButtonText: '确认',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.delete('/oms/department/' + item.id, {}).then(() => {
-            this.$notify.success({
-              duration: 2000,
-              title: '成功',
-              message: '删除部门"' + item.name + '"成功'
-            });
-            this.getDepartmentPage();
-            this.showAllType(1);
-          }).catch(error => {
-            this.$notify.error({
-              duration: 2000,
-              message: error.response.data && error.response.data.msg || '删除部门"' + item.name + '"失败'
-            });
-          });
-        });
       }
     }
   };

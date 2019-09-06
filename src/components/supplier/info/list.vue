@@ -34,7 +34,7 @@
                   <i class="el-icon-t-search" @click.stop="showSearch=(!showSearch)"></i>
               </span>
               <des-btn icon="search" @click="showSearch=(!showSearch)" v-show="!showSearch"/>
-              <des-btn icon="plus" @click="add" v-has="'base-info-manager-add'"/>
+              <des-btn icon="plus" @click="add" v-has="'oms-business-unit-add'"/>
             </span>
             <h2 class="org-name-h2">
               {{menuTitle}}
@@ -91,15 +91,15 @@
                   <span v-show="row.deleteFlag">停用</span>
                   <span v-show="!row.deleteFlag">
                     <span v-if="row.auditDto.baseInfoStatus === '0'"
-                       v-show="row.auditDto.baseInfoStatus === '0'">
+                          v-show="row.auditDto.baseInfoStatus === '0'">
                      <li>基础信息待审核</li>
                     </span>
                     <span v-if="row.auditDto.warehouseStatus === '0'"
-                       v-show="row.auditDto.warehouseStatus === '0'">
+                          v-show="row.auditDto.warehouseStatus === '0'">
                       <li>仓库地址待审核</li>
                     </span>
                     <span v-if="row.auditDto.baseInfoStatus === '2'"
-                       v-show="row.auditDto.baseInfoStatus === '2'">
+                          v-show="row.auditDto.baseInfoStatus === '2'">
                       <li>基础信息审核未通过</li>
                     </span>
                     <span
@@ -118,9 +118,13 @@
                     </span>
                 </td>
                 <td>
-                  <des-btn icon="edit" v-has="'base-info-manager-edit'" @click="edit(row)">编辑</des-btn>
-                  <des-btn icon="forbidden" v-has="'base-info-manager-stop'" v-show="!row.deleteFlag" @click="forbid(row)">停用</des-btn>
-                  <des-btn icon="start" v-has="'base-info-manager-start'" v-show="row.deleteFlag" @click="enableGoods(row)">启用</des-btn>
+                  <des-btn icon="edit" v-has="'biz-edit'" @click="edit(row)">编辑</des-btn>
+                  <des-btn icon="forbidden" v-has="'oms-business-unit-delete'" v-show="!row.deleteFlag"
+                           @click="forbid(row)">停用
+                  </des-btn>
+                  <des-btn icon="start" v-has="'oms-business-unit-delete'" v-show="row.deleteFlag"
+                           @click="enableGoods(row)">启用
+                  </des-btn>
                 </td>
               </tr>
               </tbody>
@@ -468,9 +472,7 @@
       },
       onSubmit() {
         this.getOrgPage(1);
-        if (this.action === 'add') {
-          this.showRight = false;
-        }
+        this.resetRightBox();
       }
     }
   };

@@ -10,14 +10,30 @@ export const http = axios.create({
   withCredentials: true
 });
 
+function isNewReturnType(data) {
+  let keys = Object.keys(data);
+  if (keys.length !== 3) return false;
+  return ['code', 'data', 'msg'].every(e => keys.includes(e));
+}
+
+// 添加请求拦截器
+http.interceptors.request.use(function (config) {
+  if(config.method === 'get') {
+    config.paramsSerializer = params => {
+      return qs.stringify(params, {indices: false});
+    }
+  }
+  return config;
+});
+
 http.interceptors.response.use(response => {
-  if (response.data.code) {
+  if (isNewReturnType(response.data)) {
     switch (response.data.code) {
       case 200 :
         return response;
       case 401:
         window.location.href = '#/login';
-        return response;
+        return Promise.reject({response});
       case 403:
         Notification.error({
           message: '您没有权限请求信息，请联系管理员。',
@@ -25,12 +41,11 @@ http.interceptors.response.use(response => {
             window.localStorage.removeItem('noticeError');
           }
         });
-        return response;
+        return Promise.reject({response});
       case 400:
-        Notification.error({
-          message: response.data.msg,
-        });
-        return response;
+        return Promise.reject({response});
+      default:
+        return Promise.reject({response});
     }
   } else {
     return response;
@@ -92,19 +107,139 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+
+// 收款作业
+export const receiveTask = resource('', http, {
+  query(obj) {
+    return http.post('/bms-cj/query-collection-jobs', obj);
+  },
+  queryDetail(obj) {
+    return http.post('/bms-cj/query-info', obj);
+  },
+  batchCreate(obj) {
+    return http.post('/bms-cjs/batch', obj)
+  }
+});
+
+
+// 预收款记录
+export const preRecords = resource('', http, {
+  query(obj) {
+    return http.post('/bms-acj/query-advance-collection-jobs', obj);
+  },
+  save(obj) {
+    return http.post('/bms-acj/add-advance-collection-jobs', obj);
+  }
+});
+
+// 预收款余额
+export const preBalance = resource('', http, {
+  save(obj) {
+    return http.post('/bms-acb/add', obj);
+  },
+  query(obj) {
+    return http.post('/bms-acb/query/page', obj);
+  },
+  update(obj) {
+    return http.put('/bms-acb/edit', obj);
+  },
+  delete(id) {
+    return http.delete(`/bms-sd/query/${id}`);
+  }
+});
+
+// 结算单
+export const closeAccount = resource('', http, {
+  batchCreate(obj) {
+    return http.post('/bms-sd/race-blending', obj);
+  },
+  query(obj) {
+    return http.post('/bms-statement/query-page', obj);
+  },
+  queryStateNum: (params) => {
+    return http.post('/bms-statement/count', params);
+  },
+  audit(obj) {
+    return http.post('/bms-statement/audit', obj);
+  },
+  update(obj) {
+    return http.put('/bms-statement/edit', obj);
+  },
+  queryDetail(obj) {
+    return http.post('/bms-sd/query', obj);
+  }
+});
+
+
+// 对账单
+export const accountBill = resource('', http, {
+  batchCreateBill(obj) {
+    return http.post('/bms-ac/account-check', obj);
+  },
+  query(obj) {
+    return http.post('/bms-ac/query-account-check', obj);
+  },
+  queryStateNum: (params) => {
+    return http.post('/bms-ac/count', params);
+  },
+  confirm(obj) {
+    return http.post('/bms-ac/confirm', obj);
+  },
+  audit(obj) {
+    return http.post('/bms-ac/audit', obj);
+  },
+  update(obj) {
+    return http.put('/bms-ac/edit-account-check', obj);
+  },
+});
+
+
+// 计费明细
+export const contractAccountDetail = resource('', http, {
+  save(obj) {
+    return http.post('/bms-boa/add-billing-of-account', obj);
+  },
+  update(obj) {
+    return http.put('/bms-boa/edit-billing-of-account', obj);
+  },
+  query(obj) {
+    return http.post('/bms-boa/query-billing-of-account', obj);
+  },
+  queryStateNum: (params) => {
+    return http.post('/bms-boa/count', params);
+  }
+});
+
+
+// 合同绑定货品
+export const contractBindGoods = resource('', http, {
+  save(obj) {
+    return http.post('/bms-cgbm/add', obj);
+  },
+  query(obj) {
+    return http.post('/bms-cgbm/query', obj);
+  },
+  bindCost(obj) {
+    return http.post('/bms-cgbm/add-binding', obj);
+  },
+  queryCostModel(obj) {
+    return http.post('/bms-cgbm/query-binding', obj)
+  }
+});
+
 // 合同关联计费模型
 export const contractCostModel = resource('/bms-cbmi', http, {
   save(obj) {
-    return http.post('/bms-cbmi/add-contract-billing-model-item', obj);
+    return http.post('/bms-cbmi/add', obj);
   },
   update(obj) {
-    return http.put('/bms-cbmi/edit-contract-billing-model-item', obj);
+    return http.put('/bms-cbmi/edit', obj);
   },
   query(obj) {
-    return http.post('/bms-cbmi/query-contract-billing-model-page', obj);
+    return http.post('/bms-cbmi/query/page', obj);
   },
   queryDetail(obj) {
-    return http.post('/bms-cbmi/query-contract-billing-model-item', obj);
+    return http.post(`/bms-cbmi/query/${obj.contractBillingModelId}`);
   }
 });
 
@@ -135,22 +270,25 @@ export const costItem = resource('/bms-billing-item/add-billing-item', http, {
 // 计费模型
 export const costModel = resource('/bms-bm', http, {
   save(obj) {
-    return http.post('/bms-bm/add-billing-model', obj);
+    return http.post('/bms-bm/add', obj);
   },
   queryStateNum: (params) => {
     return http.post('/bms-bm/count', params);
   },
   start(obj) {
-    return http.put('/bms-bm/enable-billing-model', obj);
+    return http.put('/bms-bm/enable', obj);
   },
   stop(obj) {
-    return http.put('/bms-bm/disable-billing-model', obj);
+    return http.put('/bms-bm/disable', obj);
   },
   update(obj) {
-    return http.put('/bms-bm/edit-billing-model', obj);
+    return http.put('/bms-bm/edit', obj);
   },
   query(obj) {
     return http.post('/bms-bm/query-billing-model/page', obj);
+  },
+  queryDetail(obj) {
+    return http.post('/bms-bm/query/info', obj);
   }
 });
 
@@ -182,7 +320,7 @@ export const project = resource('/bms-project', http, {
     return http.post('/bms-project/add-project', obj);
   },
   queryStateNum: (params) => {
-    return http.get('/bms-project/count', {params});
+    return http.post('/bms-project/count', params);
   },
   start(obj) {
     return http.put('/bms-project/enable-project', obj);
@@ -550,7 +688,7 @@ export const OrgUser = resource('/oms/user/org', http, {
 // 角色管理对象
 export const Access = resource('/oms/access', http, {
   getRoleMenus: () => {
-    return http.get('/oms/access/menus/tree', {params: {objectId: 'oms-system'}});
+    return http.get('/oms/access/menus/tree', {params: {objectId: 'bms-system'}});
   },
   getOrgRoleMenus: (orgId) => {
     return http.get('/oms/access/org/' + orgId + '/admin/menus/tree');
@@ -664,9 +802,7 @@ export const BaseInfo = resource('/orgs', http, {
   },
   // 校验名字
   checkName: (name, orgId) => {
-    return http.get('/orgs/name', {
-      params: {name, orgId}
-    });
+    return http.post('/orgs/name', {name, orgId});
   },
   // 校验身份证
   checkCreditCode: (creditCode, orgId) => {
@@ -972,7 +1108,7 @@ export const Auth = {
     }
   },
   permission: () => {
-    return http.get('/oms/access/permissions', {params: {objectId: 'oms-system'}});
+    return http.get('/oms/access/permissions', {params: {objectId: 'bms-system'}});
   }
 };
 

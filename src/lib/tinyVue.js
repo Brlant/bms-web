@@ -102,6 +102,7 @@ import DialogTemplate from '@/components/common/dialog-template';
 import SearchTemplate from '@/components/common/search-template';
 import refreshCycle from '@/components/common/refresh-cycle';
 import WholeErrorSignHandle from '@/tools/whole-error-sign-handle';
+import perm from '@/components/common/perm'
 
 const tinyVue = [
   Pagination,
@@ -196,7 +197,8 @@ const tinyVue = [
   SearchTemplate,
   Scrollbar,
   compressedImg,
-  TnInputAutoComplete
+  TnInputAutoComplete,
+  perm
 ];
 
 const install = function (Vue, opts = {}) {

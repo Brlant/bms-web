@@ -39,7 +39,7 @@
               <i class="el-icon-t-download"></i>
             </a>
           </perm>
-          <perm label="ccs-attachment-name-update">
+          <perm label="wms-attachment-name-update">
             <a href="#" class="download-link pull-right" @click.stop.prevent="editName(attachment)">
               <i class="el-icon-t-edit"></i>
             </a>

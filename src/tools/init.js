@@ -4,9 +4,9 @@ export function init(Vue) {
   //权限指令
   Vue.directive('has', {
     inserted: function (el, binding) {
-      // if (!(Vue.prototype.$_has && Vue.prototype.$_has(binding.value))) {
-      //   el.parentNode && el.parentNode.removeChild(el);
-      // }
+      if (!(Vue.prototype.$_has && Vue.prototype.$_has(binding.value))) {
+        el.parentNode && el.parentNode.removeChild(el);
+      }
     }
   });
   Vue.filter('date', function (dateTime) {
@@ -71,6 +71,15 @@ export function init(Vue) {
       num = val.toFixed(2).toString();
     }
     if (num) {
+      // 判断数字是否有负号
+      let count = num.indexOf('-');
+      let isMinusSign = false;
+      if (count !== -1) {
+        // 如果包含负号
+        isMinusSign = true;
+        // 先去除负号
+        num = num.replace('-', '');
+      }
       // 整数部分进行千分位分割
       let arr = num.split('.');
       num = arr[0];
@@ -84,6 +93,10 @@ export function init(Vue) {
       }
       // 拼接小数位
       result = result + '.' + arr[1];
+      if (isMinusSign) {
+        // 如果原来包含负号则重新拼接
+        result = '-' + result;
+      }
       return result;
     }
   });
@@ -156,23 +169,23 @@ export function init(Vue) {
             duration: 2000,
             message: successTitle
           });
-          success(res);
+          success && success(res);
         } else {
-          error(res);
+          error && error(res);
         }
       } else {
         successTitle && this.$notify.success({
           duration: 2000,
           message: successTitle
         });
-        success(res);
+        success && success(res);
       }
     }).catch(e => {
       this.$notify.error({
         duration: 2000,
         message: e.response && e.response.data && e.response.data.msg || errorTitle || '操作失败'
       });
-      error(e);
+      error && error(e);
     });
   };
 

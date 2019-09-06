@@ -11,7 +11,8 @@
       > h3 {
         left: $leftWidth;
       }
-
+      padding-left: 10px;
+      padding-right: 10px;
       left: $leftWidth;
     }
   }
@@ -19,25 +20,25 @@
   .oms-row {
     margin-bottom: 10px;
   }
+
 </style>
 <template>
   <div class="content-part">
     <div class="content-right min-gutter">
       <h3 class="clearfix">详情</h3>
       <oms-row label="模型名称" :span="5">{{ formItem.billingModelName }}</oms-row>
-      <oms-row label="模型类型" :span="5">{{formItem.billingModelTemplate === '0' ? '普通计费模型' : '计费模板'}}</oms-row>
       <oms-row label="状态" :span="5">
         {{formItem.billingModelState === '0' ? '停用': '启用'}}
       </oms-row>
-      <oms-row label="计费项" :span="5" v-show="formItem.billingModelTemplate === '1'">
-        <ul class="show-list">
-          <li class="show-item" v-for="item in billingItemList">{{item.billingItemName}}</li>
-        </ul>
-      </oms-row>
+      <h2>计费项</h2>
+      <cost-table-util :data="data.billingItems" :showBtn="false"/>
     </div>
   </div>
 </template>
 <script>
+  import costTableUtil from './costTableUtil';
+  import {costModel} from '@/resources';
+
   export default {
     props: {
       formItem: {
@@ -46,6 +47,7 @@
       },
       index: Number
     },
+    components: {costTableUtil},
     watch: {
       index(val) {
         if (val !== 1) return;
@@ -54,15 +56,20 @@
     },
     data() {
       return {
-        billingItemList: []
+        data: {
+          billingItems: []
+        }
       };
     },
     methods: {
       queryItems() {
-        if (this.formItem.billingModelTemplate === '0') return;
-        this.$http.get(`/bms-billing-item/query-item/${this.formItem.billingModelId}`).then(res => {
+        costModel.queryDetail(this.formItem).then(res => {
           if (res.data.code === 200) {
-            this.billingItemList = res.data.data;
+            this.data = res.data.data;
+          } else {
+            this.data = {
+              billingItems: []
+            };
           }
         });
       }

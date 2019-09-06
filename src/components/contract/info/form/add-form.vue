@@ -1,11 +1,11 @@
 <template>
-  <dialog-template :btnSavePosition="100">
+  <dialog-template :btnSavePosition="120">
     <template slot="title">{{actionType}}</template>
     <template slot="btnSave">
       <el-button :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
     </template>
     <template slot="content">
-      <el-form :model="form" :rules="rules" label-width="140px" ref="form">
+      <el-form :model="form" :rules="rules" label-width="120px" ref="form">
         <el-form-item label="合同名称" prop="contractName">
           <oms-input placeholder="请输入合同名称" type="input" v-model="form.contractName"/>
         </el-form-item>
@@ -59,6 +59,9 @@
           ],
           contractNo: [
             {required: true, message: '请输入合同编号', trigger: 'blur'}
+          ],
+          orgId: [
+            {required: true, message: '请选择甲方', trigger: 'change'}
           ],
           companyDepartment: [
             {required: true, message: '请选择所属部门', trigger: 'change'}

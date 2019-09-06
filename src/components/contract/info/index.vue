@@ -2,7 +2,7 @@
   <div class="order-page">
     <search-part @search="searchResult">
       <template slot="btn">
-        <el-button @click="add" plain size="small" v-has="''">
+        <el-button @click="add" plain size="small" v-has="'add-contract'">
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
@@ -35,13 +35,15 @@
       </el-row>
       <div class="order-list-body flex-list-dom" v-else="">
         <div :class="[{'active':currentItemId===item.contractId}]"
-             class="order-list-item order-list-item-bg no-pointer"
+             class="order-list-item order-list-item-bg"
              v-for="item in dataList" @click="showDetail(item)">
           <el-row>
             <el-col :span="3">{{item.contractName}}</el-col>
             <el-col :span="3">{{item.contractNo}}</el-col>
             <el-col :span="3">{{item.orgName}}</el-col>
-            <el-col :span="3" class="R">{{item.businessManageName}} {{item.companyDepartmentName}}</el-col>
+            <el-col :span="3" class="R">
+              {{item.businessManageName}}/{{item.companyDepartmentName}}
+            </el-col>
             <el-col :span="4">
               始 {{item.contractSignTime | date}}
               <div>终 {{item.contractOverTime | date}}</div>
@@ -50,10 +52,11 @@
               {{item.contractState === '0' ? '停用': '启用'}}
             </el-col>
             <el-col :span="6" class="opera-btn">
-              <des-btn @click="edit(item)" icon="edit" v-has="''">编辑</des-btn>
-              <des-btn @click="bind(item)" icon="allot" v-has="''">绑定货品</des-btn>
-              <des-btn @click="start(item)" icon="start" v-has="''" v-show="item.contractState === '0'">启用</des-btn>
-              <des-btn @click="stop(item)" icon="stop" v-has="''" v-show="item.contractState === '1'">停用</des-btn>
+              <des-btn @click="edit(item)" icon="edit" v-has="'edit-contract'">编辑</des-btn>
+              <des-btn @click="bind(item)" icon="allot" v-has="'add-contract-goods-model'">绑定货品计费模型</des-btn>
+              <des-btn @click="bindCost(item)" icon="allot" v-has="'add-contract-goods-model'">绑定非货品计费模型</des-btn>
+              <des-btn @click="start(item)" icon="start" v-has="'enable-contract'" v-show="item.contractState === '0'">启用</des-btn>
+              <des-btn @click="stop(item)" icon="stop" v-has="'disable-contract'" v-show="item.contractState === '1'">停用</des-btn>
             </el-col>
           </el-row>
         </div>
@@ -84,11 +87,13 @@
   import {Contact} from '@/resources';
   import BindOrgGoodsForm from './form/bind-orgGoods-form';
   import DetailPart from './detail';
+  import BindCostModel from './form/bind-cost-model';
   export default {
     components: {
       SearchPart,
       BindOrgGoodsForm,
-      DetailPart
+      DetailPart,
+      BindCostModel
     },
     mixins: [CommonMixin],
     data() {
@@ -100,7 +105,8 @@
         dialogComponents: {
           0: addForm,
           1: BindOrgGoodsForm,
-          2: DetailPart
+          2: DetailPart,
+          3: BindCostModel
         },
         orgType: {
           0: {'title': '正常', 'num': 0, 'contractState': '1'},
@@ -178,6 +184,12 @@
         this.form = item;
         this.showPart(1);
       },
+      bindCost(item) {
+        this.currentItem = item;
+        this.currentItemId = item.contractId;
+        this.form = item;
+        this.showPart(3);
+      },
       showDetail(item) {
         this.currentItem = item;
         this.currentItemId = item.contractId;
@@ -193,7 +205,7 @@
             errorTitle: '启用失败',
             success: (res) => {
               if (res.data.code === 200) {
-                item.contractState = '1';
+                this.queryList(this.pager.currentPage);
               } else {
                 this.$notify.error({message: res.data.msg});
               }
@@ -210,7 +222,7 @@
             errorTitle: '停用失败',
             success: (res) => {
               if (res.data.code === 200) {
-                item.contractState = '0';
+                this.queryList(this.pager.currentPage);
               } else {
                 this.$notify.error({message: res.data.msg});
               }
