@@ -107,7 +107,7 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            if (!this.form.id) {
+            if (!this.form.projectId) {
               this.doing = true;
               this.$httpRequestOpera(project.save(this.form), {
                 errorTitle: '添加失败',
