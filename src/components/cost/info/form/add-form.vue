@@ -81,6 +81,7 @@
             billingItems: []
           };
           this.actionType = '添加';
+          this.resetItem();
         }
         this.$nextTick(() => {
           this.$refs['form'] && this.$refs['form'].clearValidate();
@@ -127,8 +128,8 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            if(!this.form.billingItems.length) {
-              return this.$notify.info({message: '请添加计费项'})
+            if (!this.form.billingItems.length) {
+              return this.$notify.info({message: '请添加计费项'});
             }
             if (!this.form.billingModelId) {
               this.doing = true;

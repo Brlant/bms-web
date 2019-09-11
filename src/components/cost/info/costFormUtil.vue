@@ -43,7 +43,7 @@
       </el-col>
       <el-col :span="6" v-show="currentCostType.ladderState">
         <el-form-item label="是否阶梯">
-          <el-radio-group v-model="currentItem.ladderState" size="small">
+          <el-radio-group v-model="currentItem.ladderState" size="small" @change="ladderStateChange">
             <el-radio-button label="1">是</el-radio-button>
             <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
@@ -106,6 +106,10 @@
       },
       formatPrice() {// 格式化单价，保留两位小数
         this.currentItem.unitPrice = utils.autoformatDecimalPoint(this.currentItem.unitPrice);
+      },
+      ladderStateChange() {
+        this.currentItem.upperLimit = '';
+        this.currentItem.lowerLimit = '';
       }
     }
   }
