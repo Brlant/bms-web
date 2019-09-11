@@ -216,6 +216,7 @@
                 }
               });
             } else {
+              this.form.contractBillingModelId = this.formItem.contractBillingModelId;
               this.$httpRequestOpera(contractCostModel.update(this.form), {
                 errorTitle: '修改失败',
                 success: res => {
