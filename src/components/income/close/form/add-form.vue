@@ -1,13 +1,22 @@
 <template>
   <dialog-template :btnSavePosition="120">
-    <template slot="title">{{addType === '0' ? '编辑对账单' : '开具发票'}}</template>
+    <template slot="title">{{addType === 0 ? '编辑对账单' : '开具发票'}}</template>
     <template slot="btnSave">
       <el-button class="mt-10" :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
     </template>
     <template slot="content">
       <el-form :model="form" label-width="120px" ref="form">
-        <el-form-item label="合同">{{form.contractName}}</el-form-item>
-        <el-form-item label="甲方">{{form.customerName}}</el-form-item>
+        <el-form-item label="合同" style="margin-bottom: 0">{{form.contractName}}</el-form-item>
+        <el-form-item label="甲方" style="margin-bottom: 0">{{form.customerName}}</el-form-item>
+        <el-form-item label="结算单号" style="margin-bottom: 0">{{form.statementNo}}</el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="结算单金额" >{{form.statementAmount | formatMoney}}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="待回款金额" >{{form.unreturnedAmount | formatMoney}}</el-form-item>
+          </el-col>
+        </el-row>
         <div v-if="addType === 0">
           <el-form-item label="是否含税" prop="billingUntilPrice" label-width="120px">
             <el-switch

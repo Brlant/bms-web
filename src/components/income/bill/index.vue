@@ -2,9 +2,9 @@
   <div class="order-page">
     <search-part @search="searchResult">
     </search-part>
-    <status-list :activeStatus="filters.accountCheckType" :statusList="orgType"
-                 :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
-                 :formatClass="formatClass"></status-list>
+      <status-list :activeStatus="filters.accountCheckType" :statusList="orgType"
+                   :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
+                   :formatClass="formatClass"></status-list>
     <el-table :data="dataList" v-loading="loadingData"
               :row-style="{cursor: 'pointer'}" @row-click="showDetail"
               border class="clearfix mt-20" ref="orderDetail">
@@ -77,6 +77,8 @@
           0: {'title': '待确定', 'num': 0, 'accountCheckType': '0'},
           1: {'title': '待审核', 'num': 0, 'accountCheckType': '1'},
           2: {'title': '已审核', 'num': 0, 'accountCheckType': '2'},
+          3: {'title': '审核不通过', 'num': 0, 'accountCheckType': '3'},
+          9: {'title': '已取消', 'num': 0, 'accountCheckType': '9'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
         billItems: []
@@ -146,6 +148,8 @@
           this.orgType[0].num = data['toBeConfirmed'];
           this.orgType[1].num = data['noCheck'];
           this.orgType[2].num = data['checkedNum'];
+          this.orgType[3].num = data['notCheckedNum'];
+          this.orgType[9].num = data['cancelNum'];
         });
       },
       add() {

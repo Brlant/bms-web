@@ -185,6 +185,9 @@ export const accountBill = resource('', http, {
   confirm(obj) {
     return http.post('/bms-ac/confirm', obj);
   },
+  cancel(obj) {
+    return http.post('/bms-ac/cancel', obj);
+  },
   audit(obj) {
     return http.post('/bms-ac/audit', obj);
   },

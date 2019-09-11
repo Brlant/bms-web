@@ -192,6 +192,10 @@ export default [
             label: '确认对账单'
           },
           {
+            id: 'account-check-cancel',
+            label: '取消对账单'
+          },
+          {
             id: 'edit-account-check',
             label: '编辑对账单'
           }

@@ -46,9 +46,19 @@
       </el-row>
       <div style="margin-left: 50px">
         <el-button type="primary" v-has="'account-check-confirm'" @click="confirm"
-                   v-if="formItem.accountCheckType === '0'">确认帐单</el-button>
+                   v-if="formItem.accountCheckType === '0'">确认帐单
+        </el-button>
+
+        <el-button type="danger" v-has="'account-check-cancel'" @click="cancel"
+                   v-if="formItem.accountCheckType === '0'">取消帐单
+        </el-button>
+
         <el-button type="primary" v-has="'account-check-audit'"
-                   @click="audit" v-if="formItem.accountCheckType === '1'">审核帐单</el-button>
+                   @click="audit" v-if="formItem.accountCheckType === '1'">审核通过
+        </el-button>
+        <el-button type="primary" v-has="'account-check-audit'"
+                   @click="auditNoPass" v-if="formItem.accountCheckType === '1'">审核不通过
+        </el-button>
       </div>
     </div>
   </div>
@@ -77,10 +87,34 @@
           });
         });
       },
+      cancel() {
+        this.$confirmOpera('是否取消账单', () => {
+          this.$httpRequestOpera(accountBill.cancel(this.formItem), {
+            successTitle: '取消账单成功',
+            errorTitle: '取消账单失败',
+            success: (res) => {
+              this.$emit('change');
+            }
+          });
+        });
+      },
       audit() {
-        this.$confirmOpera('是否审核账单', () => {
+        this.$confirmOpera('是否审核通过此账单', () => {
+          this.formItem.accountCheckType = '2';
           this.$httpRequestOpera(accountBill.audit(this.formItem), {
-            successTitle: '审核账单成功',
+            successTitle: '审核账单完成',
+            errorTitle: '审核账单失败',
+            success: (res) => {
+              this.$emit('change');
+            }
+          });
+        });
+      },
+      auditNoPass() {
+        this.$confirmOpera('是否审核不通过此账单', () => {
+          this.formItem.accountCheckType = '3';
+          this.$httpRequestOpera(accountBill.audit(this.formItem), {
+            successTitle: '审核账单完成',
             errorTitle: '审核账单失败',
             success: (res) => {
               this.$emit('change');
