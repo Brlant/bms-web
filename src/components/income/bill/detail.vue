@@ -40,8 +40,8 @@
           <oms-row label="是否含税" :span="8">{{ formItem.includeTax === '0' ? '否' : '是' }}</oms-row>
           <oms-row label="税率" :span="8">{{ formItem.taxRate }}</oms-row>
           <oms-row label="优惠金额" :span="8">{{ formItem.preferentialAmount }}</oms-row>
-          <oms-row label="折扣金额" :span="8">{{ formItem.discountAmount }}</oms-row>
-          <oms-row label="待回款金额" :span="8">{{ formItem.unreturnedAmount }}</oms-row>
+          <oms-row label="折扣" :span="8">{{ formItem.discountAmount }}</oms-row>
+          <oms-row label="待回款金额" :span="8">{{ formItem.unreturnedAmount }}%</oms-row>
         </el-col>
       </el-row>
       <div style="margin-left: 50px">

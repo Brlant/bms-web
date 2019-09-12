@@ -46,7 +46,7 @@
           <oms-row label="税率" :span="8" v-show="formItem.taxRate">{{ formItem.taxRate }}</oms-row>
           <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount }}
           </oms-row>
-          <oms-row label="折扣金额" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}</oms-row>
+          <oms-row label="折扣" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}%</oms-row>
         </el-col>
       </el-row>
       <h2 class="detail-title">计费明细</h2>
