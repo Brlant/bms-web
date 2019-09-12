@@ -215,7 +215,7 @@ export const contractAccountDetail = resource('', http, {
 
 
 // 合同绑定货品
-export const contractBindGoods = resource('', http, {
+export const contractBindGoods = resource('/bms-cgbm', http, {
   save(obj) {
     return http.post('/bms-cgbm/add', obj);
   },

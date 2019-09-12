@@ -24,6 +24,10 @@
   }
 
 
+  .box-part {
+    background: #eee;
+    margin: 10px;
+  }
 </style>
 <template>
   <div class="content-part">
@@ -44,25 +48,40 @@
           <oms-row label="状态" :span="6">{{formItem.contractState === '0' ? '停用': '启用'}}</oms-row>
         </el-col>
       </el-row>
-      <div v-if="data.projectId">
+      <div >
         <h2 class="detail-title">绑定货品计费模型</h2>
-        <oms-row label="项目" :span="3">{{data.projectName}}</oms-row>
-        <oms-row label="计费模型" :span="3">
-          {{data.billingModelName}} <i class="el-icon-arrow-down" style="cursor: pointer" @click="showBillingItems = !showBillingItems"></i>
-        </oms-row>
-        <cost-table-util class="mb-10" :data="billingItems" :showBtn="false" v-show="showBillingItems"/>
-        <el-table :data="data.orgGoodsList" border class="clearfix " ref="orderDetail">
-          <el-table-column prop="orgGoodsName" label="货品"/>
-          <el-table-column prop="goodsSpecification" label="规格" width="200px"/>
-        </el-table>
+        <div class="box-part" v-for="dataItem in dataList">
+          <el-row style="padding: 5px 0;display: flex;align-items: center">
+            <el-col :span="11">
+              <oms-row label="项目" :span="5" style="margin-bottom: 0">{{dataItem.projectName}}</oms-row>
+            </el-col>
+            <el-col :span="11">
+              <oms-row label="计费模型" :span="5" style="margin-bottom: 0">
+                {{dataItem.billingModelName}}
+              </oms-row>
+            </el-col>
+            <el-col :span="2">
+              <des-btn @click="deleteItem(dataItem, 'dataList')" icon="delete">删除</des-btn>
+            </el-col>
+          </el-row>
+          <el-table :data="dataItem.orgGoodsList" border class="clearfix " ref="orderDetail">
+            <el-table-column prop="orgGoodsName" label="货品"/>
+            <el-table-column prop="goodsSpecification" label="规格" width="200px"/>
+          </el-table>
+        </div>
       </div>
-      <div v-if="costModel.projectId" class="mt-10">
+      <div  class="mt-10">
         <h2 class="detail-title">绑定非货品计费模型</h2>
-        <oms-row label="计费模型" :span="3">
-          {{costModel.billingModelName}} <i class="el-icon-arrow-down" style="cursor: pointer"
-                                            @click="showCostBillingItems = !showCostBillingItems"></i>
-        </oms-row>
-        <cost-table-util class="mb-10" :data="costBillingItems" :showBtn="false" v-show="showCostBillingItems"/>
+        <el-table :data="costModelList" border class="clearfix " ref="orderDetail">
+          <el-table-column prop="billingModelName" label="计费模型"/>
+          <el-table-column prop="projectName" label="项目"/>
+          <el-table-column prop="opa" label="操作" width="100px">
+            <template slot-scope="scope">
+              <des-btn @click="deleteItem(scope.row, 'costModelList')" icon="delete">删除</des-btn>
+            </template>
+          </el-table-column>
+        </el-table>
+<!--        <cost-table-util class="mb-10" :data="costBillingItems" :showBtn="false" v-show="showCostBillingItems"/>-->
       </div>
     </div>
   </div>
@@ -89,9 +108,9 @@
     },
     data() {
       return {
-        data: {},
+        dataList: [],
         billingItems: [],
-        costModel: {},
+        costModelList: [],
         costBillingItems: [],
         showBillingItems: false,
         showCostBillingItems: false,
@@ -100,32 +119,52 @@
     },
     methods: {
       queryItems() {
-        this.data = {
-          orgGoodsList: []
-        };
+        this.data = [];
         this.billingItems = [];
         this.loading = true;
         contractBindGoods.query({contractId: this.formItem.contractId}).then(res => {
           this.loading = false;
-          if (res.data.data.projectId) {
-            this.data = res.data.data;
-            costModel.queryDetail(this.data).then(res => {
-              this.billingItems = res.data.data.billingItems;
-            });
-          }
+          this.dataList = res.data.data;
+          // if (res.data.data.projectId) {
+          //   costModel.queryDetail(this.data).then(res => {
+          //     this.billingItems = res.data.data.billingItems;
+          //   });
+          // }
         });
       },
       queryCostModel() {
-        this.costModel = {};
+        this.costModel = [];
         this.costBillingItems = [];
         contractBindGoods.queryCostModel({contractId: this.formItem.contractId}).then(res => {
-          if (res.data.data.projectId) {
-            this.costModel = res.data.data;
-            costModel.queryDetail(this.costModel).then(res => {
-              this.costBillingItems = res.data.data.billingItems;
-            });
-          }
+          this.costModelList = res.data.data;
+          // if (res.data.data.projectId) {
+          //   costModel.queryDetail(this.costModel).then(res => {
+          //     this.costBillingItems = res.data.data.billingItems;
+          //   });
+          // }
         });
+      },
+      deleteItem(item, prop) {
+        this.$confirm('确认删除计费模型"' + item.billingModelName + '"', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          contractBindGoods.delete(item.contractGoodsBillingModelId).then(() => {
+            let index = this[prop].indexOf(item);
+            this[prop].splice(index, 1);
+            this.$notify.success({
+              duration: 2000,
+              title: '成功',
+              message: '删除成功'
+            });
+          }).catch(() => {
+            this.$notify.error({
+              duration: 2000,
+              message: '删除失败'
+            });
+          });
+        })
       }
     }
   };
