@@ -126,8 +126,9 @@
         },
         orgType: {
           0: {'title': '未对账', 'num': 0, 'attachmentType': '0'},
-          1: {'title': '已对账', 'num': 0, 'attachmentType': '1'},
-          2: {'title': '已回款', 'num': 0, 'attachmentType': '2'},
+          1: {'title': '对账中', 'num': 0, 'attachmentType': '1'},
+          2: {'title': '已对账', 'num': 0, 'attachmentType': '2'},
+          3: {'title': '已回款', 'num': 0, 'attachmentType': '3'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
         selectList: [],
@@ -232,8 +233,9 @@
         contractAccountDetail.queryStateNum(params).then(res => {
           let data = res.data.data;
           this.orgType[0].num = data['nonAccountCheck'];
-          this.orgType[1].num = data['nonReturnMoneyNum'];
+          this.orgType[1].num = data['accountCheckInNum'];
           this.orgType[2].num = data['allReturnMoneyNum'];
+          this.orgType[3].num = data['allReturnMoneyNum'];
         });
       },
       add() {

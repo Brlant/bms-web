@@ -14,6 +14,9 @@
       <el-table-column prop="unreturnedAmount" label="回款日期" width="120">
         <template slot-scope="scope">{{scope.row.backAmountTime | date}}</template>
       </el-table-column>
+      <el-table-column prop="unreturnedAmount" label="收款金额" width="120">
+        <template slot-scope="scope"></template>
+      </el-table-column>
       <el-table-column prop="accountCheckNo" label="银行名称" min-width="150">
         <template slot-scope="scope">{{scope.row.bankName}}</template>
       </el-table-column>

@@ -20,7 +20,7 @@
       <el-table-column prop="accountCheckAmount" label="对账单金额" width="200">
         <template slot-scope="scope">{{scope.row.accountCheckAmount}}</template>
       </el-table-column>
-      <el-table-column prop="unreturnedAmount" label="待回款金额" width="200">
+      <el-table-column prop="unreturnedAmount" label="实际对账金额" width="200">
         <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
       </el-table-column>
       <el-table-column prop="accountCheckType" label="状态" width="120">
@@ -28,7 +28,7 @@
           {{orgType[scope.row.accountCheckType].title}}
         </template>
       </el-table-column>
-      <el-table-column prop="operate" label="操作" width="120" v-if="filters.accountCheckType === '0'">
+      <el-table-column prop="operate" label="操作" width="120" v-if="filters.accountCheckType === '0' || filters.accountCheckType === '1'">
         <template slot-scope="scope">
           <des-btn icon="edit" v-has="'edit-account-check'" @click="edit(scope.row)">编辑</des-btn>
         </template>
