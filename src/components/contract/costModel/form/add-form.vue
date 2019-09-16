@@ -18,6 +18,12 @@
                       :rules="[{required: true, message: '请输入计费模型名称', trigger: 'blur'}]">
           <oms-input placeholder="请输入计费模型名称" type="input" v-model="form.billingModelName"/>
         </el-form-item>
+        <el-form-item label="绑定货品计费" prop="bindingGoodStatus"
+                      :rules="[{required: true, message: '请选择绑定货品计费', trigger: 'change'}]">
+          <el-switch v-model="form.bindingGoodStatus"
+                     active-value="1" inactive-value="0" active-text="是" inactive-text="否"
+                     @change="billingModelTypeChange"></el-switch>
+        </el-form-item>
         <el-form-item label="" prop="billingModelTemplate">
           <el-radio-group v-model="form.billingModelTemplate" size="small" @change="billingModelTemplateChange">
             <el-radio-button label="0">从计费模型模板选择</el-radio-button>
@@ -37,7 +43,7 @@
           </el-form-item>
         </div>
         <div v-else>
-          <cost-form-util :currentItem="currentItem"/>
+          <cost-form-util :currentItem="currentItem" :billingModelType="form.bindingGoodStatus"/>
         </div>
         <el-form-item label="">
           <el-button type="primary" @click="addItem">添加</el-button>
@@ -64,6 +70,7 @@
           contractId: '',
           billingModelName: '',
           billingModelTemplate: '0',
+          bindingGoodStatus: '1',
           billingItems: []
         },
         doing: false,
@@ -115,6 +122,7 @@
             contractId: '',
             billingModelName: '',
             billingModelTemplate: '0',
+            bindingGoodStatus: '1',
             billingItems: []
           };
           this.actionType = '添加';
@@ -125,6 +133,11 @@
       }
     },
     methods: {
+      billingModelTypeChange() {
+        this.currentItem.billingModelId = '';
+        this.form.billingItems = [];
+        this.costModelList = [];
+      },
       billingTypeChange(val) {
         if (!val) {
           return;
@@ -139,7 +152,8 @@
         let params = {
           keyWord: query,
           billingModelTemplate: this.form.billingModelTemplate,
-          billingModelState: '1'
+          billingModelState: '1',
+          billingModelType: this.form.bindingGoodStatus
         };
         this.queryCostModelList(params);
       },

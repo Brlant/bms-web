@@ -75,6 +75,7 @@
       queryContractCostModelListNew(query) {
         let params = {
           contractId: this.formItem.contractId,
+          bindingGoodStatus: '0',
           keyWord: query
         };
         this.queryContractCostModelList(params);

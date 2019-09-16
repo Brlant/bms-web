@@ -27,6 +27,14 @@
             </el-select>
           </oms-form-row>
         </el-col>
+        <el-col :span="12">
+          <oms-form-row label="是否绑定货品计费" :span="6">
+            <el-radio-group v-model="searchCondition.bindingGoodStatus">
+              <el-radio label="1">是</el-radio>
+              <el-radio label="0">否</el-radio>
+            </el-radio-group>
+          </oms-form-row>
+        </el-col>
       </el-form>
     </template>
   </search-template>
@@ -42,7 +50,8 @@
       return {
         searchCondition: {
           billingModelName: '',
-          contractId: ''
+          contractId: '',
+          bindingGoodStatus: ''
         },
         showSearch: false,
         list: [],
@@ -69,7 +78,8 @@
       reset() {
         this.searchCondition = {
           billingModelName: '',
-          contractId: ''
+          contractId: '',
+          bindingGoodStatus: ''
         };
         this.$emit('search', this.searchCondition);
       },

@@ -9,9 +9,15 @@
         <el-form-item label="模板名称" prop="billingModelName">
           <oms-input placeholder="请输入计费模板名称" type="input" v-model="form.billingModelName"/>
         </el-form-item>
+        <el-form-item label="绑定货品计费" prop="billingModelType"
+                      :rules="[{required: true, message: '请选择绑定货品计费', trigger: 'change'}]">
+          <el-switch v-model="form.billingModelType"
+                     active-value="1" inactive-value="0" active-text="是" inactive-text="否"
+                     @change="billingModelTypeChange"></el-switch>
+        </el-form-item>
       </el-form>
       <el-form :model="currentItem" :rules="rules" label-width="120px" ref="addForm">
-        <cost-form-util ref="costUtil" :currentItem="currentItem"/>
+        <cost-form-util ref="costUtil" :currentItem="currentItem" :billingModelType="form.billingModelType"/>
         <el-form-item>
           <el-button type="primary" @click="addItem">添加</el-button>
         </el-form-item>
@@ -34,6 +40,7 @@
       return {
         form: {
           billingModelName: '',
+          billingModelType: '1',
           billingItems: []
         },
         doing: false,
@@ -78,6 +85,7 @@
         } else {
           this.form = {
             billingModelName: '',
+            billingModelType: '1',
             billingItems: []
           };
           this.actionType = '添加';
@@ -89,6 +97,9 @@
       }
     },
     methods: {
+      billingModelTypeChange() {
+        this.form.billingItems = [];
+      },
       addItem() {
         this.$refs.addForm.validate(v => {
           if (!v) return;
@@ -119,7 +130,8 @@
           lowerLimit: '',
           billingRules: '',
           billingUnit: '',
-          billingItemNo: ''
+          billingItemNo: '',
+          billingModelType: '1'
         };
         this.$nextTick(() => {
           this.$refs['addForm'].clearValidate();
@@ -149,6 +161,7 @@
                 }
               });
             } else {
+              this.doing = true;
               this.$httpRequestOpera(costModel.update(this.form), {
                 errorTitle: '修改失败',
                 success: res => {

@@ -20,7 +20,7 @@
       <el-select placeholder="请选择计费项" v-model="currentItem.billingItemNo"
                  filterable clearable @change="billingItemNoChange">
         <el-option :label="item.name" :value="item.id" :key="item.id"
-                   v-for="item in currentCostType.items"></el-option>
+                   v-for="item in currentCostType.items.filter(f => (f.bind === (billingModelType==='1')))"></el-option>
       </el-select>
     </el-form-item>
     <el-row v-show="currentItem.billingItemNo">
@@ -50,12 +50,14 @@
         </el-form-item>
       </el-col>
       <el-col :span="5" v-if="currentItem.ladderState === '1'">
-        <el-form-item label="上限" label-width="80px" prop="upperLimit" :rules="[{required: true, message: '请输入上限', trigger: 'blur'}]">
+        <el-form-item label="上限" label-width="80px" prop="upperLimit"
+                      :rules="[{required: true, message: '请输入上限', trigger: 'blur'}]">
           <oms-input placeholder="请输入上限" type="input" v-model="currentItem.upperLimit"/>
         </el-form-item>
       </el-col>
       <el-col :span="5" v-if="currentItem.ladderState === '1'">
-        <el-form-item label="下限" label-width="80px" prop="lowerLimit" :rules="[{required: true, message: '请输入下限', trigger: 'blur'}]">
+        <el-form-item label="下限" label-width="80px" prop="lowerLimit"
+                      :rules="[{required: true, message: '请输入下限', trigger: 'blur'}]">
           <oms-input placeholder="请输入下限" type="input" v-model="currentItem.lowerLimit"/>
         </el-form-item>
       </el-col>
@@ -64,19 +66,25 @@
 </template>
 <script>
   import utils from '@/tools/utils';
+
   export default {
-    props: ['currentItem'],
+    props: ['currentItem', 'billingModelType'],
     data() {
       return {
         currentCostType: {
           bizTypes: [],
           items: []
         }
-      }
+      };
     },
     computed: {
       costTypes() {
         return this.$store.state.costTypes;
+      }
+    },
+    watch: {
+      billingModelType() {
+        this.currentItem.billingItemNo = '';
       }
     },
     methods: {
@@ -99,7 +107,7 @@
         if (!val) {
           return;
         }
-        let item =  this.currentCostType.items.find(f => f.id === val);
+        let item = this.currentCostType.items.find(f => f.id === val);
         this.currentItem.billingItemName = item.name;
         this.currentItem.billingRules = item.rule;
         this.currentItem.billingUnit = item.unit;
@@ -112,5 +120,5 @@
         this.currentItem.lowerLimit = '';
       }
     }
-  }
+  };
 </script>

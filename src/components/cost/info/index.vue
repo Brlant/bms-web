@@ -13,7 +13,8 @@
                  :formatClass="formatClass"></status-list>
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
-        <el-col :span="16">模板名称</el-col>
+        <el-col :span="10">模板名称</el-col>
+        <el-col :span="6">是否绑定货品计费</el-col>
         <el-col :span="2">状态</el-col>
         <el-col :span="6">操作</el-col>
       </el-row>
@@ -34,7 +35,8 @@
              class="order-list-item order-list-item-bg" @click="showDetail(item)"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="16">{{item.billingModelName}}</el-col>
+            <el-col :span="10">{{item.billingModelName}}</el-col>
+            <el-col :span="6">{{item.billingModelType === '1' ? '是' : '否'}}</el-col>
             <el-col :span="2">
               {{item.billingModelState === '0' ? '停用': '启用'}}
             </el-col>
