@@ -90,7 +90,8 @@
           lowerLimit: '',
           billingRules: '',
           billingUnit: '',
-          billingItemNo: ''
+          billingItemNo: '',
+          billingModelId: ''
         },
         currentCostType: {
           bizTypes: [],
@@ -134,9 +135,9 @@
     },
     methods: {
       billingModelTypeChange() {
-        this.currentItem.billingModelId = '';
         this.form.billingItems = [];
         this.costModelList = [];
+        this.resetItem()
       },
       billingTypeChange(val) {
         if (!val) {
