@@ -23,7 +23,7 @@
         </el-form-item>
         <el-form-item label="折扣" label-width="120px">
           <oms-input placeholder="请输入折扣" type="input" v-model="form.discountAmount">
-            <span slot="suffix">%</span>
+            <span slot="append">%</span>
           </oms-input>
         </el-form-item>
       </el-form>

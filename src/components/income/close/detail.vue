@@ -33,15 +33,15 @@
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>
           <oms-row label="合同" :span="8">{{ formItem.contractName }}</oms-row>
           <oms-row label="结算单号" :span="8">{{ formItem.statementNo }}</oms-row>
-          <oms-row label="发票类型" :span="8">{{ formItem.invoiceType}}</oms-row>
-          <oms-row label="发票号" :span="8">{{ formItem.invoiceNo }}</oms-row>
+          <oms-row label="发票类型" :span="8" v-show="formItem.invoiceType">{{ formItem.invoiceType}}</oms-row>
+          <oms-row label="发票号" :span="8" v-show="formItem.invoiceNo">{{ formItem.invoiceNo }}</oms-row>
           <oms-row label="结算单状态" :span="8">{{ orgType[formItem.statementType].title }}</oms-row>
         </el-col>
         <el-col :span="12">
           <oms-row label="结算单金额" :span="8">{{ formItem.statementAmount }}</oms-row>
           <oms-row label="结算日期" :span="8">{{ formItem.statementTime | time }}</oms-row>
           <oms-row label="待回款金额" :span="8">{{ formItem.unreturnedAmount }}</oms-row>
-          <oms-row label="回款日期" :span="8">{{ formItem.backAmountTime | time }}</oms-row>
+          <oms-row label="回款日期" :span="8" v-show="formItem.backAmountTime">{{ formItem.backAmountTime | time }}</oms-row>
           <oms-row label="是否含税" :span="8">{{ formItem.includeTax === '0' ? '否' : '是' }}</oms-row>
           <oms-row label="税率" :span="8" v-show="formItem.taxRate">{{ formItem.taxRate }}</oms-row>
           <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount }}
