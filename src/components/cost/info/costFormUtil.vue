@@ -82,7 +82,9 @@
         return this.$store.state.costTypes;
       },
       curCostItems() {
-        if (!this.currentItem.billingType || !this.currentItem.businessType) return [];
+        if (!this.currentItem.billingType) return [];
+        if (!this.currentCostType.bizTypes.length) return this.currentCostType.items.filter(f => (f.bind === (this.billingModelType === '1')));
+        if (!this.currentItem.businessType) return [];
         let bizItem = this.currentCostType.bizTypes.find(f => f.id === this.currentItem.businessType);
         if (!bizItem) return [];
         if (!bizItem.itemId) return this.currentCostType.items.filter(f => (f.bind === (this.billingModelType === '1')));
