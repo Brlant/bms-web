@@ -6,7 +6,8 @@
           <f-a class="icon-small" name="plus"></f-a>
           添加
         </el-button>
-        <el-button @click="batchCreate" plain size="small" v-has="'create-account-check'" v-show="filters.attachmentType === '0'">
+        <el-button @click="batchCreate" plain size="small" v-has="'create-account-check'"
+                   v-show="filters.attachmentType === '0'">
           <f-a class="icon-small" name="allot"></f-a>
           批量生成对账单
         </el-button>
@@ -21,10 +22,9 @@
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
     <el-table :data="dataList" @selection-change="selectionChange" v-loading="loadingData"
-              border class="clearfix mt-20" ref="orderDetail">
-      <el-table-column
-        type="selection"
-        width="55">
+              border class="clearfix mt-20" ref="table" @cell-click="cellClick">
+      <el-table-column type="selection" width="55">
+
       </el-table-column>
       <el-table-column prop="contractName" label="合同" width="100">
         <template slot-scope="scope">{{scope.row.contractName}}</template>
@@ -59,17 +59,17 @@
       <el-table-column prop="billingQuantity" label="数量">
         <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
       </el-table-column>
-      <el-table-column prop="unreturnedAmount" label="待回款金额" width="120">
+      <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
         <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
       </el-table-column>
-      <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120">
+      <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
         <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
       </el-table-column>
-      <el-table-column prop="billingTotal" label="计费合计">
+      <el-table-column prop="billingTotal" label="计费合计" fixed="right" width="120">
         <template slot-scope="scope">{{scope.row.billingTotal}}</template>
       </el-table-column>
       <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计"
-                       :fixed="filters.attachmentType === '0' ? 'right' : false">
+                       fixed="right">
         <template slot-scope="scope">
           <div v-if="$_has('edit-billing-of-account')">
             <oms-input v-if="scope.row.attachmentType === '0'" v-model="scope.row.realityBillingTotal"
@@ -91,7 +91,8 @@
     </div>
 
     <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
-      <component :formItem="form" :data="dySelectList" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change"
+      <component :formItem="form" :data="dySelectList" :index="showIndex" :statusType="statusType" :is="currentPart"
+                 @change="change"
                  @right-close="resetRightBox" :formatBillingItemName="formatBillingItemName"/>
     </page-right>
 
@@ -248,6 +249,11 @@
       change() {
         this.resetRightBox();
         this.queryList(this.pager.currentPage);
+      },
+      cellClick(row, column, cell) {
+        if (column.type === 'selection') {
+          this.$refs.table.toggleRowSelection(row);
+        }
       }
     }
   };

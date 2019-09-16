@@ -41,7 +41,7 @@
         </el-col>
         <el-col :span="8">
           <oms-form-row label="" :span="5">
-            <el-checkbox style="margin-top: 8px" v-model="searchCondition.noStatementType" true-label="1">存在未结算款</el-checkbox>
+            <el-checkbox style="margin-top: 8px" v-model="searchCondition.noStatementType" true-label="1">存在未结算金额</el-checkbox>
           </oms-form-row>
         </el-col>
       </el-form>

@@ -13,7 +13,7 @@
     <el-table :data="dataList" v-loading="loadingData"
               @selection-change="selectionChange"
               :row-style="{cursor: 'pointer'}" @row-click="showDetail"
-              border class="clearfix mt-20" ref="orderDetail">
+              border class="clearfix mt-20" ref="table">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="customerName" label="甲方" width="200">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
@@ -168,12 +168,17 @@
           this.showIndex = index;
         });
       },
-      showDetail(item) {
-        this.currentItem = item;
-        this.currentItemId = item.billingModelId;
-        this.defaultPageRight.width = '800px';
-        this.form = item;
-        this.showPart(1);
+      showDetail(item, column) {
+        if (column.type === 'selection') {
+          this.$refs.table.toggleRowSelection(item);
+        } else {
+          this.currentItem = item;
+          this.currentItemId = item.billingModelId;
+          this.defaultPageRight.width = '800px';
+          this.form = item;
+          this.showPart(1);
+        }
+
       },
       queryList(pageNo) {
         this.selectList = [];
