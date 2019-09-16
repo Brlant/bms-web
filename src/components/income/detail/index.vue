@@ -12,7 +12,7 @@
           批量生成对账单
         </el-button>
         <el-button @click="batchCreateCloseAccount" plain size="small" v-has="'race-blending'"
-                   v-show="filters.attachmentType === '1'">
+                   v-show="filters.attachmentType === '2'">
           <f-a class="icon-small" name="allot"></f-a>
           批量生成结算单
         </el-button>
@@ -234,7 +234,7 @@
           let data = res.data.data;
           this.orgType[0].num = data['nonAccountCheck'];
           this.orgType[1].num = data['accountCheckInNum'];
-          this.orgType[2].num = data['allReturnMoneyNum'];
+          this.orgType[2].num = data['nonReturnMoneyNum'];
           this.orgType[3].num = data['allReturnMoneyNum'];
         });
       },
