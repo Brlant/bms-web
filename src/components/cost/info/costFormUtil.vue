@@ -10,7 +10,7 @@
     <el-form-item label="业务类型" prop="businessType" v-if="currentCostType.bizTypes.length"
                   :rules="[{required: true, message: '请选择业务类型', trigger: 'change'}]">
       <el-select placeholder="请选择计费项" v-model="currentItem.businessType"
-                 filterable clearable>
+                 filterable clearable @change="businessTypeChange">
         <el-option :label="item.name" :value="item.id" :key="item.id"
                    v-for="item in currentCostType.bizTypes"></el-option>
       </el-select>
@@ -20,7 +20,7 @@
       <el-select placeholder="请选择计费项" v-model="currentItem.billingItemNo"
                  filterable clearable @change="billingItemNoChange">
         <el-option :label="item.name" :value="item.id" :key="item.id"
-                   v-for="item in currentCostType.items.filter(f => (f.bind === (billingModelType==='1')))"></el-option>
+                   v-for="item in curCostItems"></el-option>
       </el-select>
     </el-form-item>
     <el-row v-show="currentItem.billingItemNo">
@@ -80,6 +80,13 @@
     computed: {
       costTypes() {
         return this.$store.state.costTypes;
+      },
+      curCostItems() {
+        if (!this.currentItem.billingType || !this.currentItem.businessType) return [];
+        let bizItem = this.currentCostType.bizTypes.find(f => f.id === this.currentItem.businessType);
+        if (!bizItem) return [];
+        if (!bizItem.itemId) return this.currentCostType.items.filter(f => (f.bind === (this.billingModelType === '1')));
+        return this.currentCostType.items.filter(f => (f.bind === (this.billingModelType === '1') && f.id === bizItem.itemId));
       }
     },
     watch: {
@@ -118,6 +125,9 @@
       ladderStateChange() {
         this.currentItem.upperLimit = '';
         this.currentItem.lowerLimit = '';
+      },
+      businessTypeChange() {
+        this.currentItem.billingItemNo = '';
       }
     }
   };

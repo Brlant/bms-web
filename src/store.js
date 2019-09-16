@@ -70,8 +70,8 @@ const state = {
       name: '库内作业',
       ladderState: false,
       bizTypes: [
-        {name: '扫码复核', id: '0'},
-        {name: '拆零作业', id: '1'},
+        {name: '扫码复核', id: '0', itemId: 'A10'},
+        {name: '拆零作业', id: '1', itemId: 'A11'},
       ],
       items: [
         {name: '扫码复核费', id: 'A10', unit: '元/个', rule: '每个品种的码总数 X 计费单价', bind: true},
@@ -83,8 +83,8 @@ const state = {
       name: '耗材使用',
       ladderState: false,
       bizTypes: [
-        {name: '保温箱', id: '0'},
-        {name: '温度计', id: '1'},
+        {name: '保温箱', id: '0', itemId: 'A12'},
+        {name: '温度计', id: '1', itemId: 'A13'},
       ],
       items: [
         {name: '保温箱', id: 'A12', unit: '元/个', rule: '保温箱总数 X 计费单价', bind: false},
