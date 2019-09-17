@@ -124,6 +124,8 @@
               this.form.invoiceNo = undefined;
               this.form.invoiceAmount = undefined;
             }
+            this.form.collectionTotal = this.collectionTotal;
+            this.form.owedAmount = this.owedAmount;
             this.$httpRequestOpera(closeAccount.update(this.form), {
               errorTitle: '保存失败',
               success: res => {
