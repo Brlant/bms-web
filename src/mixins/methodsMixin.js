@@ -18,7 +18,10 @@ export default {
   },
   methods: {
     queryAllOrg: function (query) {// 查询货主
-      let params = {keyWord: query};
+      let params = {keyWord: query,
+        orgAuditStatus: 1,
+        deleteFlag: false
+      };
       this.$http.get('/orgs/pager', {params: params}).then(res => {
         this.orgList = res.data.list;
       });

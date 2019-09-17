@@ -49,8 +49,7 @@
         },
         showSearch: false,
         list: [],
-        times: [],
-        orgList: []
+        times: []
       };
     },
     mounted() {
@@ -60,12 +59,6 @@
       this.search();
     },
     methods: {
-      queryAllOrg: function (query) {// 查询货主
-        let params = {keyWord: query};
-        this.$http.get('/orgs/pager', {params: params}).then(res => {
-          this.orgList = res.data.list;
-        });
-      },
       search() {
         this.$emit('search', this.searchCondition);
       },

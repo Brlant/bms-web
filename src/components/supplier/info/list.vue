@@ -230,8 +230,7 @@
         orgStatus: [
           {'title': '待审核', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 0},
           {'title': '正常', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 1},
-          {'title': '停用', 'num': '', 'type': 1, deleteFlag: true},
-          {'title': '部分待审核', 'num': '', 'type': 1, deleteFlag: false, 'orgAuditStatus': 2}
+          {'title': '停用', 'num': '', 'type': 1, deleteFlag: true}
         ],
         kindsTitle: '全部',
         activeStatus: 1,
