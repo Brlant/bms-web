@@ -186,6 +186,8 @@
             statementId: m.statementId,
             collectionAmount: m.collectionAmount
           }));
+          this.form.collectionTotal = this.collectionTotal;
+          this.form.owedAmount = this.owedAmount;
           this.$httpRequestOpera(receiveTask.batchCreate(this.form), {
             errorTitle: '生成收款作业完成',
             success: res => {
