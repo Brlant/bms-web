@@ -17,7 +17,7 @@
           <template slot-scope="scope">{{scope.row.statementNo}}</template>
         </el-table-column>
         <el-table-column prop="accountCheckAmount" label="结算单金额" width="120">
-          <template slot-scope="scope">{{scope.row.collectionAmount | formatMoney}}</template>
+          <template slot-scope="scope">{{scope.row.statementAmount | formatMoney}}</template>
         </el-table-column>
         <el-table-column prop="unreturnedAmount" label="结算日期" width="170">
           <template slot-scope="scope">{{scope.row.statementTime | time}}</template>
@@ -129,7 +129,8 @@
         return total;
       },
       owedAmount() {
-        return this.collectionTotal - (Number(this.form.advancePayAmount) || 0);
+        let count = this.collectionTotal - (Number(this.form.advancePayAmount) || 0);
+        return count < 0 ? this.collectionTotal : count;
       }
     },
     watch: {
@@ -163,13 +164,18 @@
         index > -1 && this.dataList.splice(index, 1);
       },
       formatAdvancePayAmount() {
-        if (this.form.advancePayAmount > this.advancePayAmount) {
-          this.form.advancePayAmount = this.advancePayAmount;
+        let max = Math.min(this.advancePayAmount, this.collectionTotal);
+        if (this.form.advancePayAmount > max) {
+          this.form.advancePayAmount = max;
         }
         this.form.advancePayAmount = utils.autoformatDecimalPoint(this.form.advancePayAmount);
       },
       collectionTypeChange(val) {
-        this.form.advancePayAmount = val === '1' ? this.advancePayAmount : 0;
+        if (val === '1') {
+          this.form.advancePayAmount = this.advancePayAmount > this.collectionTotal ? this.collectionTotal : this.advancePayAmount;
+        } else {
+          this.form.advancePayAmount = 0;
+        }
       },
       queryBalance(customerId) {
         let params = {customerId};
