@@ -82,7 +82,6 @@
     },
     watch: {
       index: function (val) {
-        this.$refs['form'].clearValidate();
         if (this.formItem.contractId) {
           this.departmentUserList = [
             {id: this.formItem.businessManageId, name: this.formItem.businessManageName}
@@ -107,6 +106,9 @@
           };
           this.actionType = '添加';
         }
+        this.$nextTick(() => {
+          this.$refs['form'].clearValidate();
+        });
       }
     },
     methods: {

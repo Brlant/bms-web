@@ -44,7 +44,7 @@
       <el-table-column prop="actionType" label="货品" width="200">
         <template slot-scope="scope">
           {{scope.row.orgGoodsName}}
-          <div>规格：{{scope.row.goodsSpecification}}</div>
+          <div v-show="scope.row.goodsSpecification">规格：{{}}</div>
         </template>
       </el-table-column>
       <el-table-column prop="batchNumber" label="批号" width="120">
