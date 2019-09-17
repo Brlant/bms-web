@@ -33,7 +33,9 @@
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>
           <oms-row label="合同" :span="8">{{ formItem.contractName }}</oms-row>
           <oms-row label="结算单号" :span="8">{{ formItem.statementNo }}</oms-row>
-          <oms-row label="发票类型" :span="8" v-show="formItem.invoiceType">{{ formItem.invoiceType}}</oms-row>
+          <oms-row label="发票类型" :span="8" v-show="formItem.invoiceType">
+            {{ invoiceTypes[formItem.invoiceType] && invoiceTypes[formItem.invoiceType].label}}
+          </oms-row>
           <oms-row label="发票号" :span="8" v-show="formItem.invoiceNo">{{ formItem.invoiceNo }}</oms-row>
           <oms-row label="结算单状态" :span="8">{{ orgType[formItem.statementType].title }}</oms-row>
         </el-col>
@@ -122,6 +124,11 @@
         billAccountList: [],
         loading: false
       };
+    },
+    computed: {
+      invoiceTypes() {
+        return this.$store.state.invoiceTypes;
+      }
     },
     watch: {
       index(val) {
