@@ -59,7 +59,7 @@
     </div>
 
     <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
-      <component :formItem="form" :data="dySelectList" :index="showIndex" :orgType="orgType" :is="currentPart"
+      <component :formItem="form" :dataList="dySelectList" :index="showIndex" :orgType="orgType" :is="currentPart"
                  @change="change"
                  @right-close="resetRightBox" :addType="addType"/>
     </page-right>

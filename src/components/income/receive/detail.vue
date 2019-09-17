@@ -31,11 +31,15 @@
       <el-row>
         <el-col :span="12">
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>
+          <oms-row label="收款作业总额" :span="8">{{ formItem.collectionTotal | formatMoney}}</oms-row>
+          <oms-row label="收欠款金额" :span="8">{{ formItem.owedAmount | formatMoney}}</oms-row>
           <oms-row label="结算方式" :span="8">{{ closeTypes[formItem.statementMode].label}}</oms-row>
         </el-col>
         <el-col :span="12">
           <oms-row label="回款日期" :span="8">{{ formItem.backAmountTime | date }}</oms-row>
           <oms-row label="银行" :span="8">{{ formItem.bankName}}</oms-row>
+          <oms-row label="是否使用预收款" :span="8">{{ formItem.collectionType | formatStatus }}</oms-row>
+          <oms-row label="预收款抵扣金额" :span="8" v-show="formItem.collectionType === '1'">{{ formItem.advancePayAmount | formatMoney }}</oms-row>
         </el-col>
       </el-row>
       <h2 class="detail-title">结算单</h2>
@@ -57,9 +61,6 @@
         </el-table-column>
         <el-table-column prop="unreturnedAmount" label="回款日期" width="170">
           <template slot-scope="scope">{{scope.row.backAmountTime | time}}</template>
-        </el-table-column>
-        <el-table-column prop="unreturnedAmount" label="使用预收款余额支付" width="160" fixed="right">
-          <template slot-scope="scope">{{scope.row.collectionType === '1' ? '否' : '是'}}</template>
         </el-table-column>
         <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
           <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>

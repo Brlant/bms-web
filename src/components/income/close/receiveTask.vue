@@ -6,7 +6,7 @@
     </template>
     <template slot="content">
       <h2 style="padding: 10px 0;">结算单</h2>
-      <el-table :data="data" border class="clearfix" ref="orderDetail">
+      <el-table :data="dataList" border class="clearfix" ref="orderDetail">
         <el-table-column prop="customerName" label="甲方" width="200">
           <template slot-scope="scope">{{scope.row.customerName}}</template>
         </el-table-column>
@@ -30,15 +30,6 @@
             {{orgType[scope.row.statementType].title}}
           </template>
         </el-table-column>
-        <el-table-column prop="unreturnedAmount" label="使用预收款余额支付" width="160" fixed="right">
-          <template slot-scope="scope">
-            <span v-if="!scope.row.advanceCollectionType">否</span>
-            <el-switch
-              v-else v-model="scope.row.collectionType"
-              active-text="是" inactive-text="否" active-value="0" inactive-value="1">
-            </el-switch>
-          </template>
-        </el-table-column>
         <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
           <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
         </el-table-column>
@@ -47,24 +38,54 @@
             <oms-input v-model="scope.row.collectionAmount" @blur="editItem(scope.row)"/>
           </template>
         </el-table-column>
-        <el-table-column prop="operate" label="操作" width="120" fixed="right" v-if="data.length > 1">
+        <el-table-column prop="operate" label="操作" width="120" fixed="right" v-if="dataList.length > 1">
           <template slot-scope="scope">
             <des-btn icon="delete" @click="deleteItem(scope.row)">删除</des-btn>
           </template>
         </el-table-column>
       </el-table>
       <el-form :model="form" label-width="120px" ref="form">
-        <el-form-item label="结算方式" label-width="120px" prop="statementMode"
-                      :rules="[{required: true, message: '请选择结算方式', trigger: 'change'}]">
-          <el-radio-group v-model="form.statementMode" size="small">
-            <el-radio-button :label="item.key" :key="item.key" v-for="item in closeTypes">{{item.label}}
-            </el-radio-button>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="回款日期" label-width="120px" prop="backAmountTime"
-                      :rules="[{required: true, message: '请选择回款日期', trigger: 'change'}]">
-          <el-date-picker v-model="form.backAmountTime" type="date" placeholder="选择日期"></el-date-picker>
-        </el-form-item>
+        <el-row class="mt-10" v-show="advancePayAmount">
+          <el-col :span="12">
+            <el-form-item label="是否使用预收款" label-width="120px">
+              <el-switch v-model="form.collectionType" active-text="是" inactive-text="否" active-value="1"
+                         inactive-value="0" @change="collectionTypeChange"></el-switch>
+              <span style="margin-left: 20px" v-show="form.collectionType === '1'">预收款余额：{{advancePayAmount}}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="预收款抵扣金额" label-width="130px" prop="advancePayAmount" v-if="form.collectionType === '1'"
+                          :rules="[{required: true, message: '请输入预收款抵扣金额', trigger: 'blur'}]">
+              <oms-input v-model="form.advancePayAmount" style="width: 200px" @blur="formatAdvancePayAmount"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="收款作业总额" label-width="120px">{{collectionTotal | formatMoney}}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="收欠款金额" label-width="120px">{{owedAmount| formatMoney}}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="结算方式" label-width="120px" prop="statementMode"
+                          :rules="[{required: true, message: '请选择结算方式', trigger: 'change'}]">
+              <el-radio-group v-model="form.statementMode" size="small">
+                <el-radio-button :label="item.key" :key="item.key" v-for="item in closeTypes">{{item.label}}
+                </el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="回款日期" label-width="120px" prop="backAmountTime"
+                          :rules="[{required: true, message: '请选择回款日期', trigger: 'change'}]">
+              <el-date-picker v-model="form.backAmountTime" type="date" placeholder="选择日期"
+                              style="width: 200px"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="银行名称" label-width="120px" prop="bankName"
                       :rules="[{required: true, message: '请输入银行名称', trigger: 'blur'}]">
           <oms-input placeholder="请输入银行名称" type="input" v-model="form.bankName"/>
@@ -75,22 +96,59 @@
 </template>
 <script>
   import utils from '@/tools/utils';
-  import {receiveTask} from '@/resources';
+  import {preBalance, receiveTask} from '@/resources';
 
   export default {
     props: {
-      data: Array,
+      dataList: Array,
       orgType: Object
     },
     data() {
       return {
-        form: {},
-        doing: false
+        form: {
+          advancePayAmount: 0,
+          collectionType: '0',
+          statementMode: '',
+          backAmountTime: '',
+          bankName: ''
+        },
+        doing: false,
+        advancePayAmount: 0,
+        balanceList: []
       };
     },
     computed: {
       closeTypes() {
         return this.$store.state.closeTypes;
+      },
+      collectionTotal() {
+        let total = 0;
+        this.dataList.forEach(i => {
+          total += Number(i.collectionAmount) || 0;
+        });
+        return total;
+      },
+      owedAmount() {
+        return this.collectionTotal - (Number(this.form.advancePayAmount) || 0);
+      }
+    },
+    watch: {
+      dataList: {
+        handler(val) {
+          if (!val || !val.length) {
+            this.advancePayAmount = 0;
+            this.form = {
+              advancePayAmount: 0,
+              collectionType: '0',
+              statementMode: '',
+              backAmountTime: '',
+              bankName: ''
+            };
+            return;
+          }
+          this.queryBalance(val[0].customerId);
+        },
+        immediate: true
       }
     },
     methods: {
@@ -101,14 +159,29 @@
         item.collectionAmount = utils.autoformatDecimalPoint(item.collectionAmount);
       },
       deleteItem(item) {
-        let index = this.data.indexOf(item);
-        index > -1 && this.data.splice(index, 1);
+        let index = this.dataList.indexOf(item);
+        index > -1 && this.dataList.splice(index, 1);
+      },
+      formatAdvancePayAmount() {
+        if (this.form.advancePayAmount > this.advancePayAmount) {
+          this.form.advancePayAmount = this.advancePayAmount;
+        }
+        this.form.advancePayAmount = utils.autoformatDecimalPoint(this.form.advancePayAmount);
+      },
+      collectionTypeChange(val) {
+        this.form.advancePayAmount = val === '1' ? this.advancePayAmount : 0;
+      },
+      queryBalance(customerId) {
+        let params = {customerId};
+        preBalance.query(params).then(res => {
+          this.advancePayAmount = res.data.data.list.length && res.data.data.list[0].advanceBalance || 0;
+        });
       },
       save() {
         this.$refs.form.validate(v => {
           if (!v || this.doing) return;
           this.doing = true;
-          this.form.collectionJobsStatementInfos = this.data.map(m => ({
+          this.form.collectionJobsStatementInfos = this.dataList.map(m => ({
             collectionType: m.collectionType,
             statementId: m.statementId,
             collectionAmount: m.collectionAmount
