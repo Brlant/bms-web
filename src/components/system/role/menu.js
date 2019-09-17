@@ -307,13 +307,6 @@ export default [
           'sort': null,
           'children': null,
           'leaf': true
-        }, {
-          'id': 'wms-access-role-delete',
-          'parentId': 'wms-access-role-manager',
-          'label': '删除角色',
-          'sort': null,
-          'children': null,
-          'leaf': true
         }],
         'leaf': false
       },
@@ -323,7 +316,7 @@ export default [
         'label': '用户管理',
         'sort': 1,
         'children': [{
-          'id': 'wms-platform-user-edit',
+          'id': 'platform-user-edit',
           'parentId': 'wms-platform-user-manager',
           'label': '编辑平台用户',
           'sort': null,

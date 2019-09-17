@@ -93,11 +93,6 @@
               <ul class="show-list">
                 <li v-for="item in showTypeList" class="list-item" @click="showType(item)"
                     :class="{'active':item.id===currentItem.id}">
-                  <perm label="wms-access-role-delete">
-                    <oms-remove :item="item" @removed="removeType" :tips='"确认删除角色\""+item.title +"\"?"'
-                                class="hover-show"><i
-                      class="el-icon-t-delete"></i></oms-remove>
-                  </perm>
                   <div class="id-part">
                     {{item.name }}
                   </div>
@@ -141,11 +136,6 @@
                            <i class="el-icon-t-start"></i>启用
                          </el-button>
                        </perm>
-                      <perm label="wms-access-role-delete">
-                         <el-button @click="remove()">
-                           <i class="el-icon-t-delete"></i>删除
-                         </el-button>
-                      </perm>
                   </el-button-group>
                 </span>
               </h2>
