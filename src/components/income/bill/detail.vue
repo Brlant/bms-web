@@ -93,8 +93,6 @@
         <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
           <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
         </el-table-column>
-        <el-table-column prop="statementAmount" width="120px" label="结算金额" fixed="right">
-        </el-table-column>
       </el-table>
 
       <div style="margin-left: 50px;margin-top: 50px">
