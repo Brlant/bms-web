@@ -18,10 +18,10 @@ function isNewReturnType(data) {
 
 // 添加请求拦截器
 http.interceptors.request.use(function (config) {
-  if(config.method === 'get') {
+  if (config.method === 'get') {
     config.paramsSerializer = params => {
       return qs.stringify(params, {indices: false});
-    }
+    };
   }
   return config;
 });
@@ -117,7 +117,7 @@ export const receiveTask = resource('', http, {
     return http.post('/bms-cj/query-info', obj);
   },
   batchCreate(obj) {
-    return http.post('/bms-cjs/batch', obj)
+    return http.post('/bms-cjs/batch', obj);
   }
 });
 
@@ -179,6 +179,9 @@ export const accountBill = resource('', http, {
   query(obj) {
     return http.post('/bms-ac/query-account-check', obj);
   },
+  queryDetail(id) {
+    return http.get(`/bms-ad/${id}`);
+  },
   queryStateNum: (params) => {
     return http.post('/bms-ac/count', params);
   },
@@ -226,7 +229,7 @@ export const contractBindGoods = resource('/bms-cgbm', http, {
     return http.post('/bms-cgbm/add-binding', obj);
   },
   queryCostModel(obj) {
-    return http.post('/bms-cgbm/query-binding', obj)
+    return http.post('/bms-cgbm/query-binding', obj);
   }
 });
 
