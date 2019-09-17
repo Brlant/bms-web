@@ -135,9 +135,13 @@
       };
     },
     watch: {
-      formItem(val) {
-        if (!val.accountCheckId) return;
-        this.queryDetail(val.accountCheckId);
+      formItem: {
+        handler(val) {
+          this.billAccountList = [];
+          if (!val.accountCheckId) return;
+          this.queryDetail(val.accountCheckId);
+        },
+        immediate: true
       }
     },
     methods: {
