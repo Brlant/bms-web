@@ -179,6 +179,8 @@
         this.$httpRequestOpera(contractAccountDetail.update(item), {
           errorTitle: '修改失败',
           success: res => {
+            item.unreturnedAmount = item.realityBillingTotal;
+            item.unliquidatedAmount = item.realityBillingTotal;
             this.$notify.success({message: '修改成功'});
           },
           error: () => {
@@ -229,7 +231,7 @@
         const params = this.queryUtil(http, pageNo, null, () => {
           this.dataList.forEach(item => {
             item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
-          })
+          });
         });
         this.queryStatusNum(params);
       },
