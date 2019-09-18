@@ -273,7 +273,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/oms/department/' + item.id, {}).then(() => {
+          this.$http.delete('/department/' + item.id, {}).then(() => {
             this.$notify.success({
               duration: 2000,
               title: '成功',
