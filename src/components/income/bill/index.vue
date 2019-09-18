@@ -8,14 +8,14 @@
     <el-table :data="dataList" v-loading="loadingData"
               :row-style="{cursor: 'pointer'}" @row-click="showDetail"
               border class="clearfix mt-20" ref="orderDetail">
+      <el-table-column prop="accountCheckNo" label="对账单号">
+        <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
+      </el-table-column>
       <el-table-column prop="customerName" label="甲方">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
       </el-table-column>
       <el-table-column prop="contractName" label="合同">
         <template slot-scope="scope">{{scope.row.contractName}}</template>
-      </el-table-column>
-      <el-table-column prop="accountCheckNo" label="对账单号">
-        <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
       </el-table-column>
       <el-table-column prop="accountCheckAmount" label="对账单金额" width="200">
         <template slot-scope="scope">{{scope.row.accountCheckAmount | formatMoney}}</template>
