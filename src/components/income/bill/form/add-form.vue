@@ -8,6 +8,8 @@
       <el-form :model="form" label-width="120px" ref="form">
         <el-form-item label="合同">{{form.contractName}}</el-form-item>
         <el-form-item label="甲方">{{form.customerName}}</el-form-item>
+        <el-form-item label="对账单金额">{{form.accountCheckAmount | formatMoney}}</el-form-item>
+        <el-form-item label="实际对账金额">{{form.unreturnedAmount | formatMoney}}</el-form-item>
         <el-form-item label="是否含税" prop="billingUntilPrice" label-width="120px">
           <el-switch
             v-model="form.includeTax"
