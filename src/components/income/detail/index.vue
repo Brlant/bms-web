@@ -60,13 +60,13 @@
         <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
       </el-table-column>
       <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
-        <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+        <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
       </el-table-column>
       <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
-        <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
+        <template slot-scope="scope">{{scope.row.unliquidatedAmount | formatMoney}}</template>
       </el-table-column>
       <el-table-column prop="billingTotal" label="计费合计" fixed="right" width="120">
-        <template slot-scope="scope">{{scope.row.billingTotal}}</template>
+        <template slot-scope="scope">{{scope.row.billingTotal | formatMoney}}</template>
       </el-table-column>
       <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计"
                        fixed="right">
@@ -165,7 +165,7 @@
       batchCreateCloseAccount() {
         if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
         let list = JSON.parse(JSON.stringify(this.selectList));
-        list.forEach(i => i.statementAmount = i.unliquidatedAmount);
+        list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unreturnedAmount));
         this.dySelectList = list;
         this.showPart(2);
       },
@@ -226,7 +226,11 @@
       queryList(pageNo) {
         this.selectList = [];
         const http = contractAccountDetail.query;
-        const params = this.queryUtil(http, pageNo);
+        const params = this.queryUtil(http, pageNo, null, () => {
+          this.dataList.forEach(item => {
+            item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
+          })
+        });
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {

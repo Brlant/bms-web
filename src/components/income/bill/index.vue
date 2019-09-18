@@ -18,10 +18,10 @@
         <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
       </el-table-column>
       <el-table-column prop="accountCheckAmount" label="对账单金额" width="200">
-        <template slot-scope="scope">{{scope.row.accountCheckAmount}}</template>
+        <template slot-scope="scope">{{scope.row.accountCheckAmount | formatMoney}}</template>
       </el-table-column>
       <el-table-column prop="unreturnedAmount" label="实际对账金额" width="200">
-        <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+        <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
       </el-table-column>
       <el-table-column prop="accountCheckType" label="状态" width="120">
         <template slot-scope="scope">

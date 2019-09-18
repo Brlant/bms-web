@@ -37,13 +37,13 @@
           <oms-row label="对账单状态" :span="8">{{ orgType[formItem.accountCheckType].title }}</oms-row>
         </el-col>
         <el-col :span="12">
-          <oms-row label="对账单金额" :span="8">{{ formItem.accountCheckAmount }}</oms-row>
+          <oms-row label="对账单金额" :span="8">{{ formItem.accountCheckAmount  | formatMoney}}</oms-row>
           <oms-row label="是否含税" :span="8">{{ formItem.includeTax === '0' ? '否' : '是' }}</oms-row>
           <oms-row label="税率" :span="8" v-show="formItem.includeTax === '1'">{{ formItem.taxRate }}</oms-row>
-          <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount }}
+          <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount  | formatMoney}}
           </oms-row>
           <oms-row label="折扣" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}%</oms-row>
-          <oms-row label="实际对账金额" :span="8">{{ formItem.unreturnedAmount }}</oms-row>
+          <oms-row label="实际对账金额" :span="8">{{ formItem.unreturnedAmount  | formatMoney}}</oms-row>
         </el-col>
       </el-row>
       <h2 class="detail-title">对账单明细</h2>
@@ -77,21 +77,21 @@
           <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
         </el-table-column>
         <el-table-column prop="billingUntilPrice" label="单价" width="150px">
-          <template slot-scope="scope">{{scope.row.billingUntilPrice}}</template>
+          <template slot-scope="scope">{{scope.row.billingUntilPrice | formatMoney}}</template>
         </el-table-column>
         <el-table-column prop="billingQuantity" label="数量">
           <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
         </el-table-column>
         <el-table-column prop="billingTotal" label="计费合计">
-          <template slot-scope="scope">{{scope.row.billingTotal}}</template>
+          <template slot-scope="scope">{{scope.row.billingTotal | formatMoney}}</template>
         </el-table-column>
         <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计">
         </el-table-column>
         <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
-          <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+          <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
         </el-table-column>
         <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
-          <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
+          <template slot-scope="scope">{{scope.row.unliquidatedAmount | formatMoney}}</template>
         </el-table-column>
       </el-table>
 
