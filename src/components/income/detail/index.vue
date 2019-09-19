@@ -165,7 +165,7 @@
       batchCreateCloseAccount() {
         if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
         let list = JSON.parse(JSON.stringify(this.selectList));
-        list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unreturnedAmount));
+        list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
         this.dySelectList = list;
         this.showPart(2);
       },
