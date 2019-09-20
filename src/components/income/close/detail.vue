@@ -45,7 +45,7 @@
           <oms-row label="待回款金额" :span="8">{{ formItem.unreturnedAmount  | formatMoney}}</oms-row>
           <oms-row label="回款日期" :span="8" v-show="formItem.backAmountTime">{{ formItem.backAmountTime | time }}</oms-row>
           <oms-row label="是否含税" :span="8">{{ formItem.includeTax === '0' ? '否' : '是' }}</oms-row>
-          <oms-row label="税率" :span="8" v-show="formItem.taxRate">{{ formItem.taxRate }}</oms-row>
+          <oms-row label="税率" :span="8" v-show="formItem.taxRate">{{ formItem.taxRate }}%</oms-row>
           <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount  | formatMoney}}
           </oms-row>
           <oms-row label="折扣" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}%</oms-row>

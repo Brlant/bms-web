@@ -18,7 +18,9 @@
           </el-switch>
         </el-form-item>
         <el-form-item label="税率" label-width="120px" v-if="form.includeTax === '1'">
-          <oms-input placeholder="请输入税率" type="number" v-model="form.taxRate"/>
+          <oms-input placeholder="请输入税率" type="number" v-model="form.taxRate">
+            <span slot="append">%</span>
+          </oms-input>
         </el-form-item>
         <el-form-item label="优惠金额"  label-width="120px">
           <oms-input placeholder="请输入优惠金额" type="number" v-model="form.preferentialAmount" @blur="formatPrice"/>
