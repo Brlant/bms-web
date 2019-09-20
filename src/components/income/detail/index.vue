@@ -21,10 +21,12 @@
     <status-list :activeStatus="filters.attachmentType" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass"></status-list>
-    <el-table :data="dataList" @selection-change="selectionChange" v-loading="loadingData"
+    <el-table :data="dataList" @select-all="selectAll" v-loading="loadingData"
               border class="clearfix mt-20" ref="table" @cell-click="cellClick">
       <el-table-column type="selection" width="55">
-
+        <template slot-scope="scope">
+          <el-checkbox @click.native.stop="" v-model="scope.row.check" :disabled="!scope.row.showChecked"></el-checkbox>
+        </template>
       </el-table-column>
       <el-table-column prop="contractName" label="合同" width="100">
         <template slot-scope="scope">{{scope.row.contractName}}</template>
@@ -131,7 +133,6 @@
           3: {'title': '已回款', 'num': 0, 'attachmentType': '3'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
-        selectList: [],
         dySelectList: []
       };
     },
@@ -141,6 +142,11 @@
           this.queryList(1);
         },
         deep: true
+      }
+    },
+    computed: {
+      selectList() {
+        return this.dataList.filter(f => f.check);
       }
     },
     mounted() {
@@ -226,11 +232,12 @@
         this.showPart(1);
       },
       queryList(pageNo) {
-        this.selectList = [];
         const http = contractAccountDetail.query;
         const params = this.queryUtil(http, pageNo, null, () => {
           this.dataList.forEach(item => {
             item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
+            this.$set(item, 'check', false);
+            this.$set(item, 'showChecked', !!item.unliquidatedAmount);
           });
         });
         this.queryStatusNum(params);
@@ -260,8 +267,14 @@
       },
       cellClick(row, column, cell) {
         if (column.type === 'selection') {
-          this.$refs.table.toggleRowSelection(row);
+          if (!row.showChecked) return;
+          row.check = !row.check;
         }
+      },
+      selectAll(selection) {
+        this.dataList.filter(f => f.showChecked).forEach(i => {
+          i.check = !!selection.length;
+        });
       }
     }
   };
