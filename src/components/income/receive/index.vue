@@ -29,6 +29,9 @@
       <el-table-column prop="accountCheckNo" label="银行名称" min-width="150">
         <template slot-scope="scope">{{scope.row.bankName}}</template>
       </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="170">
+        <template slot-scope="scope">{{scope.row.createTime | time}}</template>
+      </el-table-column>
     </el-table>
 
     <div class="text-center" v-show="(dataList.length || pager.currentPage !== 1) && !loadingData">
