@@ -21,7 +21,7 @@
         <el-col :span="12">
           <oms-form-row label="合同" :span="5">
             <el-select placeholder="请输入名称搜索合同" v-model="searchCondition.contractId"
-                       filterable clearable remote :remote-method="queryContractList">
+                       filterable clearable remote :remote-method="queryContractList" @focus="queryContractList()">
               <el-option :label="item.contractName" :value="item.contractId" :key="item.contractId"
                          v-for="item in contractList"></el-option>
             </el-select>

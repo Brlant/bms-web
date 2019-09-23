@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item label="所属部门">
         <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="filterDepartment"
-                   @click.native.once="filterDepartment('')"
+                   @focus="filterDepartment()"
                    :clearable="true" v-model="form.companyDepartment" popperClass="good-selects">
           <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in departmentList">
           </el-option>

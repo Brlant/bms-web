@@ -50,7 +50,7 @@
             <el-col :span="8">
               <oms-form-row label="日志操作人" :span="6">
                 <el-select filterable remote placeholder="请输入名称/拼音首字母缩写搜索" :remote-method="filterUser"
-                           :clearable="true"
+                           :clearable="true"  @focus="filterUser()"
                            v-model="searchWord.operatorId" popperClass="good-selects">
                   <el-option :value="user.id" :key="user.id" :label="user.name" v-for="user in userList">
                     <div style="overflow: hidden">

@@ -11,6 +11,7 @@
         <el-form-item label="甲方">{{formItem.orgName}}</el-form-item>
         <el-form-item label="货品" prop="orgGoodsIdList">
           <el-select filterable remote multiple placeholder="请输入名称搜货品" :remote-method="queryOrgGoodsListNew"
+                     @focus="queryOrgGoodsListNew()"
                      :clearable="true" v-model="form.orgGoodsIdList" popperClass="good-selects">
             <el-option v-for="item in orgGoodsList" :key="item.orgGoodsDto.id"
                        :label="item.orgGoodsDto.name"
@@ -31,6 +32,7 @@
         </el-form-item>
         <el-form-item label="计费模型" prop="billingModelId">
           <el-select filterable remote placeholder="请输入名称搜计费模型" :remote-method="queryContractCostModelListNew"
+                     @focus="queryContractCostModelListNew()"
                      :clearable="true" v-model="form.billingModelId" popperClass="good-selects">
             <el-option :label="item.billingModelName" :value="item.billingModelId" :key="item.billingModelId"
                        v-for="item in contractCostModelList">
@@ -39,6 +41,7 @@
         </el-form-item>
         <el-form-item label="项目" prop="projectId">
           <el-select filterable remote placeholder="请选择项目" :remote-method="queryProjectList"
+                     @focus="queryProjectList()"
                      :clearable="true" v-model="form.projectId" popperClass="good-selects">
             <el-option :label="item.projectName" :value="item.projectId" :key="item.projectId"
                        v-for="item in projectList">

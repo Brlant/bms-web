@@ -324,7 +324,6 @@
           this.orgStatus[0].num = data['auditing'];
           this.orgStatus[1].num = data['valid'];
           this.orgStatus[2].num = data['stop'];
-          this.orgStatus[3].num = data['otherAuditCount'];
         });
       },
       getOrgPage: function (pageNo) {
