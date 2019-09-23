@@ -1,13 +1,25 @@
 <template>
   <dialog-template :btnSavePosition="120">
-    <template slot="title">{{addType === '0' ? '编辑对账单' : '开具发票'}}</template>
+    <template slot="title">{{addType === 0 ? '编辑结算单' : '开具发票'}}</template>
     <template slot="btnSave">
       <el-button class="mt-10" :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
     </template>
     <template slot="content">
       <el-form :model="form" label-width="120px" ref="form">
-        <el-form-item label="合同">{{form.contractName}}</el-form-item>
-        <el-form-item label="甲方">{{form.customerName}}</el-form-item>
+        <el-form-item label="合同" style="margin-bottom: 0">{{form.contractName}}</el-form-item>
+        <el-form-item label="甲方" style="margin-bottom: 0">{{form.customerName}}</el-form-item>
+        <el-form-item label="结算单号" style="margin-bottom: 0">{{form.statementNo}}</el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="结算单金额" >{{form.statementAmount | formatMoney}}</el-form-item>
+          </el-col>
+          <el-col :span="8" v-show="form.preferentialAmount && addType === 1">
+            <el-form-item label="优惠金额" >{{form.preferentialAmount | formatMoney}}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="待回款金额" >{{form.unreturnedAmount | formatMoney}}</el-form-item>
+          </el-col>
+        </el-row>
         <div v-if="addType === 0">
           <el-form-item label="是否含税" prop="billingUntilPrice" label-width="120px">
             <el-switch
@@ -17,13 +29,17 @@
             </el-switch>
           </el-form-item>
           <el-form-item label="税率" label-width="120px" v-if="form.includeTax === '1'">
-            <oms-input placeholder="请输入税率" type="input" v-model="form.taxRate"/>
+            <oms-input placeholder="请输入税率" type="number" v-model="form.taxRate">
+              <span slot="append">%</span>
+            </oms-input>
           </el-form-item>
           <el-form-item label="优惠金额" label-width="120px">
-            <oms-input placeholder="请输入优惠金额" type="input" v-model="form.preferentialAmount" @blur="formatPrice"/>
+            <oms-input placeholder="请输入优惠金额" type="number" v-model="form.preferentialAmount" @blur="formatPrice"/>
           </el-form-item>
-          <el-form-item label="折扣金额" label-width="120px">
-            <oms-input placeholder="请输入折扣金额" type="input" v-model="form.discountAmount" @blur="formatDisPrice"/>
+          <el-form-item label="折扣" label-width="120px">
+            <oms-input placeholder="请输入折扣" type="number" v-model="form.discountAmount">
+              <span slot="append">%</span>
+            </oms-input>
           </el-form-item>
         </div>
         <div v-if="addType === 1">

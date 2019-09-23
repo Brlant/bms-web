@@ -13,12 +13,12 @@
     <el-table :data="dataList" v-loading="loadingData"
               @selection-change="selectionChange"
               :row-style="{cursor: 'pointer'}" @row-click="showDetail"
-              border class="clearfix mt-20" ref="orderDetail">
+              border class="clearfix mt-20" ref="table">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="customerName" label="甲方" width="200">
+      <el-table-column prop="customerName" label="甲方" min-width="200">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
       </el-table-column>
-      <el-table-column prop="contractName" label="合同" width="200">
+      <el-table-column prop="contractName" label="合同" min-width="200">
         <template slot-scope="scope">{{scope.row.contractName}}</template>
       </el-table-column>
       <el-table-column prop="accountCheckNo" label="结算单号" width="150">
@@ -59,7 +59,7 @@
     </div>
 
     <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
-      <component :formItem="form" :data="dySelectList" :index="showIndex" :orgType="orgType" :is="currentPart"
+      <component :formItem="form" :dataList="dySelectList" :index="showIndex" :orgType="orgType" :is="currentPart"
                  @change="change"
                  @right-close="resetRightBox" :addType="addType"/>
     </page-right>
@@ -73,7 +73,7 @@
   import {closeAccount} from '@/resources';
   import Detail from './detail.vue';
   import receiveTask from './receiveTask';
-
+  import utils from '@/tools/utils'
   export default {
     components: {
       SearchPart,
@@ -131,7 +131,7 @@
         }
         let list = JSON.parse(JSON.stringify(this.selectList));
         list.forEach(i => {
-          i.collectionAmount = i.unreturnedAmount;
+          i.collectionAmount = utils.autoformatDecimalPoint(i.unreturnedAmount);
           i.collectionType = i.advanceCollectionType ? '0' : '1';
         });
         this.dySelectList = list;
@@ -168,12 +168,17 @@
           this.showIndex = index;
         });
       },
-      showDetail(item) {
-        this.currentItem = item;
-        this.currentItemId = item.billingModelId;
-        this.defaultPageRight.width = '800px';
-        this.form = item;
-        this.showPart(1);
+      showDetail(item, column) {
+        if (column.type === 'selection') {
+          this.$refs.table.toggleRowSelection(item);
+        } else {
+          this.currentItem = item;
+          this.currentItemId = item.billingModelId;
+          this.defaultPageRight.width = '800px';
+          this.form = item;
+          this.showPart(1);
+        }
+
       },
       queryList(pageNo) {
         this.selectList = [];

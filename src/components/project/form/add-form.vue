@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="业务员" prop="businessManageId">
+        <el-form-item label="业务员" >
           <el-select placeholder="请选择业务员" v-model="form.businessManageId"
                      filterable clearable remote :remote-method="queryDepartmentUserNew">
             <el-option :label="item.name" :value="item.id" :key="item.id"

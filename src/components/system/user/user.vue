@@ -145,7 +145,7 @@
                   <dict :dict-group="'orgUserStatus'" :dict-key="formatStatus(row.status)"></dict>
                 </td>
                 <td class="list-op">
-                  <perm label="wms-platform-user-edit">
+                  <perm label="platform-user-edit">
                     <a href="#" @click.stop.prevent="edit(row)"><i class="el-icon-t-edit"></i>编辑</a>
                     <oms-forbid :item="row" @forbided="forbid" :tips='"确认停用平台用户\""+row.name +"\"?"'
                                 v-show="row.status!== '2'"><i
@@ -273,7 +273,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/oms/department/' + item.id, {}).then(() => {
+          this.$http.delete('/department/' + item.id, {}).then(() => {
             this.$notify.success({
               duration: 2000,
               title: '成功',

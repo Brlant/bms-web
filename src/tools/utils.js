@@ -144,7 +144,7 @@ export default {
    * @param th
    */
   autoformatDecimalPoint: function (v) {
-    if (!v) return '';
+    if (!v) return '0.00';
     if (typeof v === 'number') {
       v = v.toString();
     }

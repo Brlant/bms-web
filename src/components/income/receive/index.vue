@@ -8,6 +8,18 @@
       <el-table-column prop="customerName" label="甲方" min-width="200">
         <template slot-scope="scope">{{scope.row.customerName}}</template>
       </el-table-column>
+      <el-table-column prop="customerName" label="收款作业总额" width="120">
+        <template slot-scope="scope">{{scope.row.collectionTotal | formatMoney}}</template>
+      </el-table-column>
+      <el-table-column prop="customerName" label="收欠款金额" width="120">
+        <template slot-scope="scope">{{scope.row.owedAmount | formatMoney}}</template>
+      </el-table-column>
+      <el-table-column prop="customerName" label="是否使用预收款" width="120">
+        <template slot-scope="scope">{{scope.row.collectionType | formatStatus}}</template>
+      </el-table-column>
+      <el-table-column prop="customerName" label="预收款抵扣金额" width="120">
+        <template slot-scope="scope">{{scope.row.advancePayAmount | formatMoney}}</template>
+      </el-table-column>
       <el-table-column prop="accountCheckNo" label="结算方式" width="120">
         <template slot-scope="scope">{{closeTypes[scope.row.statementMode].label}}</template>
       </el-table-column>

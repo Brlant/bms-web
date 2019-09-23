@@ -14,7 +14,7 @@
       name="file"
     >
       <img :src="imageUrl" class="avatar-user" slot="trigger" v-if="imageUrl">
-      <img class="avatar-user" slot="trigger" src="/static/img/userpic.png" v-else>
+      <img class="avatar-user" slot="trigger" :src="userPic" v-else>
     </oms-el-upload>
   </div>
 </template>
@@ -43,7 +43,7 @@
 <script>
   import {http, OmsAttachment} from '../../../resources';
   import OmsElUpload from './upload/src/index.vue';
-
+  import userPic from '@/assets/img/userpic.png';
   export default {
     props: ['photoUrl', 'formData'],
     components: {
@@ -54,7 +54,8 @@
       return {
         imageUrl: this.photoUrl,
         uploadData: {},
-        uploadUrl: '/omsAttachment'
+        uploadUrl: '/omsAttachment',
+        userPic
       };
     },
     watch: {

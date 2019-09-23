@@ -34,23 +34,23 @@
           <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
         </el-table-column>
         <el-table-column prop="billingUntilPrice" label="单价" width="150px">
-          <template slot-scope="scope">{{scope.row.billingUntilPrice}}</template>
+          <template slot-scope="scope">{{scope.row.billingUntilPrice | formatMoney}}</template>
         </el-table-column>
         <el-table-column prop="billingQuantity" label="数量">
           <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
         </el-table-column>
 
         <el-table-column prop="billingTotal" label="计费合计">
-          <template slot-scope="scope">{{scope.row.billingTotal}}</template>
+          <template slot-scope="scope">{{scope.row.billingTotal | formatMoney}}</template>
         </el-table-column>
         <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计">
         </el-table-column>
 
         <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
-          <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+          <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
         </el-table-column>
         <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
-          <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
+          <template slot-scope="scope">{{scope.row.unliquidatedAmount | formatMoney}}</template>
         </el-table-column>
         <el-table-column prop="realityBillingTotal" width="120px" label="结算金额" fixed="right">
           <template slot-scope="scope">
@@ -85,7 +85,7 @@
       },
       editItem(item) {
         if (item.statementAmount > item.unliquidatedAmount) {
-          item.statementAmount = item.unliquidatedAmount;
+          item.statementAmount = item.unliquidatedAmount || '0.00';
         }
         item.statementAmount = utils.autoformatDecimalPoint(item.statementAmount);
       },

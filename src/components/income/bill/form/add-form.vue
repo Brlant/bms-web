@@ -8,6 +8,8 @@
       <el-form :model="form" label-width="120px" ref="form">
         <el-form-item label="合同">{{form.contractName}}</el-form-item>
         <el-form-item label="甲方">{{form.customerName}}</el-form-item>
+        <el-form-item label="对账单金额">{{form.accountCheckAmount | formatMoney}}</el-form-item>
+        <el-form-item label="实际对账金额">{{form.unreturnedAmount | formatMoney}}</el-form-item>
         <el-form-item label="是否含税" prop="billingUntilPrice" label-width="120px">
           <el-switch
             v-model="form.includeTax"
@@ -16,13 +18,17 @@
           </el-switch>
         </el-form-item>
         <el-form-item label="税率" label-width="120px" v-if="form.includeTax === '1'">
-          <oms-input placeholder="请输入税率" type="input" v-model="form.taxRate"/>
+          <oms-input placeholder="请输入税率" type="number" v-model="form.taxRate">
+            <span slot="append">%</span>
+          </oms-input>
         </el-form-item>
         <el-form-item label="优惠金额"  label-width="120px">
-          <oms-input placeholder="请输入优惠金额" type="input" v-model="form.preferentialAmount" @blur="formatPrice"/>
+          <oms-input placeholder="请输入优惠金额" type="number" v-model="form.preferentialAmount" @blur="formatPrice"/>
         </el-form-item>
-        <el-form-item label="折扣金额" label-width="120px">
-          <oms-input placeholder="请输入折扣金额" type="input" v-model="form.discountAmount" @blur="formatDisPrice"/>
+        <el-form-item label="折扣" label-width="120px">
+          <oms-input placeholder="请输入折扣" type="number" v-model="form.discountAmount">
+            <span slot="append">%</span>
+          </oms-input>
         </el-form-item>
       </el-form>
     </template>

@@ -92,29 +92,13 @@
         this.$nextTick(() => {
           this.$refs['form'].clearValidate();
         });
-        contractBindGoods.query({contractId: this.formItem.contractId}).then(res => {
-          if (!res.data.data.projectId) return;
-          this.orgGoodsList = [];
-          res.data.data.orgGoodsList.forEach(i => {
-            this.orgGoodsList.push({
-              orgGoodsDto: {id: i.orgGoodsId, name: i.orgGoodsName}
-            });
-          });
-          res.data.data.orgGoodsIdList = res.data.data.orgGoodsList.map(m => m.orgGoodsId);
-          this.projectList = [
-            {projectName: res.data.data.projectName, projectId: res.data.data.projectId}
-          ];
-          this.contractCostModelList = [
-            {billingModelName: res.data.data.billingModelName, billingModelId: res.data.data.billingModelId}
-          ];
-          this.form = res.data.data;
-        });
       }
     },
     methods: {
       queryContractCostModelListNew(query) {
         let params = {
           contractId: this.formItem.contractId,
+          bindingGoodStatus: '1',
           keyWord: query
         };
         this.queryContractCostModelList(params);

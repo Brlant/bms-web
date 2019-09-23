@@ -17,6 +17,14 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="项目" prop="projectId">
+          <el-select filterable remote placeholder="请选择项目" :remote-method="queryProjectList"
+                     :clearable="true" v-model="form.projectId" popperClass="good-selects">
+            <el-option :label="item.projectName" :value="item.projectId" :key="item.projectId"
+                       v-for="item in projectList">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
     </template>
   </dialog-template>
@@ -52,7 +60,7 @@
     },
     watch: {
       index: function (val) {
-        if (val !== 1) return;
+        if (val !== 3) return;
         this.form = {
           orgGoodsIdList: [],
           billingModelId: '',
@@ -61,20 +69,13 @@
         this.$nextTick(() => {
           this.$refs['form'].clearValidate();
         });
-        contractBindGoods.queryCostModel({contractId: this.formItem.contractId}).then(res => {
-          if (!res.data.data.projectId) return;
-          res.data.data.orgGoodsIdList = res.data.data.orgGoodsList.map(m => m.orgGoodsId);
-          this.contractCostModelList = [
-            {billingModelName: res.data.data.billingModelName, billingModelId: res.data.data.billingModelId}
-          ];
-          this.form = res.data.data;
-        });
       }
     },
     methods: {
       queryContractCostModelListNew(query) {
         let params = {
           contractId: this.formItem.contractId,
+          bindingGoodStatus: '0',
           keyWord: query
         };
         this.queryContractCostModelList(params);

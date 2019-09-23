@@ -22,8 +22,10 @@
           <el-form-item label="优惠金额" label-width="120px">
             <oms-input placeholder="请输入优惠金额" type="input" v-model="form.preferentialAmount" @blur="formatPrice"/>
           </el-form-item>
-          <el-form-item label="折扣金额" label-width="120px">
-            <oms-input placeholder="请输入折扣金额" type="input" v-model="form.discountAmount" @blur="formatDisPrice"/>
+          <el-form-item label="折扣" label-width="120px">
+            <oms-input placeholder="请输入折扣" type="input" v-model="form.discountAmount">
+              <span slot="suffix">%</span>
+            </oms-input>
           </el-form-item>
         </div>
         <div v-if="addType === 1">

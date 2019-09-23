@@ -39,6 +39,11 @@
             <oms-input placeholder="请输入对账单号" type="input" v-model="searchCondition.accountCheckNo"/>
           </oms-form-row>
         </el-col>
+        <el-col :span="8">
+          <oms-form-row label="" :span="5">
+            <el-checkbox style="margin-top: 8px" v-model="searchCondition.noStatementType" true-label="1">存在未结算金额</el-checkbox>
+          </oms-form-row>
+        </el-col>
       </el-form>
     </template>
   </search-template>
@@ -56,12 +61,12 @@
           contractId: '',
           customerId: '',
           accountCheckNo: '',
-          orderNumber: ''
+          orderNumber: '',
+          noStatementType: ''
         },
         showSearch: false,
         list: [],
-        times: [],
-        orgList: []
+        times: []
       };
     },
     mounted() {
@@ -71,12 +76,6 @@
       this.search();
     },
     methods: {
-      queryAllOrg: function (query) {// 查询货主
-        let params = {keyWord: query};
-        this.$http.get('/orgs/pager', {params: params}).then(res => {
-          this.orgList = res.data.list;
-        });
-      },
       search() {
         this.$emit('search', this.searchCondition);
       },
@@ -85,7 +84,8 @@
           contractId: '',
           customerId: '',
           accountCheckNo: '',
-          orderNumber: ''
+          orderNumber: '',
+          noStatementType: ''
         };
         this.$emit('search', this.searchCondition);
       },
