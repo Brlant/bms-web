@@ -154,8 +154,14 @@
     },
     methods: {
       editItem(item) {
-        if (item.collectionAmount > item.unliquidatedAmount) {
-          item.collectionAmount = item.unliquidatedAmount;
+        if (item.unreturnedAmount >= 0) {
+          if (item.collectionAmount > item.unreturnedAmount) {
+            item.collectionAmount = item.unreturnedAmount;
+          }
+        } else {
+          if (item.collectionAmount < item.unreturnedAmount) {
+            item.collectionAmount = item.unreturnedAmount;
+          }
         }
         item.collectionAmount = utils.autoformatDecimalPoint(item.collectionAmount);
       },
