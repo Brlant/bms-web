@@ -65,6 +65,7 @@
       index: function (val) {
         if (this.formItem.accountCheckId) {
           this.form = Object.assign({}, this.formItem);
+          this.form.preferentialAmount = utils.autoformatDecimalPoint(this.form.preferentialAmount, true);
           this.actionType = '编辑';
         } else {
           this.form = {
@@ -77,10 +78,7 @@
     },
     methods: {
       formatPrice() {
-        this.formItem.preferentialAmount = utils.autoformatDecimalPoint(this.formItem.preferentialAmount);
-      },
-      formatDisPrice() {
-        this.formItem.discountAmount = utils.autoformatDecimalPoint(this.formItem.discountAmount);
+        this.form.preferentialAmount = utils.autoformatDecimalPoint(this.form.preferentialAmount, true);
       },
       save(formName) {
         this.$refs[formName].validate((valid) => {

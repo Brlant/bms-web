@@ -50,15 +50,15 @@
         </el-form-item>
       </el-col>
       <el-col :span="5" v-if="currentItem.ladderState === '1'">
-        <el-form-item label="上限" label-width="80px" prop="upperLimit"
-                      :rules="[{required: true, message: '请输入上限', trigger: 'blur'}]">
-          <oms-input placeholder="请输入上限" type="input" v-model="currentItem.upperLimit"/>
-        </el-form-item>
-      </el-col>
-      <el-col :span="5" v-if="currentItem.ladderState === '1'">
         <el-form-item label="下限" label-width="80px" prop="lowerLimit"
                       :rules="[{required: true, message: '请输入下限', trigger: 'blur'}]">
           <oms-input placeholder="请输入下限" type="input" v-model="currentItem.lowerLimit"/>
+        </el-form-item>
+      </el-col>
+      <el-col :span="5" v-if="currentItem.ladderState === '1'">
+        <el-form-item label="上限" label-width="80px" prop="upperLimit"
+                      :rules="[{required: true, message: '请输入上限', trigger: 'blur'}]">
+          <oms-input placeholder="请输入上限" type="input" v-model="currentItem.upperLimit"/>
         </el-form-item>
       </el-col>
     </el-row>

@@ -137,7 +137,7 @@
                  @submit.prevent="onSubmit('baseform')" onsubmit="return false" style="padding-right: 20px">
           <el-form-item label="DHS单位">
             <el-select filterable remote placeholder="名称/拼音/系统代码搜索单位" v-model="form.dhsOrgId"
-                       :remote-method="filterDhsOrgs"
+                       :remote-method="filterDhsOrgs" @focus="filterDhsOrgs()"
                        :clearable="true" popperClass="good-selects"
                        @change="setDhsOrg" @clear="resetDhsOrgInfo" :disabled="!!form.id">
               <el-option :value="org.id" :key="org.id" :label="org.name" v-for="org in dhsOrgList">

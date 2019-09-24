@@ -35,6 +35,7 @@
             <el-row>
               <el-col :span="12">
                 <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
+                           @focus="queryDepartment()"
                            :clearable="true" v-model="searchCondition.companyDepartment" popperClass="good-selects"
                            @change="companyDepartmentChange">
                   <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in departmentList">
@@ -43,7 +44,7 @@
               </el-col>
               <el-col :span="12" style="padding-left: 10px">
                 <el-select placeholder="请输入名称搜业务员" v-model="searchCondition.businessManageId"
-                           filterable clearable remote :remote-method="queryDepartmentUserNew">
+                           filterable clearable remote :remote-method="queryDepartmentUserNew" @focus="queryDepartmentUserNew()">
                   <el-option :label="item.name" :value="item.id" :key="item.id"
                              v-for="item in departmentUserList"></el-option>
                 </el-select>

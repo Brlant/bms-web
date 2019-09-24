@@ -84,8 +84,14 @@
       formatPrice(item) {
       },
       editItem(item) {
-        if (item.statementAmount > item.unliquidatedAmount) {
-          item.statementAmount = item.unliquidatedAmount || '0.00';
+        if(item.unliquidatedAmount >= 0) {
+          if (item.statementAmount > item.unliquidatedAmount) {
+            item.statementAmount = item.unliquidatedAmount || '0.00';
+          }
+        } else {
+          if (item.statementAmount < item.unliquidatedAmount) {
+            item.statementAmount = item.unliquidatedAmount || '0.00';
+          }
         }
         item.statementAmount = utils.autoformatDecimalPoint(item.statementAmount);
       },

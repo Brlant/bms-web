@@ -18,7 +18,7 @@
                       placeholder="请输入名称搜索甲方" v-model="form.orgId"></org-select>
         </el-form-item>
         <el-form-item label="所属部门" prop="companyDepartment">
-          <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
+          <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment" @focus="queryDepartment()"
                      :clearable="true" v-model="form.companyDepartment" popperClass="good-selects"
                      @change="companyDepartmentChange">
             <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in departmentList">
@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item label="业务员" prop="businessManageId">
           <el-select placeholder="请选择业务员" v-model="form.businessManageId"
-                     filterable clearable remote :remote-method="queryDepartmentUserNew">
+                     filterable clearable remote :remote-method="queryDepartmentUserNew" @focus="queryDepartmentUserNew()">
             <el-option :label="item.name" :value="item.id" :key="item.id"
                        v-for="item in departmentUserList"></el-option>
           </el-select>

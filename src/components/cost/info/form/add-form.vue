@@ -89,8 +89,8 @@
             billingItems: []
           };
           this.actionType = '添加';
-          this.resetItem();
         }
+        this.resetItem();
         this.$nextTick(() => {
           this.$refs['form'] && this.$refs['form'].clearValidate();
         });

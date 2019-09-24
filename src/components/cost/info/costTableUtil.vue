@@ -13,13 +13,13 @@
       <template slot-scope="scope">{{scope.row.ladderState === '1' ? '是' : '否'}}</template>
     </el-table-column>
     <el-table-column prop="actionType" label="单价">
-      <template slot-scope="scope">{{scope.row.unitPrice}}</template>
-    </el-table-column>
-    <el-table-column prop="actionType" label="上限">
-      <template slot-scope="scope">{{scope.row.upperLimit}}</template>
+      <template slot-scope="scope">{{scope.row.unitPrice | formatMoney}}</template>
     </el-table-column>
     <el-table-column prop="actionType" label="下限">
       <template slot-scope="scope">{{scope.row.lowerLimit}}</template>
+    </el-table-column>
+    <el-table-column prop="actionType" label="上限">
+      <template slot-scope="scope">{{scope.row.upperLimit}}</template>
     </el-table-column>
     <el-table-column prop="actionType" label="计费规则" width="150px">
       <template slot-scope="scope">{{scope.row.billingRules}}</template>

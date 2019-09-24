@@ -143,11 +143,12 @@ export default {
    * 录入完成后，输入模式失去焦点后对录入进行判断并强制更改，并对小数点进行0补全
    * @param th
    */
-  autoformatDecimalPoint: function (v) {
+  autoformatDecimalPoint: function (v, positive) {
     if (!v) return '0.00';
     if (typeof v === 'number') {
       v = v.toString();
     }
+    var ov = Number(v);
     v = v.replace(/[^0-9\.]*/g, '');
     if (v === '') {
       v = '0.00';
@@ -178,7 +179,8 @@ export default {
         v = '0.00';
       }
     }
-    return v;
+    if (positive) return v;
+    return ov >= 0 ? v : ('-' + v);
   },
   toDecimal2: function (x) {
     return Math.floor(x * 1000 + 1) / 1000;

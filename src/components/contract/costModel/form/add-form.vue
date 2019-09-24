@@ -9,7 +9,7 @@
         <el-form-item label="合同" prop="contractId"
                       :rules="[{required: true, message: '请选择合同', trigger: 'change'}]">
           <el-select placeholder="请选择合同" v-model="form.contractId"
-                     filterable clearable remote :remote-method="queryContractList">
+                     filterable clearable remote :remote-method="queryContractList" @focus="queryContractList()">
             <el-option :label="item.contractName" :value="item.contractId" :key="item.contractId"
                        v-for="item in contractList"></el-option>
           </el-select>
@@ -36,7 +36,7 @@
           <el-form-item label="计费模型模板" prop="billingModelId"
                         :rules="[{required: true, message: '计费模型模板', trigger: 'change'}]">
             <el-select placeholder="计费模型模板" v-model="currentItem.billingModelId"
-                       filterable clearable remote :remote-method="queryCostModelListNew">
+                       filterable clearable remote :remote-method="queryCostModelListNew" @focus="queryCostModelListNew()">
               <el-option :label="item.billingModelName" :value="item.billingModelId" :key="item.billingModelId"
                          v-for="item in costModelList"></el-option>
             </el-select>

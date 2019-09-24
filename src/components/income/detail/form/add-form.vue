@@ -9,7 +9,7 @@
         <el-form-item label="合同" prop="contractId"
                       :rules="[{required: true, message: '请选择合同', trigger: 'change'}]">
           <el-select placeholder="请输入名称搜索合同" v-model="form.contractId" @change="contractIdChange"
-                     filterable clearable remote :remote-method="queryContractList">
+                     filterable clearable remote :remote-method="queryContractList" @focus="queryContractList()">
             <el-option :label="item.contractName" :value="item.contractId" :key="item.contractId"
                        v-for="item in contractList"></el-option>
           </el-select>
@@ -41,7 +41,7 @@
             </el-form-item>
             <el-form-item label="批号">
               <el-select filterable placeholder="请输入名称搜索批号" :clearable="true"
-                         remote :remote-method="queryBatchNumberListNew"
+                         remote :remote-method="queryBatchNumberListNew" @focus="queryBatchNumberListNew()"
                          v-model="form.batchNumber" popperClass="good-selects">
                 <el-option v-for="item in batchNumberList" :key="item.id"
                            :label="item.batchNumber" :value="item.batchNumber">

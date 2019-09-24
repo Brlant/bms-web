@@ -33,10 +33,13 @@
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>
           <oms-row label="合同" :span="8">{{ formItem.contractName }}</oms-row>
           <oms-row label="结算单号" :span="8">{{ formItem.statementNo }}</oms-row>
-          <oms-row label="发票类型" :span="8" v-show="formItem.invoiceType">
-            {{ invoiceTypes[formItem.invoiceType] && invoiceTypes[formItem.invoiceType].label}}
-          </oms-row>
-          <oms-row label="发票号" :span="8" v-show="formItem.invoiceNo">{{ formItem.invoiceNo }}</oms-row>
+          <div v-show="formItem.invoiceNo">
+            <oms-row label="发票类型" :span="8">
+              {{ invoiceTypes[formItem.invoiceType] && invoiceTypes[formItem.invoiceType].label}}
+            </oms-row>
+            <oms-row label="发票号" :span="8">{{ formItem.invoiceNo }}</oms-row>
+            <oms-row label="发票金额" :span="8">{{ formItem.invoiceAmount | formatMoney}}</oms-row>
+          </div>
           <oms-row label="结算单状态" :span="8">{{ orgType[formItem.statementType].title }}</oms-row>
         </el-col>
         <el-col :span="12">
