@@ -60,6 +60,7 @@
   <div id="app">
     <div class="layer-loading" v-show="loading"><i></i><i></i><i></i></div>
     <router-view @login="queryPermissions"></router-view>
+    <print-dialog/>
   </div>
 </template>
 <script>
@@ -67,8 +68,9 @@
   import {Auth} from './resources';
   import {basicRoutes, ErrorPage, routes} from './routers';
   import Vue from 'vue';
-
+  import printDialog from '@/components/common/print.loading.vue';
   export default {
+    components: {printDialog},
     data: () => ({
       loading: false,
       menuData: [],
