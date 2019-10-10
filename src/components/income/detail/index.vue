@@ -16,6 +16,11 @@
           <f-a class="icon-small" name="allot"></f-a>
           批量生成结算单
         </el-button>
+
+        <el-button @click="exportExcel" plain size="small" v-has="'add-billing-of-account'">
+          <f-a class="icon-small" name="export"></f-a>
+          导出Excel
+        </el-button>
       </template>
     </search-part>
     <status-list :activeStatus="filters.attachmentType" :statusList="orgType"
@@ -249,6 +254,15 @@
           this.orgType[1].num = data['accountCheckInNum'];
           this.orgType[2].num = data['nonReturnMoneyNum'];
           this.orgType[3].num = data['allReturnMoneyNum'];
+        });
+      },
+      exportExcel() {
+        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
+        contractAccountDetail.export(this.filters).then(res => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+          utils.download(res.data.data.path);
+        }).catch(() => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
         });
       },
       add() {

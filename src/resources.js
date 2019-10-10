@@ -213,6 +213,9 @@ export const contractAccountDetail = resource('', http, {
   },
   queryStateNum: (params) => {
     return http.post('/bms-boa/count', params);
+  },
+  export(params) {
+    return http.post('/bms-boa/export-info', params)
   }
 });
 
