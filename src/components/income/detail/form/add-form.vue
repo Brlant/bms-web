@@ -14,86 +14,90 @@
                        v-for="item in contractList"></el-option>
           </el-select>
         </el-form-item>
-        <div v-show="form.contractId" v-loading="loading">
-          <div v-if="contractItem.contractId">
-            <el-form-item label="甲方">{{contractItem.orgName}}</el-form-item>
-            <el-form-item label="项目">{{contractItem.projectName}}</el-form-item>
-            <el-form-item label="订单号" prop="orderNumber"
-                          :rules="[{required: true, message: '请输入订单号', trigger: 'blur'}]">
-              <el-input v-model="form.orderNumber"></el-input>
+        <el-form-item label="甲方" v-show="form.contractId">{{form.customerName}}</el-form-item>
+
+        <el-form-item label="项目" prop="projectId" :rules="[{required: true, message: '请选择项目', trigger: 'change'}]">
+          <el-select filterable remote placeholder="请选择项目" :remote-method="queryProjectList" @focus="queryProjectList()"
+                     :clearable="true" v-model="form.projectId" popperClass="good-selects">
+            <el-option :label="item.projectName" :value="item.projectId" :key="item.projectId"
+                       v-for="item in projectList">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="货品">
+          <el-select filterable remote placeholder="请输入名称搜货品" :remote-method="queryOrgGoodsListNew"
+                     @focus="queryOrgGoodsListNew()" @change="orgGoodsIdChange"
+                     :clearable="true" v-model="form.orgGoodsId" popperClass="good-selects">
+            <el-option v-for="item in orgGoodsList" :key="item.orgGoodsDto.id"
+                       :label="item.orgGoodsDto.name"
+                       :value="item.orgGoodsDto.id">
+              <div style="overflow: hidden">
+                <span class="pull-left">{{item.orgGoodsDto.name}}</span>
+              </div>
+              <div style="overflow: hidden">
+                <span class="select-other-info pull-left"><span
+                  v-show="item.orgGoodsDto.goodsNo">货品编号:</span>{{item.orgGoodsDto.goodsNo}}
+                </span>
+                <span class="select-other-info pull-left"><span
+                  v-show="item.orgGoodsDto.salesFirmName">供货厂商:</span>{{ item.orgGoodsDto.salesFirmName }}
+                </span>
+              </div>
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="订单号">
+          <el-input v-model="form.orderNumber"></el-input>
+        </el-form-item>
+        <el-form-item label="批号">
+          <el-select filterable placeholder="请输入名称搜索批号" :clearable="true"
+                     remote :remote-method="queryBatchNumberListNew" @focus="queryBatchNumberListNew()"
+                     v-model="form.batchNumber" popperClass="good-selects">
+            <el-option v-for="item in batchNumberList" :key="item.id"
+                       :label="item.batchNumber" :value="item.batchNumber">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="计费项" prop="billingItemName"
+                      :rules="[{required: true, message: '请输入计费项', trigger: ['blur', 'change']}]">
+          <el-autocomplete style="width: 100%"
+            class="inline-input" v-model="form.billingItemName" :fetch-suggestions="querySearch"
+            placeholder="请输入计费项" clearable></el-autocomplete>
+        </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="单价" prop="billingUntilPrice" label-width="120px"
+                          :rules="[{required: true, message: '请输入单价', trigger: 'blur'}]">
+              <oms-input placeholder="请输入单价" type="number" v-model="form.billingUntilPrice" @blur="formatPrice"/>
             </el-form-item>
-            <el-form-item label="货品" prop="orgGoodsId" :rules="[{required: true, message: '请选择货品', trigger: 'change'}]">
-              <el-select filterable placeholder="请选择货品" :clearable="true" v-model="form.orgGoodsId"
-                         popperClass="good-selects" @change="orgGoodsIdChange">
-                <el-option v-for="item in contractItem.orgGoodsList" :key="item.orgGoodsId"
-                           :label="item.orgGoodsName"
-                           :value="item.orgGoodsId">
-                  <div style="overflow: hidden">
-                    <span class="pull-left">{{item.orgGoodsName}}</span>
-                  </div>
-                  <div style="overflow: hidden">
-                  <span class="select-other-info pull-left">
-                    规格:{{item.goodsSpecification}}
-                  </span>
-                  </div>
-                </el-option>
-              </el-select>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="数量" label-width="80px" prop="billingQuantity"
+                          :rules="[{required: true, message: '请输入数量', trigger: 'blur'}]">
+              <oms-input placeholder="请输入数量" type="number" v-model="form.billingQuantity" @blur="setBillingTotal"/>
             </el-form-item>
-            <el-form-item label="批号">
-              <el-select filterable placeholder="请输入名称搜索批号" :clearable="true"
-                         remote :remote-method="queryBatchNumberListNew" @focus="queryBatchNumberListNew()"
-                         v-model="form.batchNumber" popperClass="good-selects">
-                <el-option v-for="item in batchNumberList" :key="item.id"
-                           :label="item.batchNumber" :value="item.batchNumber">
-                </el-option>
-              </el-select>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="计费合计" label-width="100px" prop="billingTotal"
+                          :rules="[{required: true, message: '请输入计费合计', trigger: 'blur'}]">
+              <oms-input placeholder="请输入计费合计" type="number" v-model="form.billingTotal" @blur="formatTotalPrice"/>
             </el-form-item>
-            <el-form-item label="计费项" prop="billingItemId"
-                          :rules="[{required: true, message: '请输入选择计费项', trigger: 'change'}]">
-              <el-select filterable placeholder="请选择计费项" :clearable="true" @change="billingItemIdChange"
-                         v-model="form.billingItemId" popperClass="good-selects">
-                <el-option v-for="item in contractItem.billingItems" :key="item.billingItemId"
-                           :label="formatBillingItemName(item)" :value="item.billingItemId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="单价" prop="billingUntilPrice" label-width="120px"
-                              :rules="[{required: true, message: '请输入单价', trigger: 'blur'}]">
-                  <oms-input placeholder="请输入单价" type="input" v-model="form.billingUntilPrice" @blur="formatPrice"/>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="数量" label-width="80px" prop="billingQuantity"
-                              :rules="[{required: true, message: '请输入数量', trigger: 'blur'}]">
-                  <oms-input placeholder="请输入数量" type="input" v-model="form.billingQuantity"/>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="计费合计" label-width="100px" prop="billingTotal"
-                              :rules="[{required: true, message: '请输入计费合计', trigger: 'blur'}]">
-                  <oms-input placeholder="请输入计费合计" type="input" v-model="form.billingTotal"/>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </div>
-          <div v-else>
-            <el-form-item label="">
-              合同未绑定货品和项目, 请先绑定货品和项目
-            </el-form-item>
-          </div>
-        </div>
+          </el-col>
+        </el-row>
       </el-form>
     </template>
   </dialog-template>
 </template>
 <script>
-  import {contractAccountDetail, contractBindGoods, costModel} from '@/resources';
+  import {contractAccountDetail} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
   import utils from '@/tools/utils';
 
   export default {
+    props: {
+      formItem: Object,
+      index: Number
+    },
     mixins: [methodsMixin],
     data() {
       return {
@@ -104,7 +108,12 @@
           projectId: '',
           projectName: '',
           orderNumber: '',
-          orgGoodsId: ''
+          orgGoodsId: '',
+          batchNumber: '',
+          billingItemName: '',
+          billingTotal: '',
+          billingUntilPrice: '',
+          billingQuantity: ''
         },
         doing: false,
         rules: {
@@ -112,14 +121,21 @@
             {required: true, message: '名称', trigger: 'blur'}
           ]
         },
-        contractItem: {},
         actionType: '添加',
         loading: false
       };
     },
-    props: {
-      formItem: Object,
-      index: Number
+    computed: {
+      costTypes() {
+        let costTypes = this.$store.state.costTypes;
+        let values = [];
+        costTypes.forEach(i => {
+          i.items.forEach(f => {
+            values.push({value: f.name});
+          });
+        });
+        return values;
+      }
     },
     watch: {
       index: function (val) {
@@ -128,8 +144,18 @@
           this.actionType = '编辑';
         } else {
           this.form = {
-            billingModelName: '',
-            billingItems: []
+            contractId: '',
+            customerId: '',
+            customerName: '',
+            projectId: '',
+            projectName: '',
+            orderNumber: '',
+            orgGoodsId: '',
+            batchNumber: '',
+            billingItemName: '',
+            billingTotal: '',
+            billingUntilPrice: '',
+            billingQuantity: ''
           };
           this.actionType = '添加';
         }
@@ -139,48 +165,56 @@
       }
     },
     methods: {
+      querySearch(queryString, cb) {
+        var restaurants = this.costTypes;
+        var results = queryString ? restaurants.filter(f => f.value.includes(queryString)) : restaurants;
+        cb(results);
+      },
+      queryOrgGoodsListNew(query) {
+        if (!this.form.customerId) return;
+        let params = {
+          orgId: this.form.customerId,
+          keyWord: query,
+          auditedStatus: '1'
+        };
+        this.queryOrgGoodsList(params);
+      },
       formatPrice() {// 格式化单价，保留两位小数
         this.form.billingUntilPrice = utils.autoformatDecimalPoint(this.form.billingUntilPrice);
+        this.setBillingTotal();
       },
-      formatBillingItemName(item) {
-        let bill = this.$store.state.costTypes.find(f => f.id === item.billingType);
-        let billIem = bill.items.find(f => f.id === item.billingItemNo) || {};
-        return billIem.name;
+      formatTotalPrice() {// 格式化单价，保留两位小数
+        this.form.billingTotal = utils.autoformatDecimalPoint(this.form.billingTotal);
+      },
+      setBillingTotal() {
+        if (!this.form.billingUntilPrice || !this.form.billingQuantity) return;
+        this.form.billingTotal = (this.form.billingUntilPrice * this.form.billingQuantity).toFixed(2);
       },
       contractIdChange(val) {
-        this.contractItem = {};
+        this.form.customerId = '';
+        this.form.customerName = '';
+        this.form.orgGoodsId = '';
+        this.form.goodsId = '';
+        this.orgGoodsList = [];
+        this.orgGoodsIdChange(this.form.orgGoodsId);
         if (!val) return;
         let item = this.contractList.find(f => f.contractId === val);
-        this.loading = true;
-        contractBindGoods.query({contractId: val}).then(res => {
-          this.loading = false;
-          if (res.data.data.projectId) {
-            res.data.data.orgName = item.orgName;
-            res.data.data.orgId = item.orgId;
-            res.data.data.billingItems = [];
-            this.contractItem = res.data.data;
-            costModel.queryDetail(this.contractItem).then(res => {
-              this.contractItem.billingItems = res.data.data.billingItems;
-            });
-          } else {
-            this.contractItem = {};
-          }
-        });
+        if (!item) return;
+        this.form.customerId = item.orgId;
+        this.form.customerName = item.orgName;
       },
       orgGoodsIdChange(val) {
         this.form.goodsId = '';
+        this.form.batchNumber = '';
+        this.batchNumberList = [];
         if (!val) return;
-        let item = this.contractItem.orgGoodsList.find(f => f.orgGoodsId === val);
+        let item = this.orgGoodsList.find(f => f.orgGoodsDto.id === val);
         if (!item) return;
-        this.form.goodsId = item.goodsId;
+        this.form.goodsId = item.orgGoodsDto.goodsId;
         this.queryBatchNumberListNew();
       },
-      billingItemIdChange(val) {
-        if (!val) return;
-        let item = this.contractItem.billingItems.find(f => f.billingItemId === val);
-        this.form.billingUntilPrice = item.unitPrice;
-      },
       queryBatchNumberListNew(query) {
+        if (!this.form.goodsId) return;
         let params = {
           keyWord: query,
           goodsId: this.form.goodsId,
@@ -191,8 +225,6 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            this.form.customerId = this.contractItem.orgId;
-            this.form.projectId = this.contractItem.projectId;
             this.doing = true;
             this.$httpRequestOpera(contractAccountDetail.save(this.form), {
               errorTitle: '添加失败',
