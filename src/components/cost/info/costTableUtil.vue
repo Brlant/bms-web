@@ -59,9 +59,9 @@
         return biz.name;
       },
       formatBillingItemName(item) {
-        let bill = this.$store.state.costTypes.find(f => f.id === item.billingType);
-        let billIem = bill.items.find(f => f.id === item.billingItemNo) || {};
-        return billIem.name;
+        let bill = this.$store.state.billItemList.find(f => f.id === item.billingItemNo);
+        if (!bill) return item.billingItemNo;
+        return bill.name;
       }
     }
   };
