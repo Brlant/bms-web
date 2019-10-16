@@ -95,4 +95,4 @@ export default function calcTextareaHeight(targetNode,
   }
 
   return {height: height + 'px'};
-};
+}
