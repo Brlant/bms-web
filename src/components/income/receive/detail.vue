@@ -110,7 +110,7 @@
       },
       formatBillingItemName(item) {
         let bill = this.$store.state.billItemList.find(f => f.id === item.billingItemName);
-        if (!bill) return;
+        if (!bill) return item.billingItemName;
         return bill.name;
       }
     }
