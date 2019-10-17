@@ -10,7 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@dtop/dtop-web-common": "git+https://g.sinopharm-bio.com/dtop/dtop-web-common.git#v2.1.2",
+    "@dtop/dtop-web-common": "git+https://g.sinopharm-bio.com/dtop/dtop-web-common.git#2.1.4",
     "axios": "^0.16.1",
     "babel-polyfill": "^6.26.0",
     "echarts": "^4.1.0",
