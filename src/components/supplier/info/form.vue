@@ -507,9 +507,11 @@
         });
       },
       'form.selectOptions': function () {
-        this.form.province = this.form.selectOptions[0];
-        this.form.city = this.form.selectOptions[1];
-        this.form.region = this.form.selectOptions[2];
+        let selectOptions = utils.formatAddressByType(this.form.selectOptions[0],
+          this.form.selectOptions[1], this.form.selectOptions[2], 'label');
+        this.form.province = selectOptions[0] || '';
+        this.form.city = selectOptions[1] || '';
+        this.form.region = selectOptions[2] || '';
       },
       'form.creditCode': function (val) {
         if (val) {
@@ -545,8 +547,7 @@
         } else {
           orgId = '';
         }
-        this.form = Object.assign({}, val);
-        this.form.selectOptions = [];
+        this.form = Object.assign({}, val, {selectOptions: []});
         // 设置orgId
         this.form.id = orgId;
         if (!this.form.orgRelationTypeList) {
@@ -558,9 +559,7 @@
         if (!this.form.dhsOrgId) {
           this.form.dhsOrgId = val.id;
         }
-        this.form.province && this.form.selectOptions.push(this.form.province);
-        this.form.city && this.form.selectOptions.push(this.form.city);
-        this.form.region && this.form.selectOptions.push(this.form.region);
+        this.form.selectOptions = utils.formatAddressByType(this.form.province, this.form.city, this.form.region);
         this.queryLogisticsCompany(this.form.logisticsCompanyName);
       },
       resetDhsOrgInfo: function (val) {
