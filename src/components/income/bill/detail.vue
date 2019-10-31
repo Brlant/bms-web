@@ -82,6 +82,9 @@
         <el-table-column prop="billingQuantity" label="数量">
           <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
         </el-table-column>
+        <el-table-column prop="proportion" label="货值占比" width="100">
+          <template slot-scope="scope">{{scope.row.proportion}}</template>
+        </el-table-column>
         <el-table-column prop="billingTotal" label="计费合计">
           <template slot-scope="scope">{{scope.row.billingTotal | formatMoney}}</template>
         </el-table-column>
