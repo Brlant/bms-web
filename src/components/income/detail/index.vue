@@ -66,9 +66,6 @@
       <el-table-column prop="billingQuantity" label="数量">
         <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
       </el-table-column>
-      <el-table-column prop="proportion" label="货值占比" width="100">
-        <template slot-scope="scope">{{scope.row.proportion}}</template>
-      </el-table-column>
       <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
         <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
       </el-table-column>
