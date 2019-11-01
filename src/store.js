@@ -47,8 +47,7 @@ const state = {
         {name: '整件入库货品体积', id: 'A3', unit: '元/m³', rule: '每个品种的体积总数 X 计费单价', bind: true},
         {name: '整件入库整件数量', id: 'A4', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: true},
         {name: '整件入库基本单位数', id: 'A14', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
-        {name: '散件入库基本单位数', id: 'A5', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
-        {name: '货品明细货值占比', id: 'A16', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: false},
+        {name: '散件入库基本单位数', id: 'A5', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true}
       ]
     },
     {
@@ -65,8 +64,7 @@ const state = {
         {name: '整件出库整件数量', id: 'A7', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: true},
         {name: '整件出库基本单位数', id: 'A15', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
         {name: '散件出库基本单位数', id: 'A8', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
-        {name: '散件出库周转（包装）箱数', id: 'A9', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: false},
-        {name: '货品明细货值占比', id: 'A17', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: false},
+        {name: '散件出库周转（包装）箱数', id: 'A9', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: false}
       ]
     },
     {

@@ -34,17 +34,11 @@
         <el-form-item label="是否阶梯" label-width="80px">否</el-form-item>
       </el-col>
     </el-row>
-    <el-row v-if="currentItem.billingItemNo">
-      <el-col :span="!isProportion ? 7 : 10">
+    <el-row>
+      <el-col :span="7">
         <el-form-item label="单价" prop="unitPrice" label-width="120px"
-                      v-if="!isProportion"
                       :rules="[{required: true, message: '请输入单价', trigger: 'blur'}]">
           <oms-input placeholder="请输入单价" type="input" v-model="currentItem.unitPrice" @blur="formatPrice"/>
-        </el-form-item>
-        <el-form-item label="货品明细货值占比" prop="proportion" label-width="150px"
-                      :rules="[{required: true, message: '请输入货品明细货值占比', trigger: 'blur'}]"
-                      v-if="isProportion">
-          <oms-input placeholder="请输入货品明细货值占比" type="input" v-model="currentItem.proportion"/>
         </el-form-item>
       </el-col>
       <el-col :span="6" v-show="currentCostType.ladderState">
@@ -95,9 +89,6 @@
         if (!bizItem) return [];
         if (!bizItem.itemId) return this.currentCostType.items.filter(f => (f.bind === (this.billingModelType === '1')));
         return this.currentCostType.items.filter(f => (f.bind === (this.billingModelType === '1') && f.id === bizItem.itemId));
-      },
-      isProportion() {
-        return ['A16', 'A17'].includes(this.currentItem.billingItemNo);
       }
     },
     watch: {
