@@ -2,34 +2,23 @@
   <dialog-template :btnSavePosition="100">
     <template slot="title">绑定货品计费模型</template>
     <template slot="btnSave">
-      <el-button :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
+      <el-button :disabled="doing" @click="save('form')" plain type="primary" style="margin-bottom: 20px;margin-top: 10px">保存</el-button>
     </template>
     <template slot="content">
       <el-form :model="form" :rules="rules" label-width="100px" ref="form">
-        <el-form-item label="合同名称">{{formItem.contractName}}</el-form-item>
-        <el-form-item label="合同编号">{{formItem.contractNo}}</el-form-item>
+        <el-row>
+          <el-col :span="14">
+            <el-form-item label="合同名称" class="is-content-center">
+             <div style="line-height: normal"> {{formItem.contractName}}</div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="合同编号" label-width="80px" class="is-content-center">
+              <div style="line-height: normal" class="R">{{formItem.contractNo}}</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="甲方">{{formItem.orgName}}</el-form-item>
-        <el-form-item label="货品" prop="orgGoodsIdList">
-          <el-select filterable remote multiple placeholder="请输入名称搜货品" :remote-method="queryOrgGoodsListNew"
-                     @focus="queryOrgGoodsListNew()"
-                     :clearable="true" v-model="form.orgGoodsIdList" popperClass="good-selects">
-            <el-option v-for="item in orgGoodsList" :key="item.orgGoodsDto.id"
-                       :label="item.orgGoodsDto.name"
-                       :value="item.orgGoodsDto.id">
-              <div style="overflow: hidden">
-                <span class="pull-left">{{item.orgGoodsDto.name}}</span>
-              </div>
-              <div style="overflow: hidden">
-                <span class="select-other-info pull-left"><span
-                  v-show="item.orgGoodsDto.goodsNo">货品编号:</span>{{item.orgGoodsDto.goodsNo}}
-                </span>
-                <span class="select-other-info pull-left"><span
-                  v-show="item.orgGoodsDto.salesFirmName">供货厂商:</span>{{ item.orgGoodsDto.salesFirmName }}
-                </span>
-              </div>
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="计费模型" prop="billingModelId">
           <el-select filterable remote placeholder="请输入名称搜计费模型" :remote-method="queryContractCostModelListNew"
                      @focus="queryContractCostModelListNew()"
@@ -48,12 +37,23 @@
             </el-option>
           </el-select>
         </el-form-item>
+
+        <el-form-item label="货品" prop="orgGoodsIdList">
+          <el-transfer ref="elTransfer" v-model="form.orgGoodsIdList"
+                       :props="{key: 'id',label: 'name'}"
+                       filter-placeholder="请输入名称货品"
+                       :data="orgGoodsList"
+                       filterable
+                       :titles="['未选货品', '已选货品']"
+                       class="transfer-list">
+          </el-transfer>
+        </el-form-item>
       </el-form>
     </template>
   </dialog-template>
 </template>
 <script>
-  import {contractBindGoods} from '@/resources';
+  import {contractBindGoods, OrgGoods} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
 
   export default {
@@ -92,6 +92,7 @@
           billingModelId: '',
           projectId: ''
         };
+        this.queryOrgGoodsListNew();
         this.$nextTick(() => {
           this.$refs['form'].clearValidate();
         });
@@ -104,15 +105,19 @@
           bindingGoodStatus: '1',
           keyWord: query
         };
+
         this.queryContractCostModelList(params);
       },
       queryOrgGoodsListNew(query) {
         let params = {
           orgId: this.formItem.orgId,
+          pageSize: 100000,
           keyWord: query,
           auditedStatus: '1'
         };
-        this.queryOrgGoodsList(params);
+        this.$http.post('/org-goods/queryOrgGoods', params).then(res => {
+          this.orgGoodsList = res.data.map(m => m.orgGoodsDto);
+        });
       },
       companyDepartmentChange(val) {
         this.departmentUserList = [];

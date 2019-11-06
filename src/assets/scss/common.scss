@@ -323,3 +323,31 @@
   }
 }
 
+.transfer-list .el-transfer-panel {
+  width: 320px;
+  height: 510px;
+  .el-transfer-panel__list.is-filterable {
+    height: 400px;
+  }
+  .el-transfer-panel__filter .el-input__inner {
+    height: 30px;
+  }
+  .el-checkbox-group {
+    .el-checkbox {
+      display: block;
+    }
+  }
+}
+
+.app-body .el-form {
+
+  .el-form-item.is-content-center {
+    margin-bottom: 0;
+    .el-form-item__content {
+      height: 40px;
+      display:flex;
+      align-items: center;
+    }
+  }
+}
+

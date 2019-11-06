@@ -65,6 +65,9 @@
         <el-table-column prop="actionType" label="项目" width="140">
           <template slot-scope="scope">{{scope.row.projectName}}</template>
         </el-table-column>
+        <el-table-column prop="billingTime" label="创建时间" width="160">
+          <template slot-scope="scope">{{scope.row.billingTime | time}}</template>
+        </el-table-column>
         <el-table-column prop="actionType" label="订单号" width="140">
           <template slot-scope="scope">{{scope.row.orderNumber}}</template>
         </el-table-column>
