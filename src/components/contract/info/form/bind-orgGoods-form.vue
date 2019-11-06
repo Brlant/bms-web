@@ -2,14 +2,16 @@
   <dialog-template :btnSavePosition="100">
     <template slot="title">绑定货品计费模型</template>
     <template slot="btnSave">
-      <el-button :disabled="doing" @click="save('form')" plain type="primary" style="margin-bottom: 20px;margin-top: 10px">保存</el-button>
+      <el-button :disabled="doing" @click="save('form')" plain type="primary"
+                 style="margin-bottom: 20px;margin-top: 10px">保存
+      </el-button>
     </template>
     <template slot="content">
       <el-form :model="form" :rules="rules" label-width="100px" ref="form">
         <el-row>
           <el-col :span="14">
             <el-form-item label="合同名称" class="is-content-center">
-             <div style="line-height: normal"> {{formItem.contractName}}</div>
+              <div style="line-height: normal"> {{formItem.contractName}}</div>
             </el-form-item>
           </el-col>
           <el-col :span="10">
@@ -37,6 +39,22 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-row type="flex">
+          <el-col :span="2">
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="储存条件" prop="storageConditionId">
+              <el-select placeholder="请选择储存条件" v-model="search.goodsStorageConditionId">
+                <el-option :label="item.label" :value="item.key" :key="item.key"
+                           v-for="item in storageCondition"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" style="margin-left: 20px">
+            <el-button type="primary" @click="searchGoods">查询货品</el-button>
+            <el-button @click="resetGoods">重置</el-button>
+          </el-col>
+        </el-row>
 
         <el-form-item label="货品" prop="orgGoodsIdList">
           <el-transfer ref="elTransfer" v-model="form.orgGoodsIdList"
@@ -53,7 +71,7 @@
   </dialog-template>
 </template>
 <script>
-  import {contractBindGoods, OrgGoods} from '@/resources';
+  import {contractBindGoods} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
 
   export default {
@@ -77,6 +95,9 @@
             {required: true, message: '请选择项目', trigger: 'change'}
           ]
         },
+        search: {
+          goodsStorageConditionId: ''
+        },
         actionType: '添加'
       };
     },
@@ -98,14 +119,25 @@
         });
       }
     },
+    computed: {
+      storageCondition() {
+        return this.$getDict('storageCondition');
+      }
+    },
     methods: {
+      searchGoods() {
+        this.queryOrgGoodsListNew();
+      },
+      resetGoods() {
+        this.search.goodsStorageConditionId = '';
+        this.queryOrgGoodsListNew();
+      },
       queryContractCostModelListNew(query) {
         let params = {
           contractId: this.formItem.contractId,
           bindingGoodStatus: '1',
           keyWord: query
         };
-
         this.queryContractCostModelList(params);
       },
       queryOrgGoodsListNew(query) {
@@ -113,7 +145,8 @@
           orgId: this.formItem.orgId,
           pageSize: 100000,
           keyWord: query,
-          auditedStatus: '1'
+          auditedStatus: '1',
+          goodsStorageConditionId: this.search.goodsStorageConditionId
         };
         this.$http.post('/org-goods/queryOrgGoods', params).then(res => {
           this.orgGoodsList = res.data.map(m => m.orgGoodsDto);
