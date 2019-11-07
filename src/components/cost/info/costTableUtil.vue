@@ -1,5 +1,8 @@
 <template>
   <el-table :data="data" border class="clearfix" ref="orderDetail">
+    <el-table-column prop="createTime" label="创建时间" width="160">
+      <template slot-scope="scope">{{scope.row.createTime | time}}</template>
+    </el-table-column>
     <el-table-column prop="operationTime" label="计费类型" width="100">
       <template slot-scope="scope">{{formatBillingType(scope.row)}}</template>
     </el-table-column>

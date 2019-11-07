@@ -33,7 +33,7 @@
           <el-checkbox @click.native.stop="" v-model="scope.row.check" :disabled="!scope.row.showChecked"></el-checkbox>
         </template>
       </el-table-column>
-      <el-table-column prop="contractName" label="合同" width="100">
+      <el-table-column prop="contractName" label="合同" width="150">
         <template slot-scope="scope">{{scope.row.contractName}}</template>
       </el-table-column>
       <el-table-column prop="customerName" label="甲方" width="140">
@@ -42,13 +42,16 @@
       <el-table-column prop="actionType" label="项目" width="140">
         <template slot-scope="scope">{{scope.row.projectName}}</template>
       </el-table-column>
+      <el-table-column prop="billingTime" label="创建时间" width="160">
+        <template slot-scope="scope">{{scope.row.billingTime | time}}</template>
+      </el-table-column>
       <el-table-column prop="actionType" label="订单号" width="140">
         <template slot-scope="scope">{{scope.row.orderNumber}}</template>
       </el-table-column>
       <el-table-column prop="actionType" label="对账单号" width="150">
         <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
       </el-table-column>
-      <el-table-column prop="actionType" label="货品" width="200">
+      <el-table-column prop="actionType" label="货品" width="300">
         <template slot-scope="scope">
           {{scope.row.orgGoodsName}}
           <div v-show="scope.row.goodsSpecification">规格：{{scope.row.goodsSpecification}}</div>

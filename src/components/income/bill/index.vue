@@ -8,6 +8,9 @@
     <el-table :data="dataList" v-loading="loadingData"
               :row-style="{cursor: 'pointer'}" @row-click="showDetail"
               border class="clearfix mt-20" ref="orderDetail">
+      <el-table-column prop="accountCheckTime" label="生成对账时间">
+        <template slot-scope="scope">{{scope.row.accountCheckTime | time}}</template>
+      </el-table-column>
       <el-table-column prop="accountCheckNo" label="对账单号">
         <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
       </el-table-column>
