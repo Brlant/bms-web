@@ -9,7 +9,7 @@
         </el-button>
         <el-button @click="exportExcel" plain size="small">
           <f-a class="icon-small" name="export"></f-a>
-          导出Excel
+          导出计费明细
         </el-button>
       </template>
     </search-part>
@@ -126,8 +126,9 @@
     },
     methods: {
       exportExcel() {
+        if (!this.selectList.length) return this.$notify.info({message: '请选择结算单'});
         this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
-        closeAccount.export(this.filters).then(res => {
+        closeAccount.export(this.selectList.map(m => m.statementId)).then(res => {
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
           utils.download(res.data.data.path);
         }).catch(() => {
