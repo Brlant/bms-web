@@ -93,7 +93,7 @@
 
     <div class="text-center" v-show="(dataList.length || pager.currentPage !== 1) && !loadingData">
       <el-pagination :current-page="pager.currentPage" :page-size="pager.pageSize"
-                     :page-sizes="[10,20,50,100, 10000]"
+                     :page-sizes="[10,20,50,100, 100000]"
                      :total="pager.count" @current-change="handleCurrentChange"
                      @size-change="handleSizeChange"
                      layout="total, sizes, prev, pager, next, jumper">
