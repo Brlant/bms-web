@@ -17,7 +17,7 @@
           批量生成结算单
         </el-button>
 
-        <el-button @click="exportExcel" plain size="small" v-has="'add-billing-of-account'">
+        <el-button @click="exportExcel" plain size="small">
           <f-a class="icon-small" name="export"></f-a>
           导出Excel
         </el-button>
