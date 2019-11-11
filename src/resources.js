@@ -167,6 +167,9 @@ export const closeAccount = resource('', http, {
   },
   queryDetail(obj) {
     return http.post('/bms-sd/query', obj);
+  },
+  export: (params) => {
+    return http.post('/bms-sd/export-info', params);
   }
 });
 

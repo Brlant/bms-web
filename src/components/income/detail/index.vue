@@ -17,7 +17,7 @@
           批量生成结算单
         </el-button>
 
-        <el-button @click="exportExcel" plain size="small" v-has="'add-billing-of-account'">
+        <el-button @click="exportExcel" plain size="small">
           <f-a class="icon-small" name="export"></f-a>
           导出Excel
         </el-button>
@@ -93,7 +93,7 @@
 
     <div class="text-center" v-show="(dataList.length || pager.currentPage !== 1) && !loadingData">
       <el-pagination :current-page="pager.currentPage" :page-size="pager.pageSize"
-                     :page-sizes="[10,20,50,100]"
+                     :page-sizes="[10,20,50,100, 100000]"
                      :total="pager.count" @current-change="handleCurrentChange"
                      @size-change="handleSizeChange"
                      layout="total, sizes, prev, pager, next, jumper">

@@ -11,7 +11,6 @@
   }
 
 
-
 </style>
 <template>
   <div>
@@ -60,7 +59,7 @@
   import {Auth} from '../../resources';
   import AppFooter from '../layout/app.footer.vue';
   import {base64} from '@dtop/dtop-web-common';
-  import Logo from '@/assets/img/logo_pic.png'
+  import Logo from '@/assets/img/logo_pic.png';
 
   export default {
     name: 'login',
@@ -164,6 +163,10 @@
         this.isFocus = 2;
       },
       trim: function (str) {
+        if (!str) return str;
+        if (typeof str !== 'string') {
+          str = str + '';
+        }
         return str.replace(/(^\s*)|(\s*$)/g, '');
       }
     },
