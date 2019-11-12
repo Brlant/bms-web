@@ -21,14 +21,17 @@
           </el-col>
         </el-row>
         <div v-if="addType === 0">
-          <el-form-item label="是否含税" prop="billingUntilPrice" label-width="120px">
+          <el-form-item label="是否含税" prop="includeTax"
+                        :rules="[{required: true, message: '请选择是否含税', trigger: 'change'}]"
+                        label-width="120px">
             <el-switch
               v-model="form.includeTax"
               active-text="是" inactive-text="否" active-color="#13ce66"
               inactive-color="#ff4949" active-value="1" inactive-value="0">
             </el-switch>
           </el-form-item>
-          <el-form-item label="税率" label-width="120px" v-if="form.includeTax === '1'">
+          <el-form-item label="税率" prop="taxRate" label-width="120px"
+                        :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
             <oms-input placeholder="请输入税率" type="number" v-model="form.taxRate">
               <span slot="append">%</span>
             </oms-input>

@@ -66,6 +66,23 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-form :model="form" label-width="120px" ref="form">
+        <el-form-item label="是否含税" prop="includeTax"
+                      :rules="[{required: true, message: '请选择是否含税', trigger: 'change'}]"
+                      label-width="120px">
+          <el-switch
+            v-model="form.includeTax"
+            active-text="是" inactive-text="否" active-color="#13ce66"
+            inactive-color="#ff4949" active-value="1" inactive-value="0">
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="税率" prop="taxRate" label-width="120px"
+                      :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
+          <oms-input placeholder="请输入税率" type="number" style="width: 240px" v-model="form.taxRate">
+            <span slot="append">%</span>
+          </oms-input>
+        </el-form-item>
+      </el-form>
     </template>
   </dialog-template>
 </template>
@@ -80,14 +97,18 @@
     },
     data() {
       return {
-        doing: false
+        doing: false,
+        form: {
+          includeTax: '1',
+          taxRate: ''
+        }
       };
     },
     methods: {
       formatPrice(item) {
       },
       editItem(item) {
-        if(item.unliquidatedAmount >= 0) {
+        if (item.unliquidatedAmount >= 0) {
           if (item.statementAmount > item.unliquidatedAmount) {
             item.statementAmount = item.unliquidatedAmount || '0.00';
           }
@@ -103,17 +124,25 @@
         index > -1 && this.data.splice(index, 1);
       },
       save() {
-        let list = this.data.map(m => ({
-          billingOfAccountId: m.billingOfAccountId,
-          statementAmount: m.statementAmount
-        }));
-        this.$httpRequestOpera(closeAccount.batchCreate(list), {
-          errorTitle: '生成结算单完成',
-          success: res => {
-            this.$emit('change');
-          },
-          error: () => {
-          }
+        this.$refs['form'].validate((valid) => {
+          if (!valid || this.doing) return;
+          let list = this.data.map(m => ({
+            billingOfAccountId: m.billingOfAccountId,
+            statementAmount: m.statementAmount,
+            includeTax: this.form.includeTax,
+            taxRate: this.form.taxRate
+          }));
+          this.doing = true;
+          this.$httpRequestOpera(closeAccount.batchCreate(list), {
+            errorTitle: '生成结算单完成',
+            success: res => {
+              this.$emit('change');
+              this.doing = false;
+            },
+            error: () => {
+              this.doing = false;
+            }
+          });
         });
       }
     }
