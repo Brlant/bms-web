@@ -178,6 +178,7 @@
     watch: {
       filters: {
         handler: function (val) {
+          this.$refs.table.clearSelection();
           this.queryList(1);
         },
         deep: true
@@ -231,7 +232,6 @@
         });
       },
       changeType(item, key) {
-        this.$refs.table.clearSelection();
         this.filters.attachmentType = item.attachmentType;
       },
       isShowIcon(item, key, activeStatus) {
