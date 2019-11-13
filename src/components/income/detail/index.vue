@@ -1,3 +1,15 @@
+<style lang="scss">
+  .total-info {
+    align-items: flex-end;
+    position: absolute;
+    right: 20px;
+
+    &__item {
+      margin: 0 10px;
+      font-weight: 500;
+    }
+  }
+</style>
 <template>
   <div class="order-page">
     <search-part @search="searchResult">
@@ -25,13 +37,16 @@
     </search-part>
     <status-list :activeStatus="filters.attachmentType" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
-                 :formatClass="formatClass"></status-list>
-    <el-table :data="dataList" @select-all="selectAll" v-loading="loadingData"
-              border class="clearfix mt-20" ref="table" @cell-click="cellClick">
-      <el-table-column type="selection" width="55">
-        <template slot-scope="scope">
-          <el-checkbox @click.native.stop="" v-model="scope.row.check" :disabled="!scope.row.showChecked"></el-checkbox>
-        </template>
+                 :formatClass="formatClass">
+      <span class="total-info" v-if="totalInfo">
+        <span class="total-info__item">数量小计：{{totalInfo.billingQuantity}}</span>
+        <span class="total-info__item">计费小计：{{totalInfo.billingTotal | formatMoney}}</span>
+        <span class="total-info__item">实际计费小计：{{totalInfo.realityBillingTotal | formatMoney}}</span>
+      </span>
+    </status-list>
+    <el-table :data="dataList" v-loading="loadingData" row-key="billingOfAccountId"
+              border class="clearfix mt-20" ref="table" @cell-click="cellClick" @selection-change="selectionChange">
+      <el-table-column type="selection" width="55" reserve-selection :selectable="selectable">
       </el-table-column>
       <el-table-column prop="contractName" label="合同" width="150">
         <template slot-scope="scope">{{scope.row.contractName}}</template>
@@ -135,32 +150,47 @@
           2: CloseAccount
         },
         orgType: {
-          0: {'title': '未对账', 'num': 0, 'attachmentType': '0'},
-          1: {'title': '对账中', 'num': 0, 'attachmentType': '1'},
-          2: {'title': '已对账', 'num': 0, 'attachmentType': '2'},
-          3: {'title': '已回款', 'num': 0, 'attachmentType': '3'},
+          0: {'title': '全部', 'num': 0, 'attachmentType': ''},
+          1: {'title': '未对账', 'num': 0, 'attachmentType': '0'},
+          2: {'title': '对账中', 'num': 0, 'attachmentType': '1'},
+          3: {'title': '已对账', 'num': 0, 'attachmentType': '2'},
+          4: {'title': '已回款', 'num': 0, 'attachmentType': '3'},
         },
         defaultPageRight: {'width': '920px', 'padding': 0},
-        dySelectList: []
+        dySelectList: [],
+        selectList: []
       };
+    },
+    computed: {
+      totalInfo() {
+        if (!this.selectList.length) return;
+        let billingQuantity = 0;
+        let billingTotal = 0;
+        let realityBillingTotal = 0;
+        this.selectList.forEach(i => {
+          billingQuantity += i.billingQuantity;
+          billingTotal += i.billingTotal;
+          realityBillingTotal += (Number(i.realityBillingTotal) || 0);
+        });
+        return {billingQuantity, billingTotal, realityBillingTotal};
+      }
     },
     watch: {
       filters: {
         handler: function (val) {
+          this.$refs.table.clearSelection();
           this.queryList(1);
         },
         deep: true
-      }
-    },
-    computed: {
-      selectList() {
-        return this.dataList.filter(f => f.check);
       }
     },
     mounted() {
       this.queryList(1);
     },
     methods: {
+      selectable(row) {
+        return !!row.unliquidatedAmount;
+      },
       selectionChange(val) {
         this.selectList = val;
       },
@@ -244,8 +274,6 @@
         const params = this.queryUtil(http, pageNo, null, () => {
           this.dataList.forEach(item => {
             item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
-            this.$set(item, 'check', false);
-            this.$set(item, 'showChecked', !!item.unliquidatedAmount);
           });
         });
         this.queryStatusNum(params);
@@ -253,10 +281,11 @@
       queryStatusNum: function (params) {
         contractAccountDetail.queryStateNum(params).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['nonAccountCheck'];
-          this.orgType[1].num = data['accountCheckInNum'];
-          this.orgType[2].num = data['nonReturnMoneyNum'];
-          this.orgType[3].num = data['allReturnMoneyNum'];
+          this.orgType[0].num = data['nonAccountCheck'] + data['accountCheckInNum'] + data['nonReturnMoneyNum'] + data['allReturnMoneyNum'];
+          this.orgType[1].num = data['nonAccountCheck'];
+          this.orgType[2].num = data['accountCheckInNum'];
+          this.orgType[3].num = data['nonReturnMoneyNum'];
+          this.orgType[4].num = data['allReturnMoneyNum'];
         });
       },
       exportExcel() {
@@ -284,14 +313,8 @@
       },
       cellClick(row, column, cell) {
         if (column.type === 'selection') {
-          if (!row.showChecked) return;
-          row.check = !row.check;
+          this.$refs.table.toggleRowSelection(row);
         }
-      },
-      selectAll(selection) {
-        this.dataList.filter(f => f.showChecked).forEach(i => {
-          i.check = !!selection.length;
-        });
       }
     }
   };

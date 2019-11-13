@@ -148,7 +148,7 @@
           auditedStatus: '1',
           goodsStorageConditionId: this.search.goodsStorageConditionId
         };
-        this.$http.post('/org-goods/queryOrgGoods', params).then(res => {
+        this.$http.post('/bms-boa/query-org-goods', params).then(res => {
           this.orgGoodsList = res.data.map(m => m.orgGoodsDto);
         });
       },
