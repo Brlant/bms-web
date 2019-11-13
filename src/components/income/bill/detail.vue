@@ -27,7 +27,10 @@
   <div class="content-part">
     <div class="content-right min-gutter">
       <h3 class="clearfix">详情</h3>
-      <h2 class="detail-title">基础信息</h2>
+      <h2 class="detail-title">
+        基础信息
+        <el-button size="mini" @click="exportExcel" :loading="excelloading">导出excel</el-button>
+      </h2>
       <el-row>
         <el-col :span="12">
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>

@@ -204,15 +204,19 @@
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        closeAccount.queryStateNum(params).then(res => {
+        closeAccount.queryStateNum( Object.assign({}, params, {statementType: null})).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['checkPending'] + data['checkMakeInvoice'] + data['checkReturnMoney'] + data['alreadyReturnMoney'] + data['noPassNum'];
-          this.orgType[1].num = data['checkPending'];
-          this.orgType[2].num = data['checkMakeInvoice'];
-          this.orgType[3].num = data['checkReturnMoney'];
-          this.orgType[4].num = data['alreadyReturnMoney'];
-          this.orgType[9].num = data['noPassNum'];
+          let {getNum} = this;
+          this.orgType[0].num = getNum(data[0]) + getNum(data[1]) + getNum(data[2]) + getNum(data[3]) + getNum(data[9]);
+          this.orgType[1].num = getNum(data[0]);
+          this.orgType[2].num = getNum(data[1]);
+          this.orgType[3].num = getNum(data[2]);
+          this.orgType[4].num = getNum(data[3]);
+          this.orgType[9].num = getNum(data[9]);
         });
+      },
+      getNum(count) {
+        return count ? count : 0
       },
       add() {
         this.form = {};
