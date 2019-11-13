@@ -39,9 +39,9 @@
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass">
       <span class="total-info" v-if="totalInfo">
-        <span class="total-info__item">数量：{{totalInfo.billingQuantity}}</span>
-        <span class="total-info__item">计费合计：{{totalInfo.billingTotal | formatMoney}}</span>
-        <span class="total-info__item">实际计费合计：{{totalInfo.realityBillingTotal | formatMoney}}</span>
+        <span class="total-info__item">数量小计：{{totalInfo.billingQuantity}}</span>
+        <span class="total-info__item">计费小计：{{totalInfo.billingTotal | formatMoney}}</span>
+        <span class="total-info__item">实际计费小计：{{totalInfo.realityBillingTotal | formatMoney}}</span>
       </span>
     </status-list>
     <el-table :data="dataList" v-loading="loadingData" row-key="billingOfAccountId"
