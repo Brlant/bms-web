@@ -207,6 +207,18 @@ export default {
     fileLink.click();
     body.removeChild($a);
   },
+  setStatusCount(type, data, status) {
+    Object.values(type).forEach(i => {
+      if (!i.isAll) {
+        i.num = this.getNum(data[i[status]]);
+      } else {
+        i.num = Object.values(data).reduce((pre, cur) => pre += cur, 0);
+      }
+    });
+  },
+  getNum(count) {
+    return count ? count : 0;
+  },
   printLocation(that, obj) {
     let url = 'https://print.sinopharm-bio.com:8015';
     let ary = JSON.parse(window.localStorage.getItem('localConfiguration')) || [];

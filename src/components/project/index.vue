@@ -147,10 +147,9 @@
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        project.queryStateNum(params).then(res => {
+        project.queryStateNum(Object.assign({}, params, {projectState: null})).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['enableState'];
-          this.orgType[1].num = data['disableState'];
+          utils.setStatusCount(this.orgType, data, 'projectState');
         });
       },
       add() {

@@ -150,7 +150,7 @@
           2: CloseAccount
         },
         orgType: {
-          0: {'title': '全部', 'num': 0, 'attachmentType': ''},
+          0: {'title': '全部', 'num': 0, 'attachmentType': '', isAll: true},
           1: {'title': '未对账', 'num': 0, 'attachmentType': '0'},
           2: {'title': '对账中', 'num': 0, 'attachmentType': '1'},
           3: {'title': '已对账', 'num': 0, 'attachmentType': '2'},
@@ -279,13 +279,9 @@
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        contractAccountDetail.queryStateNum(params).then(res => {
+        contractAccountDetail.queryStateNum(Object.assign({}, params, {attachmentType: null})).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['nonAccountCheck'] + data['accountCheckInNum'] + data['nonReturnMoneyNum'] + data['allReturnMoneyNum'];
-          this.orgType[1].num = data['nonAccountCheck'];
-          this.orgType[2].num = data['accountCheckInNum'];
-          this.orgType[3].num = data['nonReturnMoneyNum'];
-          this.orgType[4].num = data['allReturnMoneyNum'];
+          utils.setStatusCount(this.orgType, data, 'attachmentType');
         });
       },
       exportExcel() {

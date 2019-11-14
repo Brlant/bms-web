@@ -97,7 +97,7 @@
           2: receiveTask
         },
         orgType: {
-          0: {'title': '全部', 'num': 0, 'statementType': ''},
+          0: {'title': '全部', 'num': 0, 'statementType': '', isAll: true},
           1: {'title': '待审核', 'num': 0, 'statementType': '0'},
           2: {'title': '待开票', 'num': 0, 'statementType': '1'},
           3: {'title': '待回款', 'num': 0, 'statementType': '2'},
@@ -204,14 +204,9 @@
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        closeAccount.queryStateNum(params).then(res => {
+        closeAccount.queryStateNum( Object.assign({}, params, {statementType: null})).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['checkPending'] + data['checkMakeInvoice'] + data['checkReturnMoney'] + data['alreadyReturnMoney'] + data['noPassNum'];
-          this.orgType[1].num = data['checkPending'];
-          this.orgType[2].num = data['checkMakeInvoice'];
-          this.orgType[3].num = data['checkReturnMoney'];
-          this.orgType[4].num = data['alreadyReturnMoney'];
-          this.orgType[9].num = data['noPassNum'];
+          utils.setStatusCount(this.orgType, data, 'statementType');
         });
       },
       add() {
