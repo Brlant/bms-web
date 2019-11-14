@@ -97,7 +97,7 @@
           2: receiveTask
         },
         orgType: {
-          0: {'title': '全部', 'num': 0, 'statementType': ''},
+          0: {'title': '全部', 'num': 0, 'statementType': '', isAll: true},
           1: {'title': '待审核', 'num': 0, 'statementType': '0'},
           2: {'title': '待开票', 'num': 0, 'statementType': '1'},
           3: {'title': '待回款', 'num': 0, 'statementType': '2'},
@@ -206,17 +206,8 @@
       queryStatusNum: function (params) {
         closeAccount.queryStateNum( Object.assign({}, params, {statementType: null})).then(res => {
           let data = res.data.data;
-          let {getNum} = this;
-          this.orgType[0].num = getNum(data[0]) + getNum(data[1]) + getNum(data[2]) + getNum(data[3]) + getNum(data[9]);
-          this.orgType[1].num = getNum(data[0]);
-          this.orgType[2].num = getNum(data[1]);
-          this.orgType[3].num = getNum(data[2]);
-          this.orgType[4].num = getNum(data[3]);
-          this.orgType[9].num = getNum(data[9]);
+          utils.setStatusCount(this.orgType, data, 'statementType');
         });
-      },
-      getNum(count) {
-        return count ? count : 0
       },
       add() {
         this.form = {};

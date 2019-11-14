@@ -146,13 +146,9 @@
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        accountBill.queryStateNum(params).then(res => {
+        accountBill.queryStateNum(Object.assign({}, params, {accountCheckType: null})).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['toBeConfirmed'];
-          this.orgType[1].num = data['noCheck'];
-          this.orgType[2].num = data['checkedNum'];
-          this.orgType[3].num = data['notCheckedNum'];
-          this.orgType[9].num = data['cancelNum'];
+          utils.setStatusCount(this.orgType, data, 'accountCheckType');
         });
       },
       add() {

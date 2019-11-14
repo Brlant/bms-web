@@ -153,10 +153,9 @@
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        costModel.queryStateNum(params).then(res => {
+        costModel.queryStateNum(Object.assign({}, params, {billingModelState: null})).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['enableState'];
-          this.orgType[1].num = data['disableState'];
+          utils.setStatusCount(this.orgType, data, 'billingModelState');
         });
       },
       add() {

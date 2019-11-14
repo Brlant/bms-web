@@ -162,10 +162,9 @@
         this.queryStatusNum(params);
       },
       queryStatusNum: function (params) {
-        Contact.queryStateNum(params).then(res => {
+        Contact.queryStateNum(Object.assign({}, params, {contractState: null})).then(res => {
           let data = res.data.data;
-          this.orgType[0].num = data['enableState'];
-          this.orgType[1].num = data['disableState'];
+          utils.setStatusCount(this.orgType, data, 'contractState');
         });
       },
       add() {
