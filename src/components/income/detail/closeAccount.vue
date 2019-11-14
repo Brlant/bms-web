@@ -74,7 +74,7 @@
           <el-col :span="16" style="padding-top: 10px">
             <span class="total-info" v-if="totalInfo">
                 <span class="total-info__item">已勾选计费数量总计：{{totalInfo.billingQuantity}}</span>
-                <span class="total-info__item">已勾选计费金额总计：{{totalInfo.billingTotal | formatMoney}}</span>
+                <span class="total-info__item">已勾选结算金额总计：{{totalInfo.statementAmount | formatMoney}}</span>
             </span>
           </el-col>
         </el-row>
@@ -109,14 +109,12 @@
       totalInfo() {
         if (!this.data || !this.data.length) return;
         let billingQuantity = 0;
-        let billingTotal = 0;
-        let realityBillingTotal = 0;
+        let statementAmount = 0;
         this.data.forEach(i => {
           billingQuantity += i.billingQuantity;
-          billingTotal += i.billingTotal;
-          realityBillingTotal += (Number(i.realityBillingTotal) || 0);
+          statementAmount += Number(i.statementAmount || 0);
         });
-        return {billingQuantity, billingTotal, realityBillingTotal};
+        return {billingQuantity, statementAmount};
       }
     },
     methods: {
