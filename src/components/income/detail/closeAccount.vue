@@ -67,7 +67,17 @@
         </el-table-column>
       </el-table>
       <el-form :model="form" label-width="120px" ref="form">
-        <el-form-item label="是否含税" label-width="120px">是</el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="是否含税" label-width="120px">是</el-form-item>
+          </el-col>
+          <el-col :span="16" style="padding-top: 10px">
+            <span class="total-info" v-if="totalInfo">
+                <span class="total-info__item">已勾选计费数量总计：{{totalInfo.billingQuantity}}</span>
+                <span class="total-info__item">已勾选计费金额总计：{{totalInfo.billingTotal | formatMoney}}</span>
+            </span>
+          </el-col>
+        </el-row>
         <el-form-item label="税率" prop="taxRate" label-width="120px"
                       :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
           <oms-input placeholder="请输入税率" type="number" style="width: 240px" v-model="form.taxRate">
@@ -94,6 +104,20 @@
           taxRate: ''
         }
       };
+    },
+    computed: {
+      totalInfo() {
+        if (!this.data || !this.data.length) return;
+        let billingQuantity = 0;
+        let billingTotal = 0;
+        let realityBillingTotal = 0;
+        this.data.forEach(i => {
+          billingQuantity += i.billingQuantity;
+          billingTotal += i.billingTotal;
+          realityBillingTotal += (Number(i.realityBillingTotal) || 0);
+        });
+        return {billingQuantity, billingTotal, realityBillingTotal};
+      }
     },
     methods: {
       formatPrice(item) {
