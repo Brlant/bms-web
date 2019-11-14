@@ -200,6 +200,9 @@ export const accountBill = resource('', http, {
   update(obj) {
     return http.put('/bms-ac/edit-account-check', obj);
   },
+  exportExcel(params) {
+    return http.get(`/bms-ad/export-info`, {params});
+  }
 });
 
 

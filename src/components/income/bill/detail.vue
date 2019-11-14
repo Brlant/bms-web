@@ -29,7 +29,7 @@
       <h3 class="clearfix">详情</h3>
       <h2 class="detail-title">
         基础信息
-        <el-button size="mini" @click="exportExcel" :loading="excelloading">导出excel</el-button>
+        <el-button size="mini" type="primary" @click="exportExcel" :loading="exportLoading">导出excel</el-button>
       </h2>
       <el-row>
         <el-col :span="12">
@@ -122,7 +122,7 @@
 </template>
 <script>
   import {accountBill} from '@/resources';
-
+  import utils from '@/tools/utils';
   export default {
     props: {
       formItem: {
@@ -135,7 +135,8 @@
     data() {
       return {
         billAccountList: [],
-        loading: false
+        loading: false,
+        exportLoading: false
       };
     },
     watch: {
@@ -162,6 +163,15 @@
         let bill = this.$store.state.billItemList.find(f => f.id === item.billingItemName);
         if (!bill) return item.billingItemName;
         return bill.name;
+      },
+      exportExcel() {
+        this.exportLoading = true;
+        accountBill.exportExcel({accountCheckId: this.formItem.accountCheckId}).then(res => {
+          utils.download(res.data.data.path);
+          this.exportLoading = false;
+        }).catch(() => {
+          this.exportLoading = false;
+        });
       },
       confirm() {
         this.$confirmOpera('是否确认账单', () => {
