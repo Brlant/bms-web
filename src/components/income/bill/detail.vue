@@ -29,7 +29,10 @@
       <h3 class="clearfix">详情</h3>
       <h2 class="detail-title">
         基础信息
-        <el-button size="mini" type="primary" @click="exportExcel" :loading="exportLoading">导出excel</el-button>
+        <span class="pull-right">
+           <el-button size="mini" type="primary" @click="exportExcel" :loading="exportLoading">导出excel</el-button>
+           <el-button size="mini" type="primary" @click="exportGoodsTotal" :loading="exportGoodsLoading">导出货品合计</el-button>
+        </span>
       </h2>
       <el-row>
         <el-col :span="12">
@@ -136,7 +139,8 @@
       return {
         billAccountList: [],
         loading: false,
-        exportLoading: false
+        exportLoading: false,
+        exportGoodsLoading: false
       };
     },
     watch: {
@@ -171,6 +175,15 @@
           this.exportLoading = false;
         }).catch(() => {
           this.exportLoading = false;
+        });
+      },
+      exportGoodsTotal() {
+        this.exportGoodsLoading = true;
+        accountBill.exportGoodsExcel({accountCheckId: this.formItem.accountCheckId}).then(res => {
+          utils.download(res.data.data.path);
+          this.exportGoodsLoading = false;
+        }).catch(() => {
+          this.exportGoodsLoading = false;
         });
       },
       confirm() {

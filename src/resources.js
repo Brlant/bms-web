@@ -202,6 +202,9 @@ export const accountBill = resource('', http, {
   },
   exportExcel(params) {
     return http.get(`/bms-ad/export-info`, {params});
+  },
+  exportGoodsExcel(params) {
+    return http.get(`/bms-ad/export-business-info`, {params});
   }
 });
 
