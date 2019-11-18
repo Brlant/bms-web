@@ -30,7 +30,7 @@ const state = {
       bizTypes: [],
       ladderState: false,
       items: [
-        {name: '订单总单处理', id: 'A1', unit: '元/张', rule: '订单总单数量 X 计费单价', bind: false},
+        {name: '订单总单处理', id: 'A1', unit: '元/张', rule: '订单总单数量 X 计费单价', bind: true},
         {name: '订单细单处理', id: 'A2', unit: '元/条', rule: '订单细单数量 X 计费单价', bind: true}
       ]
     },
@@ -48,7 +48,7 @@ const state = {
         {name: '整件入库整件数量', id: 'A4', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: true},
         {name: '整件入库基本单位数', id: 'A14', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
         {name: '散件入库基本单位数', id: 'A5', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
-        {name: '货品明细货值占比', id: 'A16', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: false},
+        {name: '货品明细货值占比', id: 'A16', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: true},
       ]
     },
     {
@@ -65,8 +65,8 @@ const state = {
         {name: '整件出库整件数量', id: 'A7', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: true},
         {name: '整件出库基本单位数', id: 'A15', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
         {name: '散件出库基本单位数', id: 'A8', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
-        {name: '散件出库周转（包装）箱数', id: 'A9', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: false},
-        {name: '货品明细货值占比', id: 'A17', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: false},
+        {name: '散件出库周转（包装）箱数', id: 'A9', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: true},
+        {name: '货品明细货值占比', id: 'A17', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: true},
       ]
     },
     {
@@ -91,8 +91,8 @@ const state = {
         {name: '温度计', id: '1', itemId: 'A13'},
       ],
       items: [
-        {name: '保温箱', id: 'A12', unit: '元/个', rule: '保温箱总数 X 计费单价', bind: false},
-        {name: '温度计', id: 'A13', unit: '元/个', rule: '温度计使用总数 X 计费单价', bind: false},
+        {name: '保温箱', id: 'A12', unit: '元/个', rule: '保温箱总数 X 计费单价', bind: true},
+        {name: '温度计', id: 'A13', unit: '元/个', rule: '温度计使用总数 X 计费单价', bind: true},
       ]
     },
     {
