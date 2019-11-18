@@ -9,7 +9,7 @@
     <el-table-column prop="actionType" label="业务类型">
       <template slot-scope="scope">{{formatBusinessType(scope.row)}}</template>
     </el-table-column>
-    <el-table-column prop="actionType" label="计费项" width="140">
+    <el-table-column prop="actionType" label="绑定货品计费项" width="140">
       <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
     </el-table-column>
     <el-table-column prop="actionType" label="是否阶梯">

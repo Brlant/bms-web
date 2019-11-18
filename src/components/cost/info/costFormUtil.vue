@@ -15,7 +15,7 @@
                    v-for="item in currentCostType.bizTypes"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="计费项" prop="billingItemNo"
+    <el-form-item label="绑定货品计费项" prop="billingItemNo" label-width="140px"
                   :rules="[{required: true, message: '请选择计费项', trigger: 'change'}]">
       <el-select placeholder="请选择计费项" v-model="currentItem.billingItemNo"
                  filterable clearable @change="billingItemNoChange">

@@ -11,8 +11,7 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
 
-        <el-col :span="8">计费模型名称</el-col>
-        <el-col :span="4">是否绑定货品计费</el-col>
+        <el-col :span="12">计费模型名称</el-col>
         <el-col :span="9">合同</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
@@ -33,8 +32,7 @@
              class="order-list-item order-list-item-bg" @click="showDetail(item)"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="8">{{item.billingModelName}}</el-col>
-            <el-col :span="4">{{item.bindingGoodStatus === '1' ? '是' : '否'}}</el-col>
+            <el-col :span="12">{{item.billingModelName}}</el-col>
             <el-col :span="9">{{item.contractName}}</el-col>
             <el-col :span="3" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="'edit-contract-billing-model'">编辑</des-btn>

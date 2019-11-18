@@ -18,12 +18,6 @@
                       :rules="[{required: true, message: '请输入计费模型名称', trigger: 'blur'}]">
           <oms-input placeholder="请输入计费模型名称" type="input" v-model="form.billingModelName"/>
         </el-form-item>
-        <el-form-item label="绑定货品计费" prop="bindingGoodStatus"
-                      :rules="[{required: true, message: '请选择绑定货品计费', trigger: 'change'}]">
-          <el-switch v-model="form.bindingGoodStatus"
-                     active-value="1" inactive-value="0" active-text="是" inactive-text="否"
-                     @change="billingModelTypeChange"></el-switch>
-        </el-form-item>
         <el-form-item label="" prop="billingModelTemplate">
           <el-radio-group v-model="form.billingModelTemplate" size="small" @change="billingModelTemplateChange">
             <el-radio-button label="0">从计费模型模板选择</el-radio-button>

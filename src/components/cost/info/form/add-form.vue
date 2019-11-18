@@ -9,12 +9,6 @@
         <el-form-item label="模板名称" prop="billingModelName">
           <oms-input placeholder="请输入计费模板名称" type="input" v-model="form.billingModelName"/>
         </el-form-item>
-        <el-form-item label="绑定货品计费" prop="billingModelType"
-                      :rules="[{required: true, message: '请选择绑定货品计费', trigger: 'change'}]">
-          <el-switch v-model="form.billingModelType"
-                     active-value="1" inactive-value="0" active-text="是" inactive-text="否"
-                     @change="billingModelTypeChange"></el-switch>
-        </el-form-item>
       </el-form>
       <el-form :model="currentItem" :rules="rules" label-width="120px" ref="addForm">
         <cost-form-util ref="costUtil" :currentItem="currentItem" :billingModelType="form.billingModelType"/>
