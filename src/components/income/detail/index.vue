@@ -189,7 +189,7 @@
     },
     methods: {
       selectable(row) {
-        return !!row.unliquidatedAmount;
+        return  this.filters.attachmentType !== '2' ||   this.filters.attachmentType === '2' && !!row.unliquidatedAmount;
       },
       selectionChange(val) {
         this.selectList = val;
