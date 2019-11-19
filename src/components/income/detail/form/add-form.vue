@@ -58,11 +58,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="绑定货品计费项" prop="billingItemName"
-                      :rules="[{required: true, message: '请输入绑定货品计费项', trigger: ['blur', 'change']}]">
+        <el-form-item label="计费项" prop="billingItemName"
+                      :rules="[{required: true, message: '请输入计费项', trigger: ['blur', 'change']}]">
           <el-autocomplete style="width: 100%"
             class="inline-input" v-model="form.billingItemName" :fetch-suggestions="querySearch"
-            placeholder="请输入绑定货品计费项" clearable></el-autocomplete>
+            placeholder="请输入计费项" clearable></el-autocomplete>
         </el-form-item>
         <el-row>
           <el-col :span="8">

@@ -19,7 +19,7 @@
                   :rules="[{required: true, message: '请输入计费项名称', trigger: 'blur'}]">
       <oms-input placeholder="请输入计费项名称" type="input" v-model="currentItem.billingCustomName"/>
     </el-form-item>
-    <el-form-item label="绑定货品计费项" prop="billingItemNo" label-width="140px"
+    <el-form-item label="计费项" prop="billingItemNo"
                   :rules="[{required: true, message: '请选择计费项', trigger: 'change'}]">
       <el-select placeholder="请选择计费项" v-model="currentItem.billingItemNo"
                  filterable clearable @change="billingItemNoChange">
