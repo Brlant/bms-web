@@ -15,10 +15,6 @@
                    v-for="item in currentCostType.bizTypes"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="计费项名称" prop="billingCustomName" label-width="120px"
-                  :rules="[{required: true, message: '请输入计费项名称', trigger: 'blur'}]">
-      <oms-input placeholder="请输入计费项名称" type="input" v-model="currentItem.billingCustomName"/>
-    </el-form-item>
     <el-form-item label="计费项" prop="billingItemNo"
                   :rules="[{required: true, message: '请选择计费项', trigger: 'change'}]">
       <el-select placeholder="请选择计费项" v-model="currentItem.billingItemNo"
@@ -26,6 +22,10 @@
         <el-option :label="item.name" :value="item.id" :key="item.id"
                    v-for="item in curCostItems"></el-option>
       </el-select>
+    </el-form-item>
+    <el-form-item label="计费项名称" prop="billingCustomName" label-width="120px"
+                  :rules="[{required: true, message: '请输入计费项名称', trigger: 'blur'}]">
+      <oms-input placeholder="请输入计费项名称" type="input" v-model="currentItem.billingCustomName"/>
     </el-form-item>
     <el-row v-show="currentItem.billingItemNo">
       <el-col :span="14">
@@ -117,6 +117,7 @@
 
       },
       billingItemNoChange(val) {
+        this.currentItem.billingCustomName = '';
         if (!val) {
           return;
         }
@@ -124,6 +125,7 @@
         this.currentItem.billingItemName = item.name;
         this.currentItem.billingRules = item.rule;
         this.currentItem.billingUnit = item.unit;
+        this.currentItem.billingCustomName = item.name;
       },
       formatPrice() {// 格式化单价，保留两位小数
         this.currentItem.unitPrice = utils.autoformatDecimalPoint(this.currentItem.unitPrice);

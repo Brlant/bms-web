@@ -36,6 +36,9 @@
         <el-table-column prop="billingItemName" label="计费项" width="200">
           <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
         </el-table-column>
+        <el-table-column prop="billingCustomName" label="计费项名称" width="200">
+          <template slot-scope="scope">{{scope.row.billingCustomName}}</template>
+        </el-table-column>
         <el-table-column prop="billingUntilPrice" label="单价" width="150px">
           <template slot-scope="scope">{{scope.row.billingUntilPrice | formatMoney}}</template>
         </el-table-column>
