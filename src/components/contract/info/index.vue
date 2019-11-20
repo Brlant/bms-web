@@ -54,7 +54,6 @@
             <el-col :span="6" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="'edit-contract'">编辑</des-btn>
               <des-btn @click="bind(item)" icon="allot" v-has="'add-contract-goods-model'">绑定货品计费模型</des-btn>
-              <des-btn @click="bindCost(item)" icon="allot" v-has="'add-contract-goods-model'">绑定非货品计费模型</des-btn>
               <des-btn @click="start(item)" icon="start" v-has="'enable-contract'" v-show="item.contractState === '0'">启用</des-btn>
               <des-btn @click="stop(item)" icon="stop" v-has="'disable-contract'" v-show="item.contractState === '1'">停用</des-btn>
             </el-col>

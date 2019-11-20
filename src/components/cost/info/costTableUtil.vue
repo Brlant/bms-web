@@ -9,6 +9,9 @@
     <el-table-column prop="actionType" label="业务类型">
       <template slot-scope="scope">{{formatBusinessType(scope.row)}}</template>
     </el-table-column>
+    <el-table-column prop="actionType" label="计费项名称" width="100">
+      <template slot-scope="scope">{{scope.row.billingCustomName}}</template>
+    </el-table-column>
     <el-table-column prop="actionType" label="计费项" width="140">
       <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
     </el-table-column>

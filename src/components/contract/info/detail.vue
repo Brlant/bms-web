@@ -77,25 +77,6 @@
           </el-table>
         </div>
       </div>
-      <div class="mt-10">
-        <h2 class="detail-title">绑定非货品计费模型</h2>
-        <el-table :data="costModelList" border class="clearfix " ref="orderDetail">
-          <el-table-column prop="billingModelName" label="计费模型"/>
-          <el-table-column prop="projectName" label="项目"/>
-          <el-table-column prop="projectName" label="创建时间" width="160">
-            <template slot-scope="scope">
-              <span>{{scope.row.createTime | time}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="opa" label="操作" width="100px">
-            <template slot-scope="scope">
-              <des-btn @click="deleteItem(scope.row, costModelList, `${scope.row.billingModelName}`)" icon="delete">删除
-              </des-btn>
-            </template>
-          </el-table-column>
-        </el-table>
-        <!--        <cost-table-util class="mb-10" :data="costBillingItems" :showBtn="false" v-show="showCostBillingItems"/>-->
-      </div>
     </div>
   </div>
 </template>

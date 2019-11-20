@@ -85,16 +85,6 @@
           </oms-form-row>
         </el-col>
         <el-col :span="8">
-          <oms-form-row label="计费项" :span="5">
-            <el-select filterable placeholder="请选择计费项"
-                       :clearable="true" v-model="searchCondition.billingItemName" popperClass="good-selects">
-              <el-option :label="item.name" :value="item.name" :key="item.id"
-                         v-for="item in billItemList">
-              </el-option>
-            </el-select>
-          </oms-form-row>
-        </el-col>
-        <el-col :span="8">
           <oms-form-row label="" :span="5">
             <el-checkbox style="margin-top: 8px" v-model="searchCondition.noStatementType" true-label="1">存在未结算金额
             </el-checkbox>

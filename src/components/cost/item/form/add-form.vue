@@ -6,7 +6,7 @@
     </template>
     <template slot="content">
       <el-form :model="form" :rules="rules" label-width="140px" ref="form">
-        <el-form-item label="计费项名称" prop="billingItemName">
+        <el-form-item label="计费项" prop="billingItemName">
           <oms-input placeholder="请输入计费模型名称" type="input" v-model="form.billingItemName"/>
         </el-form-item>
         <el-form-item label="计费类型" prop="billingType">
