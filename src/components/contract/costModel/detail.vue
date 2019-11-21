@@ -27,7 +27,7 @@
       <h3 class="clearfix">详情</h3>
       <oms-row label="计费模型名称" :span="5">{{ formItem.billingModelName }}</oms-row>
       <oms-row label="合同" :span="5">{{formItem.contractName}}</oms-row>
-      <oms-row label="是否绑定货品计费" :span="5">{{formItem.bindingGoodStatus === '1' ? '是' : '否'}}</oms-row>
+      <oms-row label="甲方" :span="5">{{formItem.customerName}}</oms-row>
       <h2>计费项</h2>
       <cost-table-util :data="data.billingItems" :showBtn="false"/>
     </div>

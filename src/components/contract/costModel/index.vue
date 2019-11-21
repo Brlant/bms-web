@@ -11,8 +11,9 @@
     <div class="order-list" style="margin-top: 20px">
       <el-row class="order-list-header">
 
-        <el-col :span="12">计费模型名称</el-col>
-        <el-col :span="9">合同</el-col>
+        <el-col :span="7">计费模型名称</el-col>
+        <el-col :span="7">合同</el-col>
+        <el-col :span="7">甲方</el-col>
         <el-col :span="3">操作</el-col>
       </el-row>
       <el-row v-if="loadingData">
@@ -32,8 +33,9 @@
              class="order-list-item order-list-item-bg" @click="showDetail(item)"
              v-for="item in dataList">
           <el-row>
-            <el-col :span="12">{{item.billingModelName}}</el-col>
-            <el-col :span="9">{{item.contractName}}</el-col>
+            <el-col :span="7">{{item.billingModelName}}</el-col>
+            <el-col :span="7">{{item.contractName}}</el-col>
+            <el-col :span="7">{{item.customerName}}</el-col>
             <el-col :span="3" class="opera-btn">
               <des-btn @click="edit(item)" icon="edit" v-has="'edit-contract-billing-model'">编辑</des-btn>
             </el-col>
