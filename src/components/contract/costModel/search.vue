@@ -27,6 +27,13 @@
             </el-select>
           </oms-form-row>
         </el-col>
+        <el-col :span="12">
+          <oms-form-row label="甲方" :span="5">
+            <org-select :list="orgList"
+                        :remoteMethod="queryAllOrg"
+                        placeholder="请输入名称搜索甲方" v-model="searchCondition.customerId"></org-select>
+          </oms-form-row>
+        </el-col>
       </el-form>
     </template>
   </search-template>
@@ -43,7 +50,8 @@
         searchCondition: {
           billingModelName: '',
           contractId: '',
-          bindingGoodStatus: ''
+          bindingGoodStatus: '',
+          customerId: ''
         },
         showSearch: false,
         list: [],
@@ -64,7 +72,8 @@
         this.searchCondition = {
           billingModelName: '',
           contractId: '',
-          bindingGoodStatus: ''
+          bindingGoodStatus: '',
+          customerId: ''
         };
         this.$emit('search', this.searchCondition);
       },
