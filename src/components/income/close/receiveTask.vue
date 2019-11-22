@@ -90,6 +90,9 @@
                       :rules="[{required: true, message: '请输入银行名称', trigger: 'blur'}]">
           <oms-input placeholder="请输入银行名称" type="input" v-model="form.bankName"/>
         </el-form-item>
+        <el-form-item label="银行账户" label-width="120px" prop="bankNo">
+          <oms-input placeholder="请输入银行账户" type="input" v-model="form.bankNo"/>
+        </el-form-item>
       </el-form>
     </template>
   </dialog-template>
@@ -110,7 +113,8 @@
           collectionType: '0',
           statementMode: '',
           backAmountTime: '',
-          bankName: ''
+          bankName: '',
+          bankNo: ''
         },
         doing: false,
         advancePayAmount: 0,
@@ -143,7 +147,8 @@
               collectionType: '0',
               statementMode: '',
               backAmountTime: '',
-              bankName: ''
+              bankName: '',
+              bankNo: ''
             };
             return;
           }
