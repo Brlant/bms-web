@@ -75,13 +75,14 @@
               </template>
             </el-table-column>
           </el-table>
+          <cost-table-util :data="dataItem.billingItems" :showBtn="false"/>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-  import {contractBindGoods} from '@/resources';
+  import {contractBindGoods, costModel} from '@/resources';
   import costTableUtil from '../../cost/info/costTableUtil';
 
   export default {
@@ -97,35 +98,31 @@
       index(val) {
         if (val !== 2) return;
         this.queryItems();
-        this.queryCostModel();
       }
     },
     data() {
       return {
         dataList: [],
-        billingItems: [],
-        costModelList: [],
-        costBillingItems: [],
         showBillingItems: false,
-        showCostBillingItems: false,
         loading: false
       };
     },
     methods: {
       queryItems() {
         this.data = [];
-        this.billingItems = [];
         this.loading = true;
         contractBindGoods.query({contractId: this.formItem.contractId}).then(res => {
           this.loading = false;
+          res.data.data.forEach(i => {
+            i.billingItems = [];
+            this.queryCostItem(i);
+          });
           this.dataList = res.data.data;
         });
       },
-      queryCostModel() {
-        this.costModel = [];
-        this.costBillingItems = [];
-        contractBindGoods.queryCostModel({contractId: this.formItem.contractId}).then(res => {
-          this.costModelList = res.data.data;
+      queryCostItem(i) {
+        costModel.queryDetail({billingModelId: i.billingModelId}).then(res => {
+          i.billingItems = res.data.data.billingItems || [];
         });
       },
       deleteItem(item, list, title) {
