@@ -38,8 +38,10 @@
         <el-col :span="12">
           <oms-row label="回款日期" :span="8">{{ formItem.backAmountTime | date }}</oms-row>
           <oms-row label="银行" :span="8">{{ formItem.bankName}}</oms-row>
+          <oms-row label="银行账户" :span="8" v-show="formItem.bankNo">{{ formItem.bankNo}}</oms-row>
           <oms-row label="是否使用预收款" :span="8">{{ formItem.collectionType | formatStatus }}</oms-row>
-          <oms-row label="预收款抵扣金额" :span="8" v-show="formItem.collectionType === '1'">{{ formItem.advancePayAmount | formatMoney }}</oms-row>
+          <oms-row label="预收款抵扣金额" :span="8" v-show="formItem.collectionType === '1'">
+            {{ formItem.advancePayAmount | formatMoney }}</oms-row>
         </el-col>
       </el-row>
       <h2 class="detail-title">结算单</h2>
