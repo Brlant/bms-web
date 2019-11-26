@@ -1,6 +1,6 @@
 <template>
   <dialog-template :btnSavePosition="120">
-    <template slot="title">{{addType === 0 ? '编辑结算单' : '开具发票'}}</template>
+    <template slot="title">{{addType === 0 ? '编辑结算单' : addType === 1 ? '开具发票' : '编辑发票'}}</template>
     <template slot="btnSave">
       <el-button class="mt-10" :disabled="doing" @click="save('form')" plain type="primary">保存</el-button>
     </template>
@@ -45,7 +45,7 @@
             </oms-input>
           </el-form-item>
         </div>
-        <div v-if="addType === 1">
+        <div v-if="addType === 1 || addType === 2">
           <el-form-item label="发票类型" label-width="120px" prop="invoiceType"
                         :rules="[{required: true, message: '请选择发票类型', trigger: 'blur'}]">
             <el-radio-group v-model="form.invoiceType">

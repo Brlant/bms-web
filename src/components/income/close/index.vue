@@ -44,13 +44,17 @@
       </el-table-column>
       <el-table-column prop="statementType" label="状态" width="120">
         <template slot-scope="scope">
-          {{orgType[scope.row.statementType].title}}
+          {{orgType[scope.row.statementType < 9  ?  1*scope.row.statementType + 1 : scope.row.statementType] &&
+          orgType[scope.row.statementType < 9  ? 1*scope.row.statementType + 1 : scope.row.statementType].title}}
         </template>
       </el-table-column>
-      <el-table-column prop="operate" label="操作" width="120" v-if="filters.statementType < 2" fixed="right">
+      <el-table-column prop="operate" label="操作" width="120" v-if="filters.statementType < 4" fixed="right">
         <template slot-scope="scope">
           <des-btn icon="edit" v-has="'edit-statement'" @click="edit(scope.row, 0)" v-show="filters.statementType === '0'">编辑</des-btn>
-          <des-btn icon="edit" v-has="'edit-statement'" @click="edit(scope.row, 1)" v-show="filters.statementType === '1'">开具发票</des-btn>
+          <des-btn icon="edit" v-has="'edit-statement'" @click="edit(scope.row, 1)"
+                   v-show="['1'].includes(filters.statementType)">开具发票</des-btn>
+          <des-btn icon="edit" v-has="'edit-statement'" @click="edit(scope.row, 2)"
+                   v-show="['2','3'].includes(filters.statementType)">编辑发票</des-btn>
         </template>
       </el-table-column>
     </el-table>

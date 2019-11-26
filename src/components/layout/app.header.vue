@@ -422,7 +422,7 @@
       },
       changeMenuCollapse: function () {
         this.isCollapse = !this.isCollapse;
-        this.$store.commit('changeBodyLeft', this.isCollapse);
+        // this.$store.commit('changeBodyLeft', this.isCollapse);
         window.localStorage.setItem('collapse', this.isCollapse ? 1 : 0);
       }
     },
@@ -432,7 +432,7 @@
         isCollapse = parseInt(isCollapse, 10);
       }
       this.isCollapse = !!isCollapse;
-      this.$store.commit('changeBodyLeft', this.isCollapse);
+      // this.$store.commit('changeBodyLeft', this.isCollapse);
       let defaultOpenMenus = [];
       this.$route.matched.forEach(item => {
         if (item.path) {
