@@ -88,10 +88,10 @@
         </el-row>
         <el-form-item label="银行名称" label-width="120px" prop="bankName"
                       :rules="[{required: true, message: '请输入银行名称', trigger: 'blur'}]">
-          <oms-input placeholder="请输入银行名称" type="input" v-model="form.bankName"/>
+          <oms-input placeholder="请输入银行名称" type="input" v-model="form.bankName" clearable/>
         </el-form-item>
         <el-form-item label="银行账户" label-width="120px" prop="bankNo">
-          <oms-input placeholder="请输入银行账户" type="input" v-model="form.bankNo"/>
+          <oms-input placeholder="请输入银行账户" type="input" v-model="form.bankNo" clearable/>
         </el-form-item>
       </el-form>
     </template>
@@ -135,6 +135,9 @@
       owedAmount() {
         let count = this.collectionTotal - (Number(this.form.advancePayAmount) || 0);
         return count < 0 ? this.collectionTotal : count;
+      },
+      bmsBank() {
+        return this.$getDict('bmsBank');
       }
     },
     watch: {
@@ -152,6 +155,15 @@
             };
             return;
           }
+          this.bmsBank.forEach(i => {
+            if (i.label === '银行账户') {
+              this.form.bankNo = i.key;
+              return;
+            }
+            if (i.label === '银行名称') {
+              this.form.bankName = i.key;
+            }
+          });
           this.queryBalance(val[0].customerId);
         },
         immediate: true
