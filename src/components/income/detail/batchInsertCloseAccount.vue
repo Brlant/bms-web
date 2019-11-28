@@ -146,7 +146,7 @@
       queryStatementList() {
         let params = {
           contractId: this.data[0].contractId,
-          attachmentType: '0'
+          statementType: '0'
         };
         closeAccount.queryList(params).then(res => {
           this.statementList = res.data.data;
