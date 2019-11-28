@@ -231,6 +231,9 @@ export const contractAccountDetail = resource('', http, {
   },
   export(params) {
     return http.post('/bms-boa/export-info', params)
+  },
+  createAmount(obj) {
+    return http.post('/bms-sd/add-statement-estimated-amount', obj)
   }
 });
 

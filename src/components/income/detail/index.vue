@@ -35,6 +35,12 @@
           添加到已有结算单
         </el-button>
 
+        <el-button @click="createCloseAccount" plain size="small"
+                   v-show="filters.attachmentType === '2'" v-has="'add-statement-estimated-amount'">
+          <f-a class="icon-small" name="allot"></f-a>
+          生成预计金额结算单
+        </el-button>
+
         <el-button @click="exportExcel" plain size="small">
           <f-a class="icon-small" name="export"></f-a>
           导出Excel
@@ -141,11 +147,13 @@
   import Detail from './detail.vue';
   import CloseAccount from './closeAccount';
   import batchInsertCloseAccount from './batchInsertCloseAccount';
+  import createForm from './form/create-form';
   export default {
     components: {
       SearchPart,
       CloseAccount,
-      batchInsertCloseAccount
+      batchInsertCloseAccount,
+      createForm
     },
     mixins: [CommonMixin],
     data() {
@@ -158,7 +166,8 @@
           0: addForm,
           1: Detail,
           2: CloseAccount,
-          3: batchInsertCloseAccount
+          3: batchInsertCloseAccount,
+          4: createForm
         },
         orgType: {
           0: {'title': '全部', 'num': 0, 'attachmentType': '', isAll: true},
@@ -235,6 +244,10 @@
         list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
         this.dySelectList = list;
         this.showPart(3);
+      },
+      createCloseAccount() {
+        this.form = {};
+        this.showPart(4);
       },
       formatBillingItemName(item) {
         let bill = this.$store.state.billItemList.find(f => f.id === item.billingItemName);
