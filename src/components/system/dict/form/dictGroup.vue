@@ -68,9 +68,9 @@
     },
     methods: {
       onTypeSubmit: function (formName) {
-        this.doing = true;
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.doing = true;
             if (this.action === 'add') {
               DictGroup.save(this.dictForm).then(res => {
                 this.$notify.success({

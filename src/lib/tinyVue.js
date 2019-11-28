@@ -65,6 +65,8 @@ import ColorPicker from 'element-ui/lib/color-picker';
 import Transfer from 'element-ui/lib/transfer';
 import locale from 'element-ui/lib/locale';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+import LargeDataList from '@/components/common/large-data-list';
+
 import {
   compressedImg,
   CuPagination,
@@ -198,7 +200,8 @@ const tinyVue = [
   Scrollbar,
   compressedImg,
   TnInputAutoComplete,
-  perm
+  perm,
+  LargeDataList
 ];
 
 const install = function (Vue, opts = {}) {
