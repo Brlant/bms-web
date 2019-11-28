@@ -150,11 +150,17 @@ export const preBalance = resource('', http, {
 
 // 结算单
 export const closeAccount = resource('', http, {
+  batchInsertAccount(obj) {
+    return http.post('/bms-sd/add-statement', obj);
+  },
   batchCreate(obj) {
     return http.post('/bms-sd/race-blending', obj);
   },
   query(obj) {
     return http.post('/bms-statement/query-page', obj);
+  },
+  queryList(obj) {
+    return http.post('bms-statement/query', obj);
   },
   queryStateNum: (params) => {
     return http.post('/bms-statement/count', params);

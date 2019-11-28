@@ -172,6 +172,10 @@ export default [
           {
             id: 'race-blending',
             label: '批量生成结算单'
+          },
+          {
+            id: 'add-statement',
+            label: '添加到已有结算单'
           }
         ]
       },

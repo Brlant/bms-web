@@ -84,14 +84,14 @@
             <oms-input placeholder="请输入对账单号" type="input" v-model="searchCondition.accountCheckNo"/>
           </oms-form-row>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="5">
           <oms-form-row label="" :span="5">
             <el-checkbox style="margin-top: 8px" v-model="searchCondition.noStatementType" true-label="1">存在未结算金额
             </el-checkbox>
           </oms-form-row>
         </el-col>
-        <el-col :span="12">
-          <oms-form-row label="创建时间" :span="3">
+        <el-col :span="10">
+          <oms-form-row label="创建时间" :span="5">
             <el-date-picker v-model="contractTime" type="datetimerange"  :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
           </oms-form-row>
