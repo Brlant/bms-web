@@ -12,6 +12,8 @@ before_script:
 lint:
   stage: test
   script: npm run lint
+  tags:
+    - node
 
 # 编译
 local-build:
@@ -21,3 +23,5 @@ local-build:
     - scp -r dist/* root@172.25.10.10:/opt/dev-web-dist/bms
   only:
     - dev
+  tags:
+    - node
