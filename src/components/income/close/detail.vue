@@ -27,8 +27,13 @@
   <div class="content-part">
     <div class="content-right min-gutter">
       <h3 class="clearfix">详情</h3>
-      <h2 class="detail-title">基础信息</h2>
-      <el-row>
+      <h2 class="detail-title">
+        基础信息
+        <span class="pull-right">
+           <el-button size="mini" type="primary" @click="exportGoodsTotal" :loading="exportGoodsLoading">导出货品合计</el-button>
+        </span>
+      </h2>
+      <el-row class="clearfix">
         <el-col :span="12">
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>
           <oms-row label="合同" :span="8">{{ formItem.contractName }}</oms-row>
@@ -118,6 +123,7 @@
 </template>
 <script>
   import {closeAccount} from '@/resources';
+  import utils from '@/tools/utils';
 
   export default {
     props: {
@@ -131,7 +137,8 @@
     data() {
       return {
         billAccountList: [],
-        loading: false
+        loading: false,
+        exportGoodsLoading: false
       };
     },
     computed: {
@@ -178,6 +185,15 @@
               this.$emit('change');
             }
           });
+        });
+      },
+      exportGoodsTotal() {
+        this.exportGoodsLoading = true;
+        closeAccount.exportGoodsExcel({statementId: this.formItem.statementId}).then(res => {
+          utils.download(res.data.data.path);
+          this.exportGoodsLoading = false;
+        }).catch(() => {
+          this.exportGoodsLoading = false;
         });
       }
     }

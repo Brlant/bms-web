@@ -176,6 +176,9 @@ export const closeAccount = resource('', http, {
   },
   export: (params) => {
     return http.post('/bms-sd/export-info', params);
+  },
+  exportGoodsExcel(params) {
+    return http.get('/bms-sd/export-business-info', {params})
   }
 });
 
