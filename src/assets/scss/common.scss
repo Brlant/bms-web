@@ -351,3 +351,9 @@
   }
 }
 
+.app-body {
+  .el-transfer-panel__item.el-checkbox .el-checkbox__label {
+    overflow: visible;
+    text-overflow: clip;
+  }
+}

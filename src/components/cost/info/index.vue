@@ -59,7 +59,7 @@
       </el-pagination>
     </div>
 
-    <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox">
+    <page-right :css="defaultPageRight" :show="showIndex !== -1" @right-close="resetRightBox" :doCloseOnModalClick="true">
       <component :formItem="form" :index="showIndex" :statusType="statusType" :is="currentPart" @change="change"
                  @right-close="resetRightBox"/>
     </page-right>

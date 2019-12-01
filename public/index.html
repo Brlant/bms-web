@@ -6,6 +6,19 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>BMS</title>
+    <script>
+      var phoneScale = 1;
+      if (window.screen && window.screen.width < 1250) {
+        phoneScale = window.screen.width / 1250;
+        if (window.orientation === 90 || window.orientation === -90) {
+          phoneScale = window.screen.height / 1250;
+        }
+        document.write('<meta name="viewport" id="viewPort" content="width=1250, initial-scale=' + phoneScale + ', shrink-to-fit=no">');
+      } else {
+        document.write('<meta name=viewport id="viewPort" content="width=device-width,initial-scale=1,shrink-to-fit=no">');
+      }
+
+    </script>
   </head>
   <body>
     <noscript>
@@ -13,5 +26,25 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      /*
+        var targetProtocol = 'https:';
+        if (window.location.protocol !== targetProtocol) {
+          window.location.href = targetProtocol + window.location.href.substring(window.location.protocol.length);
+        }
+      */
+      window.onorientationchange = function () {
+        var phoneScale = 1;
+        if (window.screen && window.screen.width < 1250) {
+          phoneScale = window.screen.width / 1250;
+          if (window.orientation === 90 || window.orientation === -90) {
+            phoneScale = window.screen.height / 1250;
+          }
+          document.getElementById('viewPort').setAttribute('content', 'width=1250, initial-scale=' + phoneScale + ', shrink-to-fit=no');
+        } else {
+          document.getElementById('viewPort').setAttribute('content', 'width=device-width,initial-scale=1,shrink-to-fit=no');
+        }
+      };
+    </script>
   </body>
 </html>
