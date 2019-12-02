@@ -82,7 +82,6 @@ import {
   Nl2br,
   orgGoodsSelect,
   orgSelect,
-  PageRight,
   Remove,
   Scrollbar,
   statusList,
@@ -104,7 +103,8 @@ import DialogTemplate from '@/components/common/dialog-template';
 import SearchTemplate from '@/components/common/search-template';
 import refreshCycle from '@/components/common/refresh-cycle';
 import WholeErrorSignHandle from '@/tools/whole-error-sign-handle';
-import perm from '@/components/common/perm'
+import perm from '@/components/common/perm';
+import PageRight from '@/components/common/page.right';
 
 const tinyVue = [
   Pagination,

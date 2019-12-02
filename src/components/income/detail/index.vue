@@ -29,6 +29,18 @@
           批量生成结算单
         </el-button>
 
+        <el-button @click="batchInsertCloseAccount" plain size="small" v-has="'add-statement'"
+                   v-show="filters.attachmentType === '2'">
+          <f-a class="icon-small" name="allot"></f-a>
+          添加到已有结算单
+        </el-button>
+
+        <el-button @click="createCloseAccount" plain size="small"
+                   v-show="filters.attachmentType === '2'" v-has="'add-statement-estimated-amount'">
+          <f-a class="icon-small" name="allot"></f-a>
+          生成预计金额结算单
+        </el-button>
+
         <el-button @click="exportExcel" plain size="small">
           <f-a class="icon-small" name="export"></f-a>
           导出Excel
@@ -134,11 +146,14 @@
   import {accountBill, contractAccountDetail} from '@/resources';
   import Detail from './detail.vue';
   import CloseAccount from './closeAccount';
-
+  import batchInsertCloseAccount from './batchInsertCloseAccount';
+  import createForm from './form/create-form';
   export default {
     components: {
       SearchPart,
-      CloseAccount
+      CloseAccount,
+      batchInsertCloseAccount,
+      createForm
     },
     mixins: [CommonMixin],
     data() {
@@ -150,7 +165,9 @@
         dialogComponents: {
           0: addForm,
           1: Detail,
-          2: CloseAccount
+          2: CloseAccount,
+          3: batchInsertCloseAccount,
+          4: createForm
         },
         orgType: {
           0: {'title': '全部', 'num': 0, 'attachmentType': '', isAll: true},
@@ -215,6 +232,22 @@
         list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
         this.dySelectList = list;
         this.showPart(2);
+      },
+      batchInsertCloseAccount() {
+        if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
+        let obj = {};
+        this.selectList.forEach(i => obj[i.contractId] = '');
+        if(Object.keys(obj).length > 1) {
+          return this.$notify.info({message: '请选择相同合同的计费明细'})
+        }
+        let list = JSON.parse(JSON.stringify(this.selectList));
+        list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
+        this.dySelectList = list;
+        this.showPart(3);
+      },
+      createCloseAccount() {
+        this.form = {};
+        this.showPart(4);
       },
       formatBillingItemName(item) {
         let bill = this.$store.state.billItemList.find(f => f.id === item.billingItemName);

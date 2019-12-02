@@ -172,6 +172,14 @@ export default [
           {
             id: 'race-blending',
             label: '批量生成结算单'
+          },
+          {
+            id: 'add-statement',
+            label: '添加到已有结算单'
+          },
+          {
+            id: 'add-statement-estimated-amount',
+            label: '生成预计金额结算单'
           }
         ]
       },
