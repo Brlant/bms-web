@@ -60,8 +60,8 @@
         </el-col>
       </el-row>
       <h2 class="detail-title">计费明细</h2>
-      <large-data-list :dataList="billAccountList">
-        <el-table slot-scope="{children}" :data="children" v-loading="loading" border class="clearfix mt-20" ref="orderDetail">
+      <large-data-list :dataList="billAccountList" class="mt-20">
+        <el-table slot-scope="{children}" :data="children" v-loading="loading" border class="clearfix" ref="orderDetail">
           <el-table-column prop="contractName" label="合同" width="100">
             <template slot-scope="scope">{{scope.row.contractName}}</template>
           </el-table-column>
