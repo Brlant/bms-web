@@ -1,5 +1,5 @@
 <template>
-  <div :style="`height: ${height}px;overflow-y:auto`" @scroll="scrollEvent">
+  <div :style="`max-height: ${height}px;overflow-y:auto`" @scroll="scrollEvent">
     <slot :children="children"></slot>
   </div>
 </template>
