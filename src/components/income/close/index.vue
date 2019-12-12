@@ -1,6 +1,6 @@
 <template>
   <div class="order-page">
-    <search-part @search="searchResult">
+    <search-part @search="searchResult" :statusList="orgType">
       <template slot="btn">
         <el-button  v-has="'batch-collection-jobs-statement'" @click="batchCreateReceiveTask" plain size="small"
                    v-show="filters.statementType === '2'">
@@ -15,7 +15,7 @@
     </search-part>
     <status-list :activeStatus="filters.statementType" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
-                 :formatClass="formatClass"></status-list>
+                 :formatClass="formatClass" v-if="!filters.statementType.includes(',')"></status-list>
     <el-table :data="dataList" v-loading="loadingData"
               @selection-change="selectionChange"
               :row-style="{cursor: 'pointer'}" @row-click="showDetail"
@@ -174,7 +174,13 @@
         return data ? this.$moment(data).format('YYYY-MM-DD HH:mm:ss') : '';
       },
       searchResult: function (search) {
-        this.filters = Object.assign({}, this.filters, search);
+        let obj = {};
+        if(!search.statementType[0]) {
+          obj.statementType = this.filters.statementType.includes(',') ? '0' : this.filters.statementType;
+        } else {
+          obj.statementType = search.statementType.join(',');
+        }
+        this.filters = Object.assign({}, this.filters, search, obj);
       },
       resetRightBox() {
         this.defaultPageRight.width = '920px';

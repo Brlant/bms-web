@@ -30,8 +30,34 @@
           </oms-form-row>
         </el-col>
         <el-col :span="8">
+          <oms-form-row label="项目" :span="5">
+            <el-select filterable remote placeholder="请选择项目" :remote-method="queryProjectList"
+                       @focus="queryProjectList()"
+                       :clearable="true" v-model="searchCondition.projectId" popperClass="good-selects">
+              <el-option :label="item.projectName" :value="item.projectId" :key="item.projectId"
+                         v-for="item in projectList">
+              </el-option>
+            </el-select>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
           <oms-form-row label="结算单号" :span="5">
             <oms-input placeholder="请输入结算单号" type="input" v-model="searchCondition.statementNo"/>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="对账单号" :span="5">
+            <oms-input placeholder="请输入对账单号" type="input" v-model="searchCondition.accountCheckNo"/>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="状态" :span="5">
+            <el-select  placeholder="请选择状态" multiple
+                       :clearable="true" v-model="searchCondition.statementType" popperClass="good-selects">
+              <el-option :label="item.title" :value="item.statementType" :key="item.statementType"
+                         v-for="item in curStatusList">
+              </el-option>
+            </el-select>
           </oms-form-row>
         </el-col>
       </el-form>
@@ -44,18 +70,28 @@
 
   export default {
     mixins: [methodsMixin],
-
+    props: {
+      statusList: Object
+    },
     data: function () {
       return {
         searchCondition: {
           contractId: '',
           customerId: '',
-          statementNo: ''
+          statementNo: '',
+          accountCheckNo: '',
+          projectId: '',
+          statementType: []
         },
         showSearch: false,
         list: [],
         times: []
       };
+    },
+    computed: {
+      curStatusList() {
+        return Object.values(this.statusList).slice(1);
+      }
     },
     mounted() {
       let no = this.$route.query.no;
@@ -71,7 +107,10 @@
         this.searchCondition = {
           contractId: '',
           customerId: '',
-          statementNo: ''
+          statementNo: '',
+          accountCheckNo: '',
+          projectId: '',
+          statementType: []
         };
         this.$emit('search', this.searchCondition);
       },
