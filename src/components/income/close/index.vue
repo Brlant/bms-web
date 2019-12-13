@@ -1,6 +1,6 @@
 <template>
   <div class="order-page">
-    <search-part @search="searchResult" :statusList="orgType">
+    <search-part ref="search" @search="searchResult" :statusList="orgType">
       <template slot="btn">
         <el-button  v-has="'batch-collection-jobs-statement'" @click="batchCreateReceiveTask" plain size="small"
                    v-show="filters.statementType === '2'">
@@ -10,6 +10,10 @@
         <el-button @click="exportExcel" plain size="small">
           <f-a class="icon-small" name="export"></f-a>
           导出计费明细
+        </el-button>
+        <el-button @click="exportCloseExcel" plain size="small">
+          <f-a class="icon-small" name="export"></f-a>
+          导出Excel
         </el-button>
       </template>
     </search-part>
@@ -134,6 +138,24 @@
         if (!this.selectList.length) return this.$notify.info({message: '请选择结算单'});
         this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
         closeAccount.export(this.selectList.map(m => m.statementId)).then(res => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+          utils.download(res.data.data.path);
+        }).catch(() => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+        });
+      },
+      exportCloseExcel() {
+        this.$refs.search.setSearchCondition();
+        let search = this.$refs.search.searchCondition;
+        let obj = {};
+        if(!search.statementType[0]) {
+          obj.statementType = this.filters.statementType.includes(',') ? '0' : this.filters.statementType;
+        } else {
+          obj.statementType = search.statementType.join(',');
+        }
+        let filters = Object.assign({}, this.filters, search, obj);
+        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
+        closeAccount.exportCloseExcel(filters).then(res => {
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
           utils.download(res.data.data.path);
         }).catch(() => {

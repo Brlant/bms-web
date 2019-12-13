@@ -51,6 +51,24 @@
           </oms-form-row>
         </el-col>
         <el-col :span="8">
+          <oms-form-row label="结算时间" :span="5">
+            <el-date-picker v-model="statementTime" type="datetimerange"  :default-time="['00:00:00', '23:59:59']">
+            </el-date-picker>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="回款时间" :span="5">
+            <el-date-picker v-model="backAmountTime" type="datetimerange"  :default-time="['00:00:00', '23:59:59']">
+            </el-date-picker>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="开票时间" :span="5">
+            <el-date-picker v-model="invoiceTime" type="datetimerange"  :default-time="['00:00:00', '23:59:59']">
+            </el-date-picker>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
           <oms-form-row label="状态" :span="5">
             <el-select  placeholder="请选择状态" multiple
                        :clearable="true" v-model="searchCondition.statementType" popperClass="good-selects">
@@ -81,11 +99,20 @@
           statementNo: '',
           accountCheckNo: '',
           projectId: '',
+          startStatementTime: '',
+          endStatementTime: '',
+          startBackAmountTime: '',
+          endBackAmountTime: '',
+          startInvoiceTime: '',
+          endInvoiceTime: '',
           statementType: []
         },
         showSearch: false,
         list: [],
-        times: []
+        times: [],
+        statementTime: '',
+        backAmountTime: '',
+        invoiceTime: ''
       };
     },
     computed: {
@@ -100,7 +127,16 @@
       this.search();
     },
     methods: {
+      setSearchCondition() {
+        this.searchCondition.startStatementTime = this.statementTime && this.statementTime[0] || '';
+        this.searchCondition.endStatementTime = this.statementTime && this.statementTime[1] || '';
+        this.searchCondition.startBackAmountTime = this.backAmountTime && this.backAmountTime[0] || '';
+        this.searchCondition.endBackAmountTime = this.backAmountTime && this.backAmountTime[1] || '';
+        this.searchCondition.startInvoiceTime = this.invoiceTime && this.invoiceTime[0] || '';
+        this.searchCondition.endInvoiceTime = this.invoiceTime && this.invoiceTime[1] || '';
+      },
       search() {
+        this.setSearchCondition();
         this.$emit('search', this.searchCondition);
       },
       reset() {
@@ -110,8 +146,17 @@
           statementNo: '',
           accountCheckNo: '',
           projectId: '',
+          startStatementTime: '',
+          endStatementTime: '',
+          startBackAmountTime: '',
+          endBackAmountTime: '',
+          startInvoiceTime: '',
+          endInvoiceTime: '',
           statementType: []
         };
+        this.statementTime = '';
+        this.backAmountTime = '';
+        this.invoiceTime = '';
         this.$emit('search', this.searchCondition);
       },
       isShow(val) {
