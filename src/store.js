@@ -129,7 +129,12 @@ const state = {
     {key: '1', label: '支票'},
     {key: '2', label: '现金'}
   ],
-  billItemList: []
+  billItemList: [],
+  dataRightType: [
+    {key: '0', label: '甲方'},
+    {key: '1', label: '合同'},
+    {key: '2', label: '项目'}
+  ]
 };
 
 const mutations = {

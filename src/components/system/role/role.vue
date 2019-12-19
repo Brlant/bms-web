@@ -79,17 +79,18 @@
 
       <el-table :data="showTypeList" :row-style="{cursor: 'pointer'}" @row-click="showType"
                 border class="clearfix mt-20" ref="orderDetail" v-loading="loadingData">
-        <el-table-column prop="name" label="角色" min-width="200"></el-table-column>
+        <el-table-column prop="title" label="角色" min-width="200"></el-table-column>
         <el-table-column prop="usableStatus" label="状态" width="100px">
           <template slot-scope="scope">
             {{ scope.row.usableStatus == 1 ? '可用' : '停用' }}
           </template>
         </el-table-column>
-        <el-table-column prop="operate" label="操作" min-width="200">
+        <el-table-column prop="operate" label="操作" width="300">
           <template slot-scope="scope">
             <des-btn icon="edit" v-has="'access-role-edit'" @click="edit(scope.row)">编辑</des-btn>
             <des-btn icon="forbidden" v-has="'wms-access-role-stop'" @click="forbid(scope.row)" v-show="scope.row.usableStatus == 1">停用</des-btn>
             <des-btn icon="start" v-has="'wms-access-role-start'" @click="useNormal(scope.row)" v-show="scope.row.usableStatus == 0">启用</des-btn>
+            <des-btn icon="allot" v-has="'bms-dpr-add'" @click="editDataRight(scope.row)">数据权限</des-btn>
           </template>
         </el-table-column>
       </el-table>
@@ -108,8 +109,12 @@
                  @changed="change"></role-form>
     </page-right>
     <page-right :show="showDetailRight" @right-close="resetRightBox" :css="{'width':'800px'}">
-      <detail :formItem="form" :checkedMenuList="checkedMenuList" @close="showDetailRight=false"
+      <detail :formItem="form" :showDetailRight="showDetailRight" :checkedMenuList="checkedMenuList" @close="showDetailRight=false"
                  @changed="change"></detail>
+    </page-right>
+    <page-right :show="showDataRight" @right-close="resetRightBox" :css="{'width':'800px'}">
+      <data-right :formItem="form" :showDataRight="showDataRight" @close="showDataRight=false"
+              @changed="change"></data-right>
     </page-right>
   </div>
 </template>
@@ -119,13 +124,15 @@
   import roleMixin from '@/mixins/roleMixin';
   import utils from '@/tools/utils';
   import detail from './detail'
+  import dataRight from './form/data-right'
   export default {
-    components: {roleForm, detail},
+    components: {roleForm, detail, dataRight},
     mixins: [roleMixin],
     data: function () {
       return {
         showRight: false,
         showDetailRight: false,
+        showDataRight: false,
         resData: {},
         showTypeList: [],
         form: {},
@@ -281,6 +288,7 @@
         this.form = {};
         this.resData = {};
         this.showDetailRight = false;
+        this.showDataRight = false;
       },
       addType: function () {
         this.action = 'add';
@@ -311,6 +319,18 @@
           });
           this.form.checkedIdList = checkedIdList;
           this.showDetailRight = true;
+        })
+      },
+      editDataRight(item) {
+        this.queryRoleDetail(item.id).then(res => {
+          this.form = JSON.parse(JSON.stringify(this.resData));
+          let checkedIdList = [];
+          // 勾选已经有的权限
+          this.form.permissionList.forEach(val => {
+            checkedIdList.push(val.name);
+          });
+          this.form.checkedIdList = checkedIdList;
+          this.showDataRight = true;
         })
       },
       forbid: function (item) {

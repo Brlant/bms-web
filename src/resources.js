@@ -107,6 +107,15 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+// 收款作业
+export const roleDataRight = resource('', http, {
+  query(params) {
+    return http.get('/bms-dpr/query-role-id', {params});
+  },
+  save(obj) {
+    return http.post('/bms-dpr/add', obj);
+  }
+});
 
 // 收款作业
 export const receiveTask = resource('', http, {

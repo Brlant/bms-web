@@ -315,6 +315,9 @@ export default [
           'sort': null,
           'children': null,
           'leaf': true
+        }, {
+          id: 'bms-dpr-add',
+          label: '数据权限'
         }],
         'leaf': false
       },

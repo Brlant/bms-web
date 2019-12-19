@@ -40,22 +40,43 @@
           </el-col>
         </el-col>
       </el-row>
-      <h2 class="detail-title">角色权限</h2>
       <el-row>
-        <el-tree :data="checkedMenuList" :props="defaultProps" default-expand-all></el-tree>
+        <el-col :span="10">
+          <h2 class="detail-title">角色权限</h2>
+          <el-row>
+            <el-tree :data="checkedMenuList" :props="defaultProps" default-expand-all></el-tree>
+          </el-row>
+        </el-col>
+        <el-col :span="14">
+          <div v-show="dataList.length">
+            <h2 class="detail-title">数据权限</h2>
+            <el-table :data="orgList" border  class="mt-10">
+              <el-table-column prop="objectTypeName" label="甲方"></el-table-column>
+            </el-table>
+
+            <el-table :data="contractList" border  class="mt-10">
+              <el-table-column prop="objectTypeName" label="合同"></el-table-column>
+            </el-table>
+
+            <el-table :data="projectList" border  class="mt-10">
+              <el-table-column prop="objectTypeName" label="项目"></el-table-column>
+            </el-table>
+          </div>
+        </el-col>
       </el-row>
     </div>
   </div>
 </template>
 <script>
+  import {roleDataRight} from '@/resources';
+
   export default {
     props: {
       formItem: {
         type: Object,
         required: true
       },
-      index: Number,
-      orgType: Object,
+      showDetailRight: Boolean,
       checkedMenuList: Array
     },
     data() {
@@ -64,19 +85,29 @@
           children: 'children',
           label: 'label',
           isLeaf: 'leaf'
-        }
+        },
+        dataList: []
       };
     },
-    watch: {
-      formItem: {
-        handler(val) {
-
-        },
-        immediate: true
+    computed: {
+      orgList() {
+        return this.dataList.filter(f => f.objectType === '0')
+      },
+      contractList() {
+        return this.dataList.filter(f => f.objectType === '1')
+      },
+      projectList() {
+        return this.dataList.filter(f => f.objectType === '2')
       }
     },
-    methods: {
-
+    watch: {
+      showDetailRight(val) {
+        this.dataList = [];
+        if (!val) return;
+        roleDataRight.query({roleId: this.formItem.id}).then(res => {
+          this.dataList = res.data.data.dataPermissionsRolesDTOList || [];
+        });
+      }
     }
   };
 </script>
