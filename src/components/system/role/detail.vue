@@ -50,15 +50,15 @@
         <el-col :span="14">
           <div v-show="dataList.length">
             <h2 class="detail-title">数据权限</h2>
-            <el-table :data="orgList" border  class="mt-10">
+            <el-table :data="orgList" border  class="mt-10" v-show="orgList.length">
               <el-table-column prop="objectTypeName" label="甲方"></el-table-column>
             </el-table>
 
-            <el-table :data="contractList" border  class="mt-10">
+            <el-table :data="contractList" border  class="mt-10" v-show="contractList.length">
               <el-table-column prop="objectTypeName" label="合同"></el-table-column>
             </el-table>
 
-            <el-table :data="projectList" border  class="mt-10">
+            <el-table :data="projectList" border  class="mt-10" v-show="projectList.length">
               <el-table-column prop="objectTypeName" label="项目"></el-table-column>
             </el-table>
           </div>
