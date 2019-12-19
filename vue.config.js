@@ -14,7 +14,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'http://bms.cnvss.net',
+        target: 'https://sh-bms.cdcerp.cn/',
         changOrigin: true
       }
     }

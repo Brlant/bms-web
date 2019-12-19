@@ -61,6 +61,9 @@
             class="status-num">{{item.num}}</span></div>
         </div>
         <span class="btn-group-right">
+            <span class="btn-search-toggle open" style="margin-right: 10px">
+                  <single-input v-model="filters.keyWord" placeholder="请输入关键字搜索"></single-input>
+            </span>
           <perm label="wms-access-platfrom-permission-export">
            <span @click.stop.prevent="exportRoleInfo">
                <a href="#" class="btn-circle" @click.prevent=""
@@ -68,127 +71,45 @@
                  class="el-icon-t-print"></i> </a>导出角色权限信息
             </span>
           </perm>
+            <perm label="access-role-add">
+               <a href="#" class="btn-circle" @click.stop.prevent="addType"><i class="el-icon-t-plus"></i></a>新增
+            </perm>
         </span>
       </div>
-      <div class="container d-table">
-        <div class="d-table-left">
-          <div class="d-table-col-wrap" :style="'height:'+bodyHeight" @scroll="scrollLoadingData">
-            <h2 class="header">
-                <span class="pull-right">
-                  <perm label="access-role-add">
-                    <a href="#" class="btn-circle" @click.stop.prevent="addType"><i class="el-icon-t-plus"></i> </a>
-                  </perm>
-                    <a href="#" class="btn-circle" @click.prevent="searchType"><i
-                      class="el-icon-t-search"></i> </a>
-                </span>
-              角色管理
-            </h2>
-            <div class="search-left-box" v-show="showTypeSearch">
-              <oms-input v-model="filters.keyWord" placeholder="请输入名称搜索" :showFocus="showTypeSearch"></oms-input>
-            </div>
-            <div v-if="!currentItem.title" class="empty-info">
-              暂无信息
-            </div>
-            <div v-else>
-              <ul class="show-list">
-                <li v-for="item in showTypeList" class="list-item" @click="showType(item)"
-                    :class="{'active':item.id===currentItem.id}">
-                  <div class="id-part">
-                    {{item.name }}
-                  </div>
-                  <div>
-                    {{item.title }}
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="btn-left-list-more">
-              <bottom-loading></bottom-loading>
-              <div @click.stop="getMore" v-show="!$store.state.bottomLoading">
-                <el-button v-show="pager.currentPage<pager.totalPage">加载更多</el-button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="d-table-right">
-          <div class="d-table-col-wrap" :style="'height:'+bodyHeight">
-            <div v-if="!currentItem.title" class="empty-info">
-              暂无信息
-            </div>
-            <div v-else>
-              <h2 class="clearfix">
-                <span class="pull-right">
-                 <el-button-group>
-                     <perm label="access-role-edit">
-                       <el-button @click="edit()">
-                         <i class="el-icon-t-edit"></i>
-                         编辑
-                       </el-button>
-                     </perm>
-                      <perm label="wms-access-role-stop">
-                        <el-button @click="forbid()" v-show="resData.usableStatus == 1">
-                          <i class="el-icon-t-forbidden"></i>
-                          停用
-                        </el-button>
-                      </perm>
-                       <perm label="wms-access-role-start">
-                         <el-button @click="useNormal()" v-show="resData.usableStatus == 0">
-                           <i class="el-icon-t-start"></i>启用
-                         </el-button>
-                       </perm>
-                  </el-button-group>
-                </span>
-              </h2>
-              <div class="page-main-body">
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色名称：
-                  </el-col>
-                  <el-col :span="20">
-                    {{ resData.title }}
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色英文名称：
-                  </el-col>
-                  <el-col :span="20">
-                    {{ resData.name }}
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色状态：
-                  </el-col>
-                  <el-col :span="20">
-                    {{ resData.usableStatus == 1 ? '可用' : '停用' }}
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色描述：
-                  </el-col>
-                  <el-col :span="20">
-                    {{resData.remark}}
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4" class="text-right">
-                    角色权限：
-                  </el-col>
-                  <el-col :span="20">
-                    <el-tree :data="checkedMenuList" :props="defaultProps" default-expand-all></el-tree>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      <el-table :data="showTypeList" :row-style="{cursor: 'pointer'}" @row-click="showType"
+                border class="clearfix mt-20" ref="orderDetail" v-loading="loadingData">
+        <el-table-column prop="name" label="角色" min-width="200"></el-table-column>
+        <el-table-column prop="usableStatus" label="状态" width="100px">
+          <template slot-scope="scope">
+            {{ scope.row.usableStatus == 1 ? '可用' : '停用' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="operate" label="操作" min-width="200">
+          <template slot-scope="scope">
+            <des-btn icon="edit" v-has="'access-role-edit'" @click="edit(scope.row)">编辑</des-btn>
+            <des-btn icon="forbidden" v-has="'wms-access-role-stop'" @click="forbid(scope.row)" v-show="scope.row.usableStatus == 1">停用</des-btn>
+            <des-btn icon="start" v-has="'wms-access-role-start'" @click="useNormal(scope.row)" v-show="scope.row.usableStatus == 0">启用</des-btn>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <div class="text-center" v-show="showTypeList.length && !loadingData">
+      <el-pagination :current-page="pager.currentPage" :page-size="pager.pageSize"
+                     :page-sizes="[10,20,50,100]"
+                     :total="pager.count" @current-change="handleCurrentChange"
+                     @size-change="handleSizeChange"
+                     layout="total, sizes, prev, pager, next, jumper">
+      </el-pagination>
     </div>
     <page-right :show="showRight" @right-close="resetRightBox" :css="{'width':'1000px'}">
       <role-form :formItem="form" :action="action" @close="showRight=false" :actionType="showRight"
                  @changed="change"></role-form>
+    </page-right>
+    <page-right :show="showDetailRight" @right-close="resetRightBox" :css="{'width':'800px'}">
+      <detail :formItem="form" :checkedMenuList="checkedMenuList" @close="showDetailRight=false"
+                 @changed="change"></detail>
     </page-right>
   </div>
 </template>
@@ -197,28 +118,19 @@
   import roleForm from './form/form.vue';
   import roleMixin from '@/mixins/roleMixin';
   import utils from '@/tools/utils';
-
+  import detail from './detail'
   export default {
-    components: {roleForm},
+    components: {roleForm, detail},
     mixins: [roleMixin],
     data: function () {
       return {
-        defaultProps: {
-          children: 'children',
-          label: 'label',
-          isLeaf: 'leaf'
-        },
         showRight: false,
-        showTypeRight: false,
-        showTypeSearch: false,
-        showSearch: false,
-        resData: {'permissionList': []},
-        typeList: [],
+        showDetailRight: false,
+        resData: {},
         showTypeList: [],
         form: {},
         action: '',
         roleText: '',
-        currentItem: {},
         orgType: {
           0: {'title': '所有', 'num': '', 'usableStatus': null},
           1: {'title': '正常', 'num': '', 'usableStatus': 1},
@@ -233,9 +145,9 @@
         pager: {
           currentPage: 1,
           count: 0,
-          pageSize: 20,
-          totalPage: 1
-        }
+          pageSize: 20
+        },
+        loadingData: false
       };
     },
     computed: {
@@ -249,6 +161,7 @@
       },
       checkedMenuList() {
         let checkedMenuList = JSON.parse(JSON.stringify(this.menuList));
+        if(!this.resData.id) return [];
         let perms = this.resData.permissionList;
         if (!checkedMenuList || !perms) return [];
         this.getMenus(checkedMenuList, perms);
@@ -301,11 +214,13 @@
           });
         });
       },
-      getMore: function () {
-        this.getPageList(this.pager.currentPage + 1, true);
+      handleSizeChange(val) {
+        this.pager.pageSize = val;
+        window.localStorage.setItem('currentPageSize', val);
+        this.getPageList(1);
       },
-      scrollLoadingData(event) {
-        this.$scrollLoadingData(event);
+      handleCurrentChange(val) {
+        this.getPageList(val);
       },
       getMenuList: function (cache = true) {
         this.getRoleMenus(cache).then(res => {
@@ -338,22 +253,12 @@
           deleteFlag: false,
           objectId: 'bms-system'
         }, this.filters);
+        this.loadingData = true;
         Access.query(param).then(res => {
           if (param.keyword !== this.typeTxt) return;
-          this.$store.commit('initBottomLoading', false);
-          if (isContinue) {
-            this.showTypeList = this.showTypeList.concat(res.data.list);
-          } else {
-            this.showTypeList = res.data.list;
-            this.typeList = res.data.list;
-            this.currentItem = Object.assign({id: ''}, this.showTypeList[0]);
-            if (res.data.list.length !== 0) {
-              this.queryRoleDetail(this.currentItem.id);
-            } else {
-              this.resData = {};
-            }
-          }
-          this.pager.totalPage = res.data.totalPage;
+          this.showTypeList = res.data.list;
+          this.pager.count = res.data.count;
+          this.loadingData = false;
           this.queryStatusNum(param);
         });
       },
@@ -367,113 +272,80 @@
       },
       queryRoleDetail: function (id) {
         if (!id) return;
-        Access.getRoleDetail(id).then(res => {
+        return Access.getRoleDetail(id).then(res => {
           this.resData = res.data;
-          // this.getMenus(this.resData.permissionList);
         });
       },
       resetRightBox: function () {
         this.showRight = false;
+        this.form = {};
+        this.resData = {};
+        this.showDetailRight = false;
       },
       addType: function () {
         this.action = 'add';
         this.form = {};
         this.showRight = true;
       },
-      searchType: function () {
-        this.showTypeSearch = !this.showTypeSearch;
+      edit: function (item) {
+        this.queryRoleDetail(item.id).then(res => {
+          this.action = 'edit';
+          this.form = JSON.parse(JSON.stringify(this.resData));
+          let checkedIdList = [];
+          // 勾选已经有的权限
+          this.form.permissionList.forEach(val => {
+            checkedIdList.push(val.name);
+          });
+          this.form.checkedIdList = checkedIdList;
+          this.showRight = true;
+        })
       },
-      edit: function () {
-        this.action = 'edit';
-        this.form = JSON.parse(JSON.stringify(this.resData));
-        let checkedIdList = [];
-        // 勾选已经有的权限
-        this.form.permissionList.forEach(val => {
-          checkedIdList.push(val.name);
-        });
-        this.form.checkedIdList = checkedIdList;
-        this.showRight = true;
+      showType: function (item) {
+        this.queryRoleDetail(item.id).then(res => {
+          this.action = 'edit';
+          this.form = JSON.parse(JSON.stringify(this.resData));
+          let checkedIdList = [];
+          // 勾选已经有的权限
+          this.form.permissionList.forEach(val => {
+            checkedIdList.push(val.name);
+          });
+          this.form.checkedIdList = checkedIdList;
+          this.showDetailRight = true;
+        })
       },
-      forbid: function () {
-        this.$confirm('确认停用角色"' + this.resData.title + '"?', '', {
+      forbid: function (item) {
+        this.$confirm('确认停用角色"' + item.title + '"?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let itemTemp = JSON.parse(JSON.stringify(this.resData));
-          itemTemp.usableStatus = 0;
-          Access.update(itemTemp.id, itemTemp).then(() => {
-            this.resData.usableStatus = 0;
-            this.getPageList(1);
+          Access.update(item.id, {usableStatus: 0, id: item.id}).then(() => {
+            this.getPageList(this.pager.currentPage);
             this.$notify.success({
               title: '成功',
-              message: '已成功停用角色"' + this.resData.title + '"'
+              message: '已成功停用角色"' + item.title + '"'
             });
           });
         });
       },
-      useNormal: function () {
-        this.$confirm('确认启用角色"' + this.resData.title + '"?', '', {
+      useNormal: function (item) {
+        this.$confirm('确认启用角色"' + item.title + '"?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let itemTemp = JSON.parse(JSON.stringify(this.resData));
-          itemTemp.usableStatus = 1;
-          Access.update(itemTemp.id, itemTemp).then(() => {
-            this.resData.usableStatus = 1;
-            this.getPageList(1);
+          Access.update(item.id, {usableStatus: 1, id: item.id}).then(() => {
+            this.getPageList(this.pager.currentPage);
             this.$notify.success({
               title: '成功',
-              message: '已成功启用角色"' + this.resData.title + '"'
+              message: '已成功启用角色"' + item.title + '"'
             });
           });
         });
       },
-      remove: function () {
-        this.$confirm('确认删除角色"' + this.resData.title + '"?', '', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          Access.delete(this.resData.id).then(() => {
-            this.getPageList(1);
-            this.$notify.success({
-              title: '成功',
-              message: '已成功删除角色"' + this.resData.title + '"'
-            });
-          });
-        });
-      },
-      removeType: function (item) {
-        Access.delete(item.id).then(() => {
-          this.getPageList(1);
-          this.$notify.success({
-            title: '成功',
-            message: '已成功删除角色"' + item.title + '"'
-          });
-        });
-      },
-      showType: function (type) {
-        this.currentItem = type;
-        this.queryRoleDetail(this.currentItem.id);
-      },
+
       change: function (item) {
-        if (this.action === 'add') {
-          this.getPageList(1);
-          this.showRight = false;
-        } else {
-          this.resData = item;
-          this.showTypeList.forEach(roleItem => {
-            if (roleItem.id === item.id) {
-              roleItem.name = item.name;
-              roleItem.title = item.title;
-            }
-          });
-          // 重新过滤树
-          // this.getMenus(this.resData.permissionList);
-          this.showRight = false;
-        }
+        this.getPageList(this.pager.currentPage);
       }
     }
   };
