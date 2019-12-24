@@ -320,7 +320,7 @@
       queryStatusNum: function (params, nowTime) {
         BaseInfo.queryStateNum(params).then(res => {
           if (this.nowTime > nowTime) return;
-          let data = res.data.data;
+          let data = res.data;
           this.orgStatus[0].num = data['auditing'];
           this.orgStatus[1].num = data['valid'];
           this.orgStatus[2].num = data['stop'];
@@ -339,10 +339,10 @@
         this.loadingData = true;
         this.nowTime = Date.now();
         let nowTime = this.nowTime;
-        this.$http.get('/org-dpr/pager', {params: param}).then(res => {
+        this.$http.get('/orgs/pager', {params: param}).then(res => {
           if (this.nowTime > nowTime) return;
-          this.dataRows = res.data.data.list;
-          this.pager.count = res.data.data.count;
+          this.dataRows = res.data.list;
+          this.pager.count = res.data.count;
           this.loadingData = false;
         });
         this.queryStatusNum(param, nowTime);
