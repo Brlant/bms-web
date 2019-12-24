@@ -811,7 +811,7 @@ export const BaseInfo = resource('/orgs', http, {
   },
   // 查询数量
   queryStateNum: (params) => {
-    return http.get('/orgs/count', {params});
+    return http.get('/org-dpr/count', {params});
   },
   // 查询dhs的平台单位
   queryDhsOrgs: (params) => {

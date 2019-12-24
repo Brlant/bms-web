@@ -22,8 +22,8 @@ export default {
         orgAuditStatus: 1,
         deleteFlag: false
       };
-      this.$http.get('/orgs/pager', {params: params}).then(res => {
-        this.orgList = res.data.list;
+      this.$http.get('/org-dpr/pager', {params: params}).then(res => {
+        this.orgList = res.data.data.list;
       });
     },
     queryDepartment(query) {
