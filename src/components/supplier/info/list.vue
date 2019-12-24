@@ -320,7 +320,7 @@
       queryStatusNum: function (params, nowTime) {
         BaseInfo.queryStateNum(params).then(res => {
           if (this.nowTime > nowTime) return;
-          let data = res.data;
+          let data = res.data.data;
           this.orgStatus[0].num = data['auditing'];
           this.orgStatus[1].num = data['valid'];
           this.orgStatus[2].num = data['stop'];
