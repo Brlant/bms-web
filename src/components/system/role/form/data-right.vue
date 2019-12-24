@@ -76,11 +76,11 @@
                @submit.prevent="onSubmit('roleform')" onsubmit="return false">
         <el-form-item label="对象类型" prop="objectType">
           <el-radio-group v-model="form.objectType" @change="objectTypeChange">
-            <el-radio :label="item.key" v-for="item in dataRightType">{{item.label}}</el-radio>
+            <el-radio :label="item.key" v-for="item in dataRightType" :key="item.key">{{item.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="对象" prop="objectId" class="contact-check" v-if="form.objectType">
-          <org-select :list="orgList" :remoteMethod="queryAllOrg" v-if="form.objectType === '0'"
+          <org-select :list="orgList" :remoteMethod="queryAllOrgOms" v-if="form.objectType === '0'"
                       placeholder="请输入名称搜索对象" v-model="form.objectId"></org-select>
           <el-select placeholder="请输入名称搜索对象" v-model="form.objectId" v-else-if="form.objectType === '1'"
                      filterable clearable remote :remote-method="queryContractList" @focus="queryContractList()">
