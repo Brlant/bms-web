@@ -424,6 +424,10 @@ export default [
         'sort': 4,
         'children': null,
         'leaf': true
+      },
+      {
+        id: 'bms-dpr-system',
+        label: '所有数据权限'
       }],
     'leaf': false
   }
