@@ -124,7 +124,7 @@
   </div>
 </template>
 <script type="text/jsx">
-  import {roleDataRight} from '@/resources';
+  import {roleDataRight, Contact, project} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
   export default {
     props: {
@@ -172,6 +172,26 @@
       }
     },
     methods: {
+      queryContractList(query) {
+        let params = {keyWord: query};
+        this.$http.post('/bms-contract/query-contract-nodpr/page', params).then(res => {
+          if (res.data.code === 200) {
+            this.contractList = res.data.data.list;
+          } else {
+            this.contractList = [];
+          }
+        });
+      },
+      queryProjectList(query) {
+        let params = {keyWord: query, projectState: '1'};
+        this.$http.post('/bms-project/query-project-nodpr/page', params).then(res => {
+          if (res.data.code === 200) {
+            this.projectList = res.data.data.list;
+          } else {
+            this.projectList = [];
+          }
+        });
+      },
       objectTypeChange(val) {
         this.form.objectId = '';
       },
