@@ -228,11 +228,10 @@
       },
       onSubmit: function (formName) {
         if(this.doing) return;
-        if(!this.dataList.length) return this.$notify.info('请添加对象');
         this.doing = true;
         let obj = {
           roleId: this.formItem.id,
-          dataPermissionsRolesDTOList: this.dataList
+          dataPermissionsRolesDTOList: this.dataList || []
         };
         this.$httpRequestOpera(roleDataRight.save(obj), {
           errorTitle: '保存失败',
