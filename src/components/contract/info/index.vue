@@ -123,7 +123,6 @@
       }
     },
     mounted() {
-      this.queryList(1);
     },
     methods: {
       changeType(item, key) {

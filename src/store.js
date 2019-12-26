@@ -50,6 +50,11 @@ const state = {
         {name: '散件入库基本单位数', id: 'A5', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
         {name: '入库基本单位数', id: 'A18', unit: '元/基本单位', rule: '每个品种的基本单位总数（包含整散） X 计费单价', bind: true},
         {name: '货品明细货值占比', id: 'A16', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: true},
+        {name: '待验区存储整件数量', id: 'A20', unit: '元/整件/天', rule: '每个品种的整件数 X 存储天数 X 计费单价', bind: true},
+        {name: '待验区存储散件数量', id: 'A21', unit: '元/基本单位/天', rule: '每个品种的散件数 X 存储天数 X 计费单价', bind: true},
+        {name: '待验区存储基本单位数量', id: 'A22', unit: '元/基本单位/天', rule: '每个品种的基本单位数 X 存储天数 X 计费单价', bind: true},
+        {name: '待验区存储按货值百分比', id: 'B6', unit: '%',
+          rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比 X 存储天数 ', bind: true}
       ]
     },
     {
@@ -68,7 +73,7 @@ const state = {
         {name: '散件出库基本单位数', id: 'A8', unit: '元/基本单位', rule: '每个品种的基本单位总数 X 计费单价', bind: true},
         {name: '散件出库周转（包装）箱数', id: 'A9', unit: '元/箱', rule: '每个品种的整件总数 X 计费单价', bind: true},
         {name: '出库基本单位数', id: 'A19', unit: '元/基本单位', rule: '每个品种的基本单位总数（包含整散） X 计费单价', bind: true},
-        {name: '货品明细货值占比', id: 'A17', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: true},
+        {name: '货品明细货值占比', id: 'A17', unit: '%', rule: '每条订单明细单价 X 货品数量 X 货品明细货值占比', bind: true}
       ]
     },
     {
@@ -124,7 +129,12 @@ const state = {
     {key: '1', label: '支票'},
     {key: '2', label: '现金'}
   ],
-  billItemList: []
+  billItemList: [],
+  dataRightType: [
+    {key: '0', label: '甲方'},
+    {key: '1', label: '合同'},
+    {key: '2', label: '项目'}
+  ]
 };
 
 const mutations = {

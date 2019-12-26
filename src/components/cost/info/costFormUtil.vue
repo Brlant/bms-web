@@ -28,12 +28,12 @@
       <oms-input placeholder="请输入计费项名称" type="input" v-model="currentItem.billingCustomName"/>
     </el-form-item>
     <el-row v-show="currentItem.billingItemNo">
-      <el-col :span="14">
+      <el-col :span="24">
         <el-form-item label="计费规则">{{currentItem.billingRules}}</el-form-item>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="6" v-show="currentCostType.ladderState">
+      <el-col :span="6" v-show="currentItem.ladderState === '1'">
         <el-form-item label="是否阶梯">
           <el-radio-group v-model="currentItem.ladderState" size="small" @change="ladderStateChange">
             <el-radio-button label="1">是</el-radio-button>
@@ -41,13 +41,13 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-      <el-col :span="5" v-if="currentItem.ladderState === '1'">
+      <el-col :span="6" v-if="currentItem.ladderState === '1'">
         <el-form-item label="下限" label-width="80px" prop="lowerLimit"
                       :rules="[{required: true, message: '请输入下限', trigger: 'blur'}]">
           <oms-input placeholder="请输入下限" type="input" v-model="currentItem.lowerLimit"/>
         </el-form-item>
       </el-col>
-      <el-col :span="5" v-if="currentItem.ladderState === '1'">
+      <el-col :span="6" v-if="currentItem.ladderState === '1'">
         <el-form-item label="上限" label-width="80px" prop="upperLimit"
                       :rules="[{required: true, message: '请输入上限', trigger: 'blur'}]">
           <oms-input placeholder="请输入上限" type="input" v-model="currentItem.upperLimit"/>
@@ -118,6 +118,15 @@
       },
       billingItemNoChange(val) {
         this.currentItem.billingCustomName = '';
+        this.currentItem.lowerLimit = '';
+        this.currentItem.upperLimit = '';
+        if (this.currentItem.billingType === '1') {
+          if (['A16', 'B6'].includes(val)) {
+            this.currentItem.ladderState = '1';
+          } else {
+            this.currentItem.ladderState = '0';
+          }
+        }
         if (!val) {
           return;
         }

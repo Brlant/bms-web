@@ -1,6 +1,6 @@
 <template>
   <div class="order-page">
-    <search-part @search="searchResult">
+    <search-part ref="search" @search="searchResult" :statusList="orgType">
       <template slot="btn">
         <el-button  v-has="'batch-collection-jobs-statement'" @click="batchCreateReceiveTask" plain size="small"
                    v-show="filters.statementType === '2'">
@@ -11,11 +11,15 @@
           <f-a class="icon-small" name="export"></f-a>
           导出计费明细
         </el-button>
+        <el-button @click="exportCloseExcel" plain size="small">
+          <f-a class="icon-small" name="export"></f-a>
+          导出Excel
+        </el-button>
       </template>
     </search-part>
     <status-list :activeStatus="filters.statementType" :statusList="orgType"
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
-                 :formatClass="formatClass"></status-list>
+                 :formatClass="formatClass" v-if="!filters.statementType.includes(',')"></status-list>
     <el-table :data="dataList" v-loading="loadingData"
               @selection-change="selectionChange"
               :row-style="{cursor: 'pointer'}" @row-click="showDetail"
@@ -140,6 +144,24 @@
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
         });
       },
+      exportCloseExcel() {
+        this.$refs.search.setSearchCondition();
+        let search = this.$refs.search.searchCondition;
+        let obj = {};
+        if(!search.statementType[0]) {
+          obj.statementType = this.filters.statementType.includes(',') ? '0' : this.filters.statementType;
+        } else {
+          obj.statementType = search.statementType.join(',');
+        }
+        let filters = Object.assign({}, this.filters, search, obj);
+        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
+        closeAccount.exportCloseExcel(filters).then(res => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+          utils.download(res.data.data.path);
+        }).catch(() => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+        });
+      },
       selectionChange(val) {
         this.selectList = val;
       },
@@ -174,7 +196,13 @@
         return data ? this.$moment(data).format('YYYY-MM-DD HH:mm:ss') : '';
       },
       searchResult: function (search) {
-        this.filters = Object.assign({}, this.filters, search);
+        let obj = {};
+        if(!search.statementType[0]) {
+          obj.statementType = this.filters.statementType.includes(',') ? '0' : this.filters.statementType;
+        } else {
+          obj.statementType = search.statementType.join(',');
+        }
+        this.filters = Object.assign({}, this.filters, search, obj);
       },
       resetRightBox() {
         this.defaultPageRight.width = '920px';

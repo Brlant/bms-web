@@ -22,6 +22,15 @@ export default {
         orgAuditStatus: 1,
         deleteFlag: false
       };
+      this.$http.get('/org-dpr/pager', {params: params}).then(res => {
+        this.orgList = res.data.data.list;
+      });
+    },
+    queryAllOrgOms: function (query) {// 查询货主
+      let params = {keyWord: query,
+        orgAuditStatus: 1,
+        deleteFlag: false
+      };
       this.$http.get('/orgs/pager', {params: params}).then(res => {
         this.orgList = res.data.list;
       });

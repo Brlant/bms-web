@@ -14,7 +14,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'https://bms.sinopharm-bio.com',
+        target: 'http://dev-bms.cdcerp.cn/',
         changOrigin: true
       }
     }
