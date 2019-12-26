@@ -59,10 +59,7 @@
       };
     },
     mounted() {
-      let no = this.$route.query.no;
-      if (!no) return;
-      this.searchCondition.no = no;
-      this.search();
+
     },
     methods: {
       search() {
