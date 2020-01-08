@@ -80,6 +80,7 @@
           companyDepartment: '',
           businessManageId: '',
           ladderState: '0',
+          showLadderState: false,
           unitPrice: '',
           upperLimit: '',
           lowerLimit: '',
@@ -140,6 +141,7 @@
         }
         this.currentCostType = this.costTypes.find(f => f.id === val);
         this.currentItem.ladderState = this.currentCostType.ladderState ? '1' : '0';
+        this.currentItem.showLadderState =  this.currentItem.ladderState === '1';
       },
       formatPrice() {// 格式化单价，保留两位小数
         this.currentItem.unitPrice = utils.autoformatDecimalPoint(this.currentItem.unitPrice);
@@ -192,6 +194,7 @@
           companyDepartment: '',
           businessManageId: '',
           ladderState: '0',
+          showLadderState: false,
           unitPrice: '',
           upperLimit: '',
           lowerLimit: '',

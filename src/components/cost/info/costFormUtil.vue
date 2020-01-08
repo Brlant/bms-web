@@ -33,7 +33,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="6" v-show="currentItem.ladderState === '1'">
+      <el-col :span="6" v-show="currentItem.showLadderState">
         <el-form-item label="是否阶梯">
           <el-radio-group v-model="currentItem.ladderState" size="small" @change="ladderStateChange">
             <el-radio-button label="1">是</el-radio-button>
@@ -107,6 +107,7 @@
         this.currentItem.billingRules = '';
         this.currentItem.billingUnit = '';
         this.currentItem.ladderState = '0';
+        this.currentItem.showLadderState = false;
         this.currentItem.upperLimit = '';
         this.currentItem.lowerLimit = '';
         if (!val) {
@@ -114,7 +115,7 @@
         }
         this.currentCostType = this.costTypes.find(f => f.id === val);
         this.currentItem.ladderState = this.currentCostType.ladderState ? '1' : '0';
-
+        this.currentItem.showLadderState =  this.currentItem.ladderState === '1';
       },
       billingItemNoChange(val) {
         this.currentItem.billingCustomName = '';
@@ -123,6 +124,7 @@
         if (this.currentItem.billingType === '1') {
           if (['A16', 'B6'].includes(val)) {
             this.currentItem.ladderState = '1';
+            this.currentItem.showLadderState = true;
           } else {
             this.currentItem.ladderState = '0';
           }
