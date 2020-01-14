@@ -25,7 +25,7 @@
         <el-col :span="8">
           <oms-form-row label="甲方" :span="5">
             <org-select :list="orgList"
-                        :remoteMethod="queryAllOrgOms"
+                        :remoteMethod="queryAllOrg"
                         placeholder="请输入名称搜索甲方" v-model="searchCondition.customerId"></org-select>
           </oms-form-row>
         </el-col>
