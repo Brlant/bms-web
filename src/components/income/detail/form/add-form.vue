@@ -217,8 +217,7 @@
         if (!this.form.goodsId) return;
         let params = {
           keyWord: query,
-          goodsId: this.form.goodsId,
-          batchStatus: '1'
+          goodsId: this.form.goodsId
         };
         this.queryBatchNumberList(params);
       },
