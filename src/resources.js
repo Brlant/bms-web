@@ -353,6 +353,9 @@ export const Contact = resource('/bms-contract', http, {
   },
   query(obj) {
     return http.post('/bms-contract/query-contract/page', obj);
+  },
+  queryNew(obj) {
+    return http.post('/bms-contract/query-contract-info/page', obj)
   }
 });
 

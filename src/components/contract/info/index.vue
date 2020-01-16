@@ -155,7 +155,7 @@
         });
       },
       queryList(pageNo) {
-        const http = Contact.query;
+        const http = Contact.queryNew;
         const params = this.queryUtil(http, pageNo);
         this.queryStatusNum(params);
       },
