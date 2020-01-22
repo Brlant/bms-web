@@ -18,6 +18,7 @@
       line-height: 24px;
       font-weight: normal;
     }
+
     ul {
       margin: 10px 0;
 
@@ -30,6 +31,7 @@
         font-size: 12px;
       }
     }
+
     .group-list {
 
       border: 1px solid #eee;
@@ -88,8 +90,12 @@
         <el-table-column prop="operate" label="操作" width="300">
           <template slot-scope="scope">
             <des-btn icon="edit" v-has="'access-role-edit'" @click="edit(scope.row)">编辑</des-btn>
-            <des-btn icon="forbidden" v-has="'wms-access-role-stop'" @click="forbid(scope.row)" v-show="scope.row.usableStatus == 1">停用</des-btn>
-            <des-btn icon="start" v-has="'wms-access-role-start'" @click="useNormal(scope.row)" v-show="scope.row.usableStatus == 0">启用</des-btn>
+            <des-btn icon="forbidden" v-has="'wms-access-role-stop'" @click="forbid(scope.row)"
+                     v-show="scope.row.usableStatus == 1">停用
+            </des-btn>
+            <des-btn icon="start" v-has="'wms-access-role-start'" @click="useNormal(scope.row)"
+                     v-show="scope.row.usableStatus == 0">启用
+            </des-btn>
             <des-btn icon="allot" v-has="'bms-dpr-add'" @click="editDataRight(scope.row)">数据权限</des-btn>
           </template>
         </el-table-column>
@@ -109,12 +115,13 @@
                  @changed="change"></role-form>
     </page-right>
     <page-right :show="showDetailRight" @right-close="resetRightBox" :css="{'width':'800px'}">
-      <detail :formItem="form" :showDetailRight="showDetailRight" :checkedMenuList="checkedMenuList" @close="showDetailRight=false"
-                 @changed="change"></detail>
+      <detail :formItem="form" :showDetailRight="showDetailRight" :checkedMenuList="checkedMenuList"
+              @close="showDetailRight=false"
+              @changed="change"></detail>
     </page-right>
     <page-right :show="showDataRight" @right-close="resetRightBox" :css="{'width':'800px'}">
       <data-right :formItem="form" :showDataRight="showDataRight" @close="showDataRight=false"
-              @changed="change"></data-right>
+                  @changed="change"></data-right>
     </page-right>
   </div>
 </template>
@@ -123,8 +130,9 @@
   import roleForm from './form/form.vue';
   import roleMixin from '@/mixins/roleMixin';
   import utils from '@/tools/utils';
-  import detail from './detail'
-  import dataRight from './form/data-right'
+  import detail from './detail';
+  import dataRight from './form/data-right';
+
   export default {
     components: {roleForm, detail, dataRight},
     mixins: [roleMixin],
@@ -168,7 +176,7 @@
       },
       checkedMenuList() {
         let checkedMenuList = JSON.parse(JSON.stringify(this.menuList));
-        if(!this.resData.id) return [];
+        if (!this.resData.id) return [];
         let perms = this.resData.permissionList;
         if (!checkedMenuList || !perms) return [];
         this.getMenus(checkedMenuList, perms);
@@ -306,7 +314,7 @@
           });
           this.form.checkedIdList = checkedIdList;
           this.showRight = true;
-        })
+        });
       },
       showType: function (item) {
         this.queryRoleDetail(item.id).then(res => {
@@ -319,7 +327,7 @@
           });
           this.form.checkedIdList = checkedIdList;
           this.showDetailRight = true;
-        })
+        });
       },
       editDataRight(item) {
         this.queryRoleDetail(item.id).then(res => {
@@ -331,7 +339,7 @@
           });
           this.form.checkedIdList = checkedIdList;
           this.showDataRight = true;
-        })
+        });
       },
       forbid: function (item) {
         this.$confirm('确认停用角色"' + item.title + '"?', '', {
@@ -365,6 +373,7 @@
       },
 
       change: function (item) {
+        this.resetRightBox();
         this.getPageList(this.pager.currentPage);
       }
     }

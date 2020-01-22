@@ -40,7 +40,7 @@
           <template slot-scope="scope">{{scope.row.billingCustomName}}</template>
         </el-table-column>
         <el-table-column prop="billingUntilPrice" label="单价" width="150px">
-          <template slot-scope="scope">{{scope.row.billingUntilPrice | formatMoney}}</template>
+          <template slot-scope="scope">{{scope.row.billingUntilPrice}}</template>
         </el-table-column>
         <el-table-column prop="billingQuantity" label="数量">
           <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
