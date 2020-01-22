@@ -37,8 +37,8 @@ Vue.use(Vuex);
 if (process.env.NODE_ENV === 'production') {
   // 日志工具
   Raven
-    .config('https://62f56ceea555483fab3d6238ff4a80d0@f-log.cdcerp.net/3', {
-      serverName: 'ccs',
+    .config('https://7f0a84a6bb0642018aa4c44ab650c4f3@f-log.sinopharm-bio.com/3', {
+      serverName: 'bms',
       shouldSendCallback: (date) => {// 过滤错误日志
         let filterArray = ['Request failed with status code 401', 'Request failed with status code 502'];
         if (date && date.hasOwnProperty('exception') && date.exception.hasOwnProperty('values') && filterArray.indexOf(date.exception.values[0].value) > -1 || date && date.transaction && date.transaction.indexOf('http://requirejs.org/docs/errors.html') > -1) {
