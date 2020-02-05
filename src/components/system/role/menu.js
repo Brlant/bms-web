@@ -96,7 +96,29 @@ export default [
           {
             id: 'add-contract-goods-model',
             label: '绑定货品'
-          }
+          },
+          {
+            id: 'invoice-info-manage',
+            label: '发票信息管理',
+            children: [
+              {
+                id: 'query-contract-invoice',
+                label: '查看发票信息'
+              },
+              {
+                id: 'add-contract-invoice',
+                label: '新增发票信息'
+              },
+              {
+                id: 'edit-contract-invoice',
+                label: '编辑发票信息'
+              },
+              {
+                id: 'delete-contract-invoice',
+                label: '删除发票信息'
+              }
+            ]
+          },
         ]
       },
       {
