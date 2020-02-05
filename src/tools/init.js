@@ -171,6 +171,10 @@ export function init(Vue) {
           });
           success && success(res);
         } else {
+          this.$notify.error({
+            duration: 2000,
+            message: res.data && res.data.msg || errorTitle || '操作失败'
+          });
           error && error(res);
         }
       } else {
@@ -181,6 +185,7 @@ export function init(Vue) {
         success && success(res);
       }
     }).catch(e => {
+      debugger;
       this.$notify.error({
         duration: 2000,
         message: e.response && e.response.data && e.response.data.msg || errorTitle || '操作失败'
