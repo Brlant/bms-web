@@ -133,6 +133,7 @@
       index: function (val) {
         if (val !== 4) return;
         this.showAdd = false;
+        this.listForm.list = [];
         this.query();
         this.$nextTick(() => {
           this.$refs['form'] && this.$refs['form'].clearValidate();
