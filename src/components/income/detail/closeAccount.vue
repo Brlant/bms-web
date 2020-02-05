@@ -69,7 +69,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-form :model="form" label-width="120px" ref="form">
+      <el-form :model="invoiceForm" label-width="120px" ref="form">
         <el-row>
           <el-col :span="8">
             <el-form-item label="是否含税" label-width="120px">是</el-form-item>
@@ -81,11 +81,42 @@
             </span>
           </el-col>
         </el-row>
-        <el-form-item label="税率" prop="taxRate" label-width="120px"
-                      :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
-          <oms-input placeholder="请输入税率" type="number" style="width: 240px" v-model="form.taxRate">
-            <span slot="append">%</span>
-          </oms-input>
+        <div class="invoice-box" v-for="(item, index) in invoiceForm.invoiceData">
+          <el-row>
+            <h2>合同：{{item.contractName}}</h2>
+
+            <el-form-item label="已关联发票信息">
+              <el-select v-model="item.contractInvoiceId" placeholder="请选择已关联发票信息"
+                         @change="val => contractInvoiceIdChange(item, val)" clearable>
+                <el-option :value="invoice.contractInvoiceId" :label="invoice.invoiceContentsLabel"
+                           :key="invoice.contractInvoiceId" v-for="invoice in item.invoiceList">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="发票类型" :prop="`invoiceData.${index}.invoiceType`"
+                          :rules="[{required: true, message: '请选择发票类型', trigger: 'change'}]">
+              <el-select v-model="item.invoiceType">
+                <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceTypes">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="发票内容" :prop="`invoiceData.${index}.invoiceContents`"
+                          :rules="[{required: true, message: '请输入发票内容', trigger: 'change'}]">
+              <el-select v-model="item.invoiceContents" placeholder="请选择发票内容">
+                <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceContents">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="税率" :prop="`invoiceData.${index}.taxRate`"
+                          :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
+              <el-input type="number" v-model.number="item.taxRate">
+                <span slot="suffix">%</span>
+              </el-input>
+            </el-form-item>
+          </el-row>
+        </div>
+        <el-form-item label="备注" label-width="120px">
+          <el-input type="textarea" v-model="form.statementRemark"></el-input>
         </el-form-item>
       </el-form>
     </template>
@@ -93,7 +124,7 @@
 </template>
 <script>
   import utils from '@/tools/utils';
-  import {closeAccount} from '@/resources';
+  import {closeAccount, InvoiceManger} from '@/resources';
 
   export default {
     props: {
@@ -104,7 +135,10 @@
       return {
         doing: false,
         form: {
-          taxRate: ''
+          statementRemark: ''
+        },
+        invoiceForm: {
+          invoiceData: []
         }
       };
     },
@@ -118,10 +152,71 @@
           statementAmount += Number(i.statementAmount || 0);
         });
         return {billingQuantity, statementAmount};
+      },
+      invoiceTypes() {
+        return this.$store.state.invoiceTypes;
+      },
+      invoiceContents() {
+        return this.$getDict('invoiceContent');
+      }
+    },
+    watch: {
+      data: {
+        handler(val) {
+          if (!this.data) {
+            this.invoiceForm.invoiceData = [];
+            return;
+          }
+          // 合并相同的合同
+          let obj = {};
+          this.data.forEach(i => {
+            obj[i.contractId] = i;
+          });
+          this.invoiceForm.invoiceData = Object.values(obj).map(m => {
+            let item = Object.assign({}, m, {
+              contractInvoiceId: '',
+              invoiceType: '',
+              taxRate: '',
+              invoiceContents: '',
+              invoiceList: []
+            });
+            this.queryInvoice(item);
+            return item;
+          });
+        },
+        immediate: true
       }
     },
     methods: {
-      formatPrice(item) {
+      queryInvoice(item) {
+        let params = {
+          contractId: item.contractId
+        };
+        InvoiceManger.query(params).then(res => {
+          res.data.data.forEach(i => {
+            i.status = 'view';
+            let item = this.invoiceContents.find(f => f.key === i.invoiceContents);
+            i.invoiceContentsLabel = item && item.label || i.invoiceContents;
+          });
+          item.invoiceList = res.data.data;
+          if (item.invoiceList.length === 1) {
+            item.contractInvoiceId = item.invoiceList[0].contractInvoiceId;
+            item.invoiceType = item.invoiceList[0].invoiceType;
+            item.invoiceContents = item.invoiceList[0].invoiceContents;
+            item.taxRate = item.invoiceList[0].taxRate;
+          }
+        });
+      },
+      contractInvoiceIdChange(item, val) {
+        if (!val) return;
+        let contractInvoice = item.invoiceList.find(f => f.contractInvoiceId === val);
+        if (!contractInvoice) return;
+        item.invoiceType = contractInvoice.invoiceType;
+        item.invoiceContents = contractInvoice.invoiceContents;
+        item.taxRate = contractInvoice.taxRate;
+        this.$nextTick(() => {
+          this.$refs['form'].clearValidate();
+        });
       },
       editItem(item) {
         if (item.unliquidatedAmount >= 0) {
@@ -142,12 +237,20 @@
       save() {
         this.$refs['form'].validate((valid) => {
           if (!valid || this.doing) return;
-          let list = this.data.map(m => ({
-            billingOfAccountId: m.billingOfAccountId,
-            statementAmount: m.statementAmount,
-            includeTax: '1',
-            taxRate: this.form.taxRate
-          }));
+          let list = this.data.map(m => {
+            let contractInvoice = this.invoiceForm.invoiceData.find(f => f.contractId === m.contractId);
+            let invoiceContentsItem = this.invoiceContents.find(f => f.key === contractInvoice.invoiceType);
+            return {
+              billingOfAccountId: m.billingOfAccountId,
+              statementAmount: m.statementAmount,
+              includeTax: '1',
+              invoiceType: contractInvoice.invoiceType,
+              invoiceContents: invoiceContentsItem && invoiceContentsItem.label || contractInvoice.invoiceContents,
+              taxRate: contractInvoice.taxRate,
+              statementRemark: this.form.statementRemark
+            };
+          });
+
           this.doing = true;
           this.$httpRequestOpera(closeAccount.batchCreate(list), {
             errorTitle: '生成结算单完成',

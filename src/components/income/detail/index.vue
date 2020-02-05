@@ -38,7 +38,7 @@
         <el-button @click="createCloseAccount" plain size="small"
                    v-show="filters.attachmentType === '2'" v-has="'add-statement-estimated-amount'">
           <f-a class="icon-small" name="allot"></f-a>
-          生成预计金额结算单
+          按结算金额生成结算单
         </el-button>
 
         <el-button @click="exportExcel" plain size="small">

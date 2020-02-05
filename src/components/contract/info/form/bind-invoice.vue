@@ -1,27 +1,9 @@
 <style lang="scss">
-  .invoice-box {
-    position: relative;
-    padding: 10px 10px 0 10px;
-    margin-bottom: 20px;
-    border: 1px solid #e8e8e8;
-    border-radius: 4px;
 
-    .invoice-box-btn {
-      position: absolute;
-      top: 0;
-      right: 10px;
-    }
-
-    .is-view.el-form {
-      .el-form-item {
-        margin-bottom: 0;
-      }
-    }
-  }
 </style>
 <template>
   <dialog-template :btnSavePosition="100">
-    <template slot="title">发票信息管理1</template>
+    <template slot="title">发票信息管理</template>
     <template slot="content">
       <div class="mb-10">
         <des-btn @click="add()" v-has="'add-contract-invoice'" icon="plus" class="ml-10" v-show="!showAdd">添加发票</des-btn>
@@ -67,7 +49,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="发票内容" :prop="`list.${index}.invoiceContents`"
-                          :rules="[{required: true, message: '请输入发票内容', trigger: 'blur'}]">
+                          :rules="[{required: true, message: '请输入发票内容', trigger: 'change'}]">
               <span v-if="item.status === 'view'">
                 <dict :dict-group="'invoiceContent'" :dict-key="item.invoiceContents"></dict>
               </span>
@@ -77,7 +59,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="税率" :prop="`list.${index}.taxRate`"
-                          :rules="[{required: true, message: '请输入发票内容', trigger: 'blur'}]">
+                          :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
               <span v-if="item.status === 'view'">{{item.taxRate}}%</span>
               <el-input type="number" v-model.number="item.taxRate" v-else>
                 <span slot="suffix">%</span>
@@ -208,7 +190,14 @@
                 if (res.data.code === 200) {
                   this.$notify.success({message: '添加成功'});
                   this.doing = false;
-                  this.$refs[formName].resetFields();
+                  this.form = {
+                    invoiceType: '',
+                    taxRate: '',
+                    invoiceContents: '',
+                  };
+                  this.$nextTick(() => {
+                    this.$refs[formName].clearValidate();
+                  });
                   this.query();
                 } else {
                   this.doing = false;
