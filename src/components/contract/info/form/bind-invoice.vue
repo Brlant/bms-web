@@ -23,8 +23,9 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="税率"
-                      :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
+        <el-form-item label="税率" prop="taxRate"
+                      :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
+                       {required: true, type:'number', max:100, message: '税率不能大于100%', trigger: 'blur'}]">
           <el-input type="number" v-model.number="form.taxRate">
             <span slot="suffix">%</span>
           </el-input>
@@ -59,7 +60,8 @@
               </el-select>
             </el-form-item>
             <el-form-item label="税率" :prop="`list.${index}.taxRate`"
-                          :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
+                          :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
+                           {required: true, type:'number', max:100, message: '税率不能大于100%', trigger: 'blur'}]">
               <span v-if="item.status === 'view'">{{item.taxRate}}%</span>
               <el-input type="number" v-model.number="item.taxRate" v-else>
                 <span slot="suffix">%</span>

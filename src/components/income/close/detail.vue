@@ -38,7 +38,10 @@
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>
           <oms-row label="合同" :span="8">{{ formItem.contractName }}</oms-row>
           <oms-row label="结算单号" :span="8">{{ formItem.statementNo }}</oms-row>
-          <oms-row label="结算单状态" :span="8">{{ orgType[formItem.statementType].title }}</oms-row>
+          <oms-row label="结算单状态" :span="8">
+            {{orgType[formItem.statementType < 9  ?  1*formItem.statementType + 1 : formItem.statementType] &&
+            orgType[formItem.statementType < 9  ? 1*formItem.statementType + 1 : formItem.statementType].title}}
+          </oms-row>
 
         </el-col>
         <el-col :span="12">
@@ -74,54 +77,54 @@
       <large-data-list :dataList="billAccountList" class="mt-20">
         <el-table slot-scope="{children}" :data="children" v-loading="loading" border class="clearfix" ref="orderDetail">
           <el-table-column prop="contractName" label="合同" width="100">
-            <template slot-scope="scope">{{scope.row.contractName}}</template>
+            <template slot-scope="scope">{{formItem.contractName}}</template>
           </el-table-column>
           <el-table-column prop="customerName" label="甲方" width="140">
-            <template slot-scope="scope">{{scope.row.customerName}}</template>
+            <template slot-scope="scope">{{formItem.customerName}}</template>
           </el-table-column>
           <el-table-column prop="actionType" label="项目" width="140">
-            <template slot-scope="scope">{{scope.row.projectName}}</template>
+            <template slot-scope="scope">{{formItem.projectName}}</template>
           </el-table-column>
           <el-table-column prop="billingTime" label="创建时间" width="160">
-            <template slot-scope="scope">{{scope.row.billingTime | time}}</template>
+            <template slot-scope="scope">{{formItem.billingTime | time}}</template>
           </el-table-column>
           <el-table-column prop="actionType" label="订单号" width="140">
-            <template slot-scope="scope">{{scope.row.orderNumber}}</template>
+            <template slot-scope="scope">{{formItem.orderNumber}}</template>
           </el-table-column>
           <el-table-column prop="actionType" label="对账单号" width="150">
-            <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
+            <template slot-scope="scope">{{formItem.accountCheckNo}}</template>
           </el-table-column>
           <el-table-column prop="actionType" label="货品" width="200">
             <template slot-scope="scope">
-              {{scope.row.orgGoodsName}}
-              <div v-show="scope.row.goodsSpecification">规格：{{scope.row.goodsSpecification}}</div>
+              {{formItem.orgGoodsName}}
+              <div v-show="formItem.goodsSpecification">规格：{{formItem.goodsSpecification}}</div>
             </template>
           </el-table-column>
           <el-table-column prop="batchNumber" label="批号" width="120">
-            <template slot-scope="scope">{{scope.row.batchNumber}}</template>
+            <template slot-scope="scope">{{formItem.batchNumber}}</template>
           </el-table-column>
           <el-table-column prop="billingItemName" label="计费项" width="200">
-            <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
+            <template slot-scope="scope">{{formatBillingItemName(formItem)}}</template>
           </el-table-column>
           <el-table-column prop="billingCustomName" label="计费项名称" width="200">
-            <template slot-scope="scope">{{scope.row.billingCustomName}}</template>
+            <template slot-scope="scope">{{formItem.billingCustomName}}</template>
           </el-table-column>
           <el-table-column prop="billingUntilPrice" label="单价" width="150px">
-            <template slot-scope="scope">{{scope.row.billingUntilPrice}}</template>
+            <template slot-scope="scope">{{formItem.billingUntilPrice}}</template>
           </el-table-column>
           <el-table-column prop="billingQuantity" label="数量">
-            <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
+            <template slot-scope="scope">{{formItem.billingQuantity}}</template>
           </el-table-column>
           <el-table-column prop="billingTotal" label="计费合计">
-            <template slot-scope="scope">{{scope.row.billingTotal}}</template>
+            <template slot-scope="scope">{{formItem.billingTotal}}</template>
           </el-table-column>
           <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计">
           </el-table-column>
           <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
-            <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+            <template slot-scope="scope">{{formItem.unreturnedAmount}}</template>
           </el-table-column>
           <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
-            <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
+            <template slot-scope="scope">{{formItem.unliquidatedAmount}}</template>
           </el-table-column>
           <el-table-column prop="statementAmount" width="120px" label="结算金额" fixed="right">
           </el-table-column>
