@@ -205,6 +205,7 @@
       }
     },
     mounted() {
+      this.$getDict('invoiceContent');
       this.queryList(1);
     },
     methods: {

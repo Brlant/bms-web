@@ -26,10 +26,13 @@
         </el-form-item>
         <el-form-item label="是否含税">是</el-form-item>
         <el-form-item label="合同已关联发票信息" v-if="form.contractId">
-          <el-select v-model="form.contractInvoiceId" placeholder="请选择已关联发票信息"
+          <el-select v-model="form.contractInvoiceId" placeholder="请选择已关联发票信息" popper-class="selects--custom is-max"
                      @change="val => contractInvoiceIdChange(val)" clearable>
             <el-option :value="invoice.contractInvoiceId" :label="invoice.invoiceContentsLabel"
                        :key="invoice.contractInvoiceId" v-for="invoice in invoiceList">
+              <div style="line-height:20px">发票内容：{{invoice.invoiceContentsLabel}}</div>
+              <div style="line-height:20px">发票类型：{{invoice.invoiceTypeLabel}}</div>
+              <div style="line-height:20px">税率：{{invoice.taxRate}}%</div>
             </el-option>
           </el-select>
         </el-form-item>
@@ -159,6 +162,8 @@
             i.status = 'view';
             let item = this.invoiceContents.find(f => f.key === i.invoiceContents);
             i.invoiceContentsLabel = item && item.label || i.invoiceContents;
+            let invoiceTypeItem = this.invoiceTypes.find(f => f.key === i.invoiceType);
+            i.invoiceTypeLabel = invoiceTypeItem && invoiceTypeItem.label || i.invoiceType;
           });
           this.invoiceList = res.data.data;
           if (this.invoiceList.length === 1) {

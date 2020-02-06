@@ -84,12 +84,14 @@
         <div class="invoice-box" v-for="(item, index) in invoiceForm.invoiceData">
           <el-row>
             <h2>合同：{{item.contractName}}</h2>
-
             <el-form-item label="已关联发票信息">
               <el-select v-model="item.contractInvoiceId" placeholder="请选择已关联发票信息"
-                         @change="val => contractInvoiceIdChange(item, val)" clearable>
+                         @change="val => contractInvoiceIdChange(item, val)" clearable popper-class="selects--custom is-max">
                 <el-option :value="invoice.contractInvoiceId" :label="invoice.invoiceContentsLabel"
                            :key="invoice.contractInvoiceId" v-for="invoice in item.invoiceList">
+                  <div style="line-height:20px">发票内容：{{invoice.invoiceContentsLabel}}</div>
+                  <div style="line-height:20px">发票类型：{{invoice.invoiceTypeLabel}}</div>
+                  <div style="line-height:20px">税率：{{invoice.taxRate}}%</div>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -197,6 +199,8 @@
             i.status = 'view';
             let item = this.invoiceContents.find(f => f.key === i.invoiceContents);
             i.invoiceContentsLabel = item && item.label || i.invoiceContents;
+            let invoiceTypeItem = this.invoiceTypes.find(f => f.key === i.invoiceType);
+            i.invoiceTypeLabel = invoiceTypeItem && invoiceTypeItem.label || i.invoiceType;
           });
           item.invoiceList = res.data.data;
           if (item.invoiceList.length === 1) {
