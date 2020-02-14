@@ -1,4 +1,10 @@
 .selects--custom, .good-selects, .org-goods-selects {
+
+  &.is-max {
+    .el-select-dropdown__item {
+      max-width: unset;
+    }
+  }
   .el-select-dropdown__item {
     padding-top: 4px;
     padding-bottom: 4px;

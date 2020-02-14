@@ -357,3 +357,23 @@
     text-overflow: clip;
   }
 }
+
+.invoice-box {
+  position: relative;
+  padding: 10px 10px 0 10px;
+  margin-bottom: 20px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+
+  .invoice-box-btn {
+    position: absolute;
+    top: 0;
+    right: 10px;
+  }
+
+  .is-view.el-form {
+    .el-form-item {
+      margin-bottom: 0;
+    }
+  }
+}

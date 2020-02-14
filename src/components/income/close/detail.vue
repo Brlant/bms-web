@@ -38,79 +38,93 @@
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>
           <oms-row label="合同" :span="8">{{ formItem.contractName }}</oms-row>
           <oms-row label="结算单号" :span="8">{{ formItem.statementNo }}</oms-row>
-          <div v-show="formItem.invoiceNo">
-            <oms-row label="发票类型" :span="8">
-              {{ invoiceTypes[formItem.invoiceType] && invoiceTypes[formItem.invoiceType].label}}
-            </oms-row>
-            <oms-row label="发票号" :span="8">{{ formItem.invoiceNo }}</oms-row>
-            <oms-row label="发票金额" :span="8">{{ formItem.invoiceAmount | formatMoney}}</oms-row>
-          </div>
-          <oms-row label="结算单状态" :span="8">{{ orgType[formItem.statementType].title }}</oms-row>
+          <oms-row label="结算单状态" :span="8">
+            {{orgType[formItem.statementType < 9  ?  1*formItem.statementType + 1 : formItem.statementType] &&
+            orgType[formItem.statementType < 9  ? 1*formItem.statementType + 1 : formItem.statementType].title}}
+          </oms-row>
+
         </el-col>
         <el-col :span="12">
           <oms-row label="结算单金额" :span="8">{{ formItem.statementAmount  | formatMoney}}</oms-row>
           <oms-row label="结算日期" :span="8">{{ formItem.statementTime | time }}</oms-row>
           <oms-row label="待回款金额" :span="8">{{ formItem.unreturnedAmount  | formatMoney}}</oms-row>
           <oms-row label="回款日期" :span="8" v-show="formItem.backAmountTime">{{ formItem.backAmountTime | time }}</oms-row>
-          <oms-row label="是否含税" :span="8">{{ formItem.includeTax === '0' ? '否' : '是' }}</oms-row>
-          <oms-row label="税率" :span="8" v-show="formItem.taxRate">{{ formItem.taxRate }}%</oms-row>
           <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount  | formatMoney}}
           </oms-row>
           <oms-row label="折扣" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}%</oms-row>
+          <oms-row label="备注" :span="8" v-show="formItem.statementRemark">{{ formItem.statementRemark }}</oms-row>
+        </el-col>
+      </el-row>
+      <h2 class="detail-title">开票信息</h2>
+      <el-row class="clearfix">
+        <el-col :span="12">
+          <oms-row label="发票类型" :span="8" v-show="formItem.invoiceType">
+            {{invoiceTypes[formItem.invoiceType] && invoiceTypes[formItem.invoiceType].label || formItem.invoiceType }}
+          </oms-row>
+          <oms-row label="发票内容" :span="8" v-show="formItem.invoiceContents">{{ formItem.invoiceContents }}</oms-row>
+          <div v-show="formItem.invoiceNo">
+            <oms-row label="发票号" :span="8">{{ formItem.invoiceNo }}</oms-row>
+            <oms-row label="发票金额" :span="8">{{ formItem.invoiceAmount | formatMoney}}</oms-row>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <oms-row label="是否含税" :span="8">{{ formItem.includeTax === '0' ? '否' : '是' }}</oms-row>
+          <oms-row label="税率" :span="8" v-show="formItem.taxRate">{{ formItem.taxRate }}%</oms-row>
+          <oms-row label="开票日期" :span="8" v-show="formItem.invoiceTime">{{ formItem.invoiceTime | date}}</oms-row>
         </el-col>
       </el-row>
       <h2 class="detail-title">计费明细</h2>
       <large-data-list :dataList="billAccountList" class="mt-20">
         <el-table slot-scope="{children}" :data="children" v-loading="loading" border class="clearfix" ref="orderDetail">
           <el-table-column prop="contractName" label="合同" width="100">
-            <template slot-scope="scope">{{scope.row.contractName}}</template>
+            <template slot-scope="scope">{{formItem.contractName}}</template>
           </el-table-column>
           <el-table-column prop="customerName" label="甲方" width="140">
-            <template slot-scope="scope">{{scope.row.customerName}}</template>
+            <template slot-scope="scope">{{formItem.customerName}}</template>
           </el-table-column>
           <el-table-column prop="actionType" label="项目" width="140">
-            <template slot-scope="scope">{{scope.row.projectName}}</template>
+            <template slot-scope="scope">{{formItem.projectName}}</template>
           </el-table-column>
           <el-table-column prop="billingTime" label="创建时间" width="160">
-            <template slot-scope="scope">{{scope.row.billingTime | time}}</template>
+            <template slot-scope="scope">{{formItem.billingTime | time}}</template>
           </el-table-column>
           <el-table-column prop="actionType" label="订单号" width="140">
-            <template slot-scope="scope">{{scope.row.orderNumber}}</template>
+            <template slot-scope="scope">{{formItem.orderNumber}}</template>
           </el-table-column>
           <el-table-column prop="actionType" label="对账单号" width="150">
-            <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
+            <template slot-scope="scope">{{formItem.accountCheckNo}}</template>
           </el-table-column>
           <el-table-column prop="actionType" label="货品" width="200">
             <template slot-scope="scope">
-              {{scope.row.orgGoodsName}}
-              <div v-show="scope.row.goodsSpecification">规格：{{scope.row.goodsSpecification}}</div>
+              {{formItem.orgGoodsName}}
+              <div v-show="formItem.goodsSpecification">规格：{{formItem.goodsSpecification}}</div>
             </template>
           </el-table-column>
           <el-table-column prop="batchNumber" label="批号" width="120">
-            <template slot-scope="scope">{{scope.row.batchNumber}}</template>
+            <template slot-scope="scope">{{formItem.batchNumber}}</template>
           </el-table-column>
           <el-table-column prop="billingItemName" label="计费项" width="200">
-            <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
+            <template slot-scope="scope">{{formatBillingItemName(formItem)}}</template>
           </el-table-column>
           <el-table-column prop="billingCustomName" label="计费项名称" width="200">
-            <template slot-scope="scope">{{scope.row.billingCustomName}}</template>
+            <template slot-scope="scope">{{formItem.billingCustomName}}</template>
           </el-table-column>
           <el-table-column prop="billingUntilPrice" label="单价" width="150px">
-            <template slot-scope="scope">{{scope.row.billingUntilPrice}}</template>
+            <template slot-scope="scope">{{formItem.billingUntilPrice}}</template>
           </el-table-column>
           <el-table-column prop="billingQuantity" label="数量">
-            <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
+            <template slot-scope="scope">{{formItem.billingQuantity}}</template>
           </el-table-column>
           <el-table-column prop="billingTotal" label="计费合计">
-            <template slot-scope="scope">{{scope.row.billingTotal}}</template>
+            <template slot-scope="scope">{{formItem.billingTotal}}</template>
           </el-table-column>
           <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计">
           </el-table-column>
           <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
-            <template slot-scope="scope">{{scope.row.unreturnedAmount}}</template>
+            <template slot-scope="scope">{{formItem.unreturnedAmount}}</template>
           </el-table-column>
           <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
-            <template slot-scope="scope">{{scope.row.unliquidatedAmount}}</template>
+            <template slot-scope="scope">{{formItem.unliquidatedAmount}}</template>
           </el-table-column>
           <el-table-column prop="statementAmount" width="120px" label="结算金额" fixed="right">
           </el-table-column>

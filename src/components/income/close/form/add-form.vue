@@ -31,7 +31,8 @@
             </el-switch>
           </el-form-item>
           <el-form-item label="税率" prop="taxRate" label-width="120px"
-                        :rules="[{required: true, message: '请输入税率', trigger: 'blur'}]">
+                        :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
+                         {required: true, type:'number', max:100, message: '税率不能大于100%', trigger: 'blur'}]">
             <oms-input placeholder="请输入税率" type="number" v-model="form.taxRate">
               <span slot="append">%</span>
             </oms-input>
@@ -52,6 +53,10 @@
               <el-radio-button :label="item.key" :key="item.key" v-for="item in invoiceTypes">{{item.label}}</el-radio-button>
             </el-radio-group>
           </el-form-item>
+          <el-form-item label="发票内容" label-width="120px" prop="invoiceContents"
+                        :rules="[{required: true, message: '请输入发票内容', trigger: 'blur'}]">
+            <oms-input placeholder="请输入发票内容" type="input" v-model="form.invoiceContents"/>
+          </el-form-item>
           <el-form-item label="发票号" label-width="120px" prop="invoiceNo"
                         :rules="[{required: true, message: '请输入发票号', trigger: 'blur'}]">
             <oms-input placeholder="请输入发票号" type="input" v-model="form.invoiceNo"/>
@@ -60,6 +65,10 @@
                         :rules="[{required: true, message: '请输入发票金额', trigger: 'blur'}]">
             <oms-input placeholder="请输入发票金额" type="input" v-model="form.invoiceAmount"
                        @blur="formatInvoiceAmountPrice"/>
+          </el-form-item>
+          <el-form-item label="开票日期" label-width="120px"  prop="invoiceTime"
+                        :rules="[{required: true, message: '请选择开票日期', trigger: 'blur'}]">
+            <el-date-picker v-model="form.invoiceTime" type="date" placeholder="选择日期" style="width: 200px"></el-date-picker>
           </el-form-item>
         </div>
       </el-form>
@@ -82,7 +91,8 @@
           projectId: '',
           projectName: '',
           orderNumber: '',
-          orgGoodsId: ''
+          orgGoodsId: '',
+          invoiceTime: ''
         },
         doing: false,
         actionType: '添加',
@@ -104,6 +114,7 @@
         } else {
           this.form = {
             billingModelName: '',
+            invoiceTime: '',
             billingItems: []
           };
           this.actionType = '添加';

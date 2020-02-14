@@ -56,6 +56,7 @@
               <des-btn @click="bind(item)" icon="allot" v-has="'add-contract-goods-model'">绑定货品计费模型</des-btn>
               <des-btn @click="start(item)" icon="start" v-has="'enable-contract'" v-show="item.contractState === '0'">启用</des-btn>
               <des-btn @click="stop(item)" icon="stop" v-has="'disable-contract'" v-show="item.contractState === '1'">停用</des-btn>
+              <des-btn @click="addInvoice(item)" icon="detail" v-has="'query-contract-invoice'">发票信息管理</des-btn>
             </el-col>
           </el-row>
         </div>
@@ -87,12 +88,14 @@
   import BindOrgGoodsForm from './form/bind-orgGoods-form';
   import DetailPart from './detail';
   import BindCostModel from './form/bind-cost-model';
+  import BindInvoice from './form/bind-invoice'
   export default {
     components: {
       SearchPart,
       BindOrgGoodsForm,
       DetailPart,
-      BindCostModel
+      BindCostModel,
+      BindInvoice
     },
     mixins: [CommonMixin],
     data() {
@@ -105,7 +108,8 @@
           0: addForm,
           1: BindOrgGoodsForm,
           2: DetailPart,
-          3: BindCostModel
+          3: BindCostModel,
+          4: BindInvoice
         },
         orgType: {
           0: {'title': '正常', 'num': 0, 'contractState': '1'},
@@ -226,6 +230,13 @@
             }
           });
         });
+      },
+      addInvoice(item) {
+        this.currentItem = item;
+        this.currentItemId = item.contractId;
+        this.form = item;
+        this.defaultPageRight.width = '700px';
+        this.showPart(4);
       },
       change() {
         this.resetRightBox();

@@ -107,6 +107,22 @@ http.interceptors.response.use(response => {
 
 Vue.prototype.$http = http;
 
+//发票信息管理
+export const InvoiceManger = resource('/bms-contract-invoice', http, {
+  save(obj) {
+    return http.post('/bms-contract-invoice/add', obj);
+  },
+  update(obj) {
+    return http.post('/bms-contract-invoice/edit', obj);
+  },
+  delete(id) {
+    return http.delete(`/bms-contract-invoice/${id}`)
+  },
+  query(params) {
+    return http.get('/bms-contract-invoice/query-list', {params})
+  }
+});
+
 // 收款作业
 export const roleDataRight = resource('', http, {
   query(params) {
@@ -187,7 +203,7 @@ export const closeAccount = resource('', http, {
     return http.post('/bms-sd/export-info', params);
   },
   exportGoodsExcel(params) {
-    return http.get('/bms-sd/export-business-info', {params})
+    return http.get('/bms-sd/export-business-info', {params});
   },
   exportCloseExcel(params) {
     return http.post('/bms-statement/export-statement-info', params);
@@ -245,10 +261,10 @@ export const contractAccountDetail = resource('', http, {
     return http.post('/bms-boa/count', params);
   },
   export(params) {
-    return http.post('/bms-boa/export-info', params)
+    return http.post('/bms-boa/export-info', params);
   },
   createAmount(obj) {
-    return http.post('/bms-sd/add-statement-estimated-amount', obj)
+    return http.post('/bms-sd/add-statement-estimated-amount', obj);
   }
 });
 
@@ -355,7 +371,7 @@ export const Contact = resource('/bms-contract', http, {
     return http.post('/bms-contract/query-contract/page', obj);
   },
   queryNew(obj) {
-    return http.post('/bms-contract/query-contract-info/page', obj)
+    return http.post('/bms-contract/query-contract-info/page', obj);
   }
 });
 
