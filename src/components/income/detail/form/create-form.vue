@@ -36,34 +36,38 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="发票类型" prop="invoiceType"
-                      :rules="[{required: true, message: '请选择发票类型', trigger: 'change'}]">
-          <el-select v-if="!form.contractInvoiceId" v-model="form.invoiceType">
-            <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceTypes">
-            </el-option>
-          </el-select>
-          <div v-else>
+        <div v-if="form.contractInvoiceId">
+          <el-form-item label="发票类型">
             {{invoiceTypes[form.invoiceType] && invoiceTypes[form.invoiceType].label || form.invoiceType }}
-          </div>
-        </el-form-item>
-        <el-form-item label="发票内容" :prop="'invoiceContents'"
-                      :rules="[{required: true, message: '请输入发票内容', trigger: 'change'}]">
-          <el-select v-if="!form.contractInvoiceId" v-model="form.invoiceContents" placeholder="请选择发票内容">
-            <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceContents">
-            </el-option>
-          </el-select>
-          <div v-else>
+          </el-form-item>
+          <el-form-item label="发票内容" :span="8">
             <dict :dict-group="'invoiceContent'" :dict-key="form.invoiceContents"></dict>
-          </div>
-        </el-form-item>
-        <el-form-item label="税率" :prop="'taxRate'"
-                      :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
+          </el-form-item>
+          <el-form-item label="税率" :span="8">{{ form.taxRate }}%</el-form-item>
+        </div>
+        <div v-else>
+          <el-form-item label="发票类型" prop="invoiceType"
+                        :rules="[{required: true, message: '请选择发票类型', trigger: 'change'}]">
+            <el-select v-model="form.invoiceType">
+              <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceTypes">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="发票内容" :prop="'invoiceContents'"
+                        :rules="[{required: true, message: '请输入发票内容', trigger: 'change'}]">
+            <el-select v-model="form.invoiceContents" placeholder="请选择发票内容">
+              <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceContents">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="税率" :prop="'taxRate'"
+                        :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
                        {required: true, type:'number', max:100, message: '税率不能大于100%', trigger: 'blur'}]">
-          <el-input v-if="!form.contractInvoiceId" type="number" v-model.number="form.taxRate" :max="100">
-            <span slot="suffix">%</span>
-          </el-input>
-          <div v-else>{{ form.taxRate }}%</div>
-        </el-form-item>
+            <el-input  type="number" v-model.number="form.taxRate" :max="100">
+              <span slot="suffix">%</span>
+            </el-input>
+          </el-form-item>
+        </div>
         <el-form-item label="备注">
           <el-input type="textarea" v-model="form.statementRemark"></el-input>
         </el-form-item>
@@ -216,11 +220,12 @@
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
             this.doing = true;
+            let form = JSON.parse(JSON.stringify(this.form));
             let invoiceContentsItem = this.invoiceContents.find(f => f.key === this.form.invoiceType);
             if(invoiceContentsItem) {
-              this.form.invoiceContents = invoiceContentsItem.label;
+              form.invoiceContents = invoiceContentsItem.label;
             }
-            this.$httpRequestOpera(contractAccountDetail.createAmount(this.form), {
+            this.$httpRequestOpera(contractAccountDetail.createAmount(form), {
               errorTitle: '失败',
               success: res => {
                 if (res.data.code === 200) {
