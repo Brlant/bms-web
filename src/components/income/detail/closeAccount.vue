@@ -95,27 +95,38 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="发票类型" :prop="`invoiceData.${index}.invoiceType`"
-                          :rules="[{required: true, message: '请选择发票类型', trigger: 'change'}]">
-              <el-select v-model="item.invoiceType">
-                <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceTypes">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="发票内容" :prop="`invoiceData.${index}.invoiceContents`"
-                          :rules="[{required: true, message: '请输入发票内容', trigger: 'change'}]">
-              <el-select v-model="item.invoiceContents" placeholder="请选择发票内容">
-                <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceContents">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="税率" :prop="`invoiceData.${index}.taxRate`"
-                          :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
+            <div v-if="item.contractInvoiceId">
+              <el-form-item label="发票类型">
+                {{invoiceTypes[item.invoiceType] && invoiceTypes[item.invoiceType].label || item.invoiceType }}
+              </el-form-item>
+              <el-form-item label="发票内容" :span="8">
+                <dict :dict-group="'invoiceContent'" :dict-key="item.invoiceContents"></dict>
+              </el-form-item>
+              <el-form-item label="税率" :span="8">{{ item.taxRate }}%</el-form-item>
+            </div>
+            <div v-else>
+              <el-form-item label="发票类型" :prop="`invoiceData.${index}.invoiceType`"
+                            :rules="[{required: true, message: '请选择发票类型', trigger: 'change'}]">
+                <el-select v-model="item.invoiceType">
+                  <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceTypes">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="发票内容" :prop="`invoiceData.${index}.invoiceContents`"
+                            :rules="[{required: true, message: '请输入发票内容', trigger: 'change'}]">
+                <el-select v-model="item.invoiceContents" placeholder="请选择发票内容">
+                  <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceContents">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="税率" :prop="`invoiceData.${index}.taxRate`"
+                            :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
                           {required: true, type:'number', max:100, message: '税率不能大于100%', trigger: 'blur'}]">
-              <el-input type="number" v-model.number="item.taxRate">
-                <span slot="suffix">%</span>
-              </el-input>
-            </el-form-item>
+                <el-input type="number" v-model.number="item.taxRate">
+                  <span slot="suffix">%</span>
+                </el-input>
+              </el-form-item>
+            </div>
           </el-row>
         </div>
         <el-form-item label="备注" label-width="120px">
