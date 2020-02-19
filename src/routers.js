@@ -11,7 +11,7 @@ export const routes = [
       {
         path: '/org',
         component: () => import('./components/common/parent-route.vue'),
-        meta: {moduleId: 'monitoring', title: '单位主档', icon: 'platform', perm: 'oms-business-unit-manager'},
+        meta: {moduleId: 'monitoring', title: '单位主档1', icon: 'platform', perm: 'oms-business-unit-manager'},
         children: [
           {
             path: '/org/info',
