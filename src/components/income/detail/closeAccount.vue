@@ -69,7 +69,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-form :model="invoiceForm" label-width="120px" ref="form">
+      <el-form :model="invoiceForm" label-width="130px" ref="form">
         <el-row>
           <el-col :span="8">
             <el-form-item label="是否含税" label-width="120px">是</el-form-item>
@@ -84,7 +84,8 @@
         <div class="invoice-box" v-for="(item, index) in invoiceForm.invoiceData">
           <el-row>
             <h2>合同：{{item.contractName}}</h2>
-            <el-form-item label="已关联发票信息">
+            <el-form-item label="已关联发票信息" :prop="`invoiceData.${index}.contractInvoiceId`"
+                          :rules="[{required: true, message: '请选择已关联发票信息', trigger: 'change'}]">
               <el-select v-model="item.contractInvoiceId" placeholder="请选择已关联发票信息"
                          @change="val => contractInvoiceIdChange(item, val)" clearable popper-class="selects--custom is-max">
                 <el-option :value="invoice.contractInvoiceId" :label="invoice.invoiceContentsLabel"
@@ -96,36 +97,13 @@
               </el-select>
             </el-form-item>
             <div v-if="item.contractInvoiceId">
-              <el-form-item label="发票类型">
+              <el-form-item label="发票类型" style="margin-bottom: 0">
                 {{invoiceTypes[item.invoiceType] && invoiceTypes[item.invoiceType].label || item.invoiceType }}
               </el-form-item>
-              <el-form-item label="发票内容" :span="8">
+              <el-form-item label="发票内容" :span="8" style="margin-bottom: 0">
                 <dict :dict-group="'invoiceContent'" :dict-key="item.invoiceContents"></dict>
               </el-form-item>
               <el-form-item label="税率" :span="8">{{ item.taxRate }}%</el-form-item>
-            </div>
-            <div v-else>
-              <el-form-item label="发票类型" :prop="`invoiceData.${index}.invoiceType`"
-                            :rules="[{required: true, message: '请选择发票类型', trigger: 'change'}]">
-                <el-select v-model="item.invoiceType">
-                  <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceTypes">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="发票内容" :prop="`invoiceData.${index}.invoiceContents`"
-                            :rules="[{required: true, message: '请输入发票内容', trigger: 'change'}]">
-                <el-select v-model="item.invoiceContents" placeholder="请选择发票内容">
-                  <el-option :value="item.key" :label="item.label" :key="item.key" v-for="item in invoiceContents">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="税率" :prop="`invoiceData.${index}.taxRate`"
-                            :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
-                          {required: true, type:'number', max:100, message: '税率不能大于100%', trigger: 'blur'}]">
-                <el-input type="number" v-model.number="item.taxRate">
-                  <span slot="suffix">%</span>
-                </el-input>
-              </el-form-item>
             </div>
           </el-row>
         </div>
