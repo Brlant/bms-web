@@ -68,8 +68,8 @@
                 <el-col :span="24">
                   <el-date-picker
                     v-model="expectedTime"
-                    type="daterange"
-                    placeholder="请选择" format="yyyy-MM-dd">
+                    type="datetimerange"
+                    :default-time="['00:00:00', '23:59:59']">
                   </el-date-picker>
                 </el-col>
               </oms-form-row>
@@ -232,8 +232,8 @@
         this.showDetailPart = false;
       },
       searchInOrder: function () {// 搜索
-        this.searchWord.startTime = this.formatTimeToRangeByFormat(this.$formatAryTime(this.expectedTime, 0));
-        this.searchWord.endTime = this.formatTimeToRangeByFormat(this.$formatAryTime(this.expectedTime, 1), 1);
+        this.searchWord.startTime = this.$formatAryTime(this.expectedTime, 0);
+        this.searchWord.endTime = this.$formatAryTime(this.expectedTime, 1);
         Object.assign(this.filters, this.searchWord);
       },
       formatTimeToRangeByFormat(time, type) {
