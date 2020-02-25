@@ -406,6 +406,10 @@ export default [
             'label': '新增数据字典组',
           },
           {
+            'id': 'dict-group-export',
+            'label': '导出数据字典组',
+          },
+          {
             'id': 'oms-dict-group-update',
             'label': '编辑数据字典组',
           },
