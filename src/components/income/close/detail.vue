@@ -36,6 +36,7 @@
       <el-row class="clearfix">
         <el-col :span="12">
           <oms-row label="甲方" :span="8">{{ formItem.customerName }}</oms-row>
+          <oms-row label="甲方单位统一社会编码" :span="15">{{ formItem.manufacturerCode }}</oms-row>
           <oms-row label="合同" :span="8">{{ formItem.contractName }}</oms-row>
           <oms-row label="结算单号" :span="8">{{ formItem.statementNo }}</oms-row>
           <oms-row label="结算单状态" :span="8">
