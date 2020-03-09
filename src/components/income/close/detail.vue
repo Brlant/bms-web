@@ -43,14 +43,14 @@
             {{orgType[formItem.statementType < 9  ?  1*formItem.statementType + 1 : formItem.statementType] &&
             orgType[formItem.statementType < 9  ? 1*formItem.statementType + 1 : formItem.statementType].title}}
           </oms-row>
-
         </el-col>
         <el-col :span="12">
           <oms-row label="结算单金额" :span="8">{{ formItem.statementAmount  | formatMoney}}</oms-row>
           <oms-row label="结算日期" :span="8">{{ formItem.statementTime | time }}</oms-row>
           <oms-row label="待回款金额" :span="8">{{ formItem.unreturnedAmount  | formatMoney}}</oms-row>
           <oms-row label="回款日期" :span="8" v-show="formItem.backAmountTime">{{ formItem.backAmountTime | date }}</oms-row>
-          <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount  | formatMoney}}
+          <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">
+            {{ formItem.preferentialAmount  | formatMoney}}
           </oms-row>
           <oms-row label="折扣" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}%</oms-row>
           <oms-row label="备注" :span="8" v-show="formItem.statementRemark">{{ formItem.statementRemark }}</oms-row>
