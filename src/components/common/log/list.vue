@@ -68,8 +68,8 @@
                 <el-col :span="24">
                   <el-date-picker
                     v-model="expectedTime"
-                    type="daterange"
-                    placeholder="请选择" format="yyyy-MM-dd">
+                    type="datetimerange"
+                    :default-time="['00:00:00', '23:59:59']">
                   </el-date-picker>
                 </el-col>
               </oms-form-row>
@@ -81,6 +81,13 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="8">
+              <oms-form-row label="请求体" :span="6">
+                <el-col :span="24">
+                  <oms-input type="text" v-model="searchWord.body" placeholder="请输入请求体"></oms-input>
+                </el-col>
+              </oms-form-row>
+            </el-col>
             <el-col :span="8">
               <oms-form-row label="" :span="5">
                 <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
@@ -106,7 +113,8 @@
             {{ showActionType(scope.row.actionType)}}
           </template>
         </el-table-column>
-        <el-table-column prop="logRemarks" label="日志内容" :sortable="true"></el-table-column>
+        <el-table-column prop="logRemarks" label="日志内容" :sortable="true" min-width="150"></el-table-column>
+        <el-table-column prop="body" label="请求体" :sortable="true" min-width="150"></el-table-column>
         <el-table-column prop="ip" label="IP" :sortable="true" width="150"></el-table-column>
       </el-table>
       <div class="text-center" v-show="(logList.length || pager.currentPage !== 1) && !loadingData">
@@ -139,13 +147,15 @@
           operatorId: '',
           startTime: '',
           endTime: '',
-          actionType: ''
+          actionType: '',
+          body: ''
         },
         searchWord: {
           operatorId: '',
           startTime: '',
           endTime: '',
-          actionType: ''
+          actionType: '',
+          body: ''
         },
         pager: {
           currentPage: 1,
@@ -222,8 +232,8 @@
         this.showDetailPart = false;
       },
       searchInOrder: function () {// 搜索
-        this.searchWord.startTime = this.formatTimeToRangeByFormat(this.$formatAryTime(this.expectedTime, 0));
-        this.searchWord.endTime = this.formatTimeToRangeByFormat(this.$formatAryTime(this.expectedTime, 1), 1);
+        this.searchWord.startTime = this.$formatAryTime(this.expectedTime, 0);
+        this.searchWord.endTime = this.$formatAryTime(this.expectedTime, 1);
         Object.assign(this.filters, this.searchWord);
       },
       formatTimeToRangeByFormat(time, type) {
@@ -237,7 +247,8 @@
           operatorId: '',
           startTime: '',
           endTime: '',
-          actionType: ''
+          actionType: '',
+          body: ''
         };
         this.expectedTime = '';
         Object.assign(this.filters, this.searchWord);

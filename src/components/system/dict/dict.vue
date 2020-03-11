@@ -18,6 +18,13 @@
       <div class="d-table-left">
         <h2 class="header">
           <span class="pull-right">
+             <perm label="dict-group-export">
+               <el-tooltip placement="bottom" content="导出excel">
+                   <a href="#" class="btn-circle" @click.stop.prevent="exportDict">
+                  <i class="el-icon-t-export"></i>
+                </a>
+               </el-tooltip>
+              </perm>
               <perm label="oms-dict-group-add">
                 <a href="#" class="btn-circle" @click.stop.prevent="addType">
                   <i class="el-icon-t-plus"></i>
@@ -168,7 +175,7 @@
   import {DictGroup, DictItem} from '../../../resources';
   import dictGroupForm from './form/dictGroup.vue';
   import dictItemForm from './form/dictItem.vue';
-
+  import utils from '@/tools/utils';
   export default {
     components: {dictItemForm, dictGroupForm},
     data: function () {
@@ -459,6 +466,15 @@
         }
         this.showRowItem(item);
         this.changeDate();
+      },
+      exportDict() {
+        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path, text: '正在导出'});
+        this.$http.get('/dictGroup/export').then(res => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+          utils.download(res.data.path);
+        }).catch(() => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+        });
       }
     }
   };
