@@ -33,7 +33,7 @@
           <el-form-item label="税率" prop="taxRate" label-width="120px"
                         :rules="[{required: true, message: '请输入税率', trigger: 'blur'},
                          {required: true, type:'number', max:100, message: '税率不能大于100%', trigger: 'blur'}]">
-            <oms-input placeholder="请输入税率" type="number" v-model="form.taxRate">
+            <oms-input placeholder="请输入税率" type="number" v-model.number="form.taxRate">
               <span slot="append">%</span>
             </oms-input>
           </el-form-item>
