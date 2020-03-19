@@ -180,8 +180,12 @@
         closeAccount.exportCloseBill(filters).then(res => {
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
           utils.download(res.data.data.path);
-        }).catch(() => {
+        }).catch((error) => {
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+          this.$notify.info({
+            duration: 2000,
+            message: error.response.data && error.response.data.msg || '导出信息出现问题，可能是没有数据权限导致'
+          });
         });
       },
       selectionChange(val) {
