@@ -251,6 +251,10 @@ export default [
             id: 'batch-collection-jobs-statement',
             label: '批量生成收款作业'
           },
+          {
+            id: 'export-invoicing-after-info',
+            label: '导出开票明细'
+          }
         ]
       },
       {

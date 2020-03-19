@@ -15,6 +15,10 @@
           <f-a class="icon-small" name="export"></f-a>
           导出Excel
         </el-button>
+        <el-button @click="exportCloseBill" plain size="small" v-has="'export-invoicing-after-info'">
+          <f-a class="icon-small" name="export"></f-a>
+          导出开票明细
+        </el-button>
       </template>
     </search-part>
     <status-list :activeStatus="filters.statementType" :statusList="orgType"
@@ -156,6 +160,24 @@
         let filters = Object.assign({}, this.filters, search, obj);
         this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
         closeAccount.exportCloseExcel(filters).then(res => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+          utils.download(res.data.data.path);
+        }).catch(() => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+        });
+      },
+      exportCloseBill() {
+        this.$refs.search.setSearchCondition();
+        let search = this.$refs.search.searchCondition;
+        let obj = {};
+        if(!search.statementType[0]) {
+          obj.statementType = this.filters.statementType.includes(',') ? '0' : this.filters.statementType;
+        } else {
+          obj.statementType = search.statementType.join(',');
+        }
+        let filters = Object.assign({}, this.filters, search, obj);
+        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
+        closeAccount.exportCloseBill(filters).then(res => {
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
           utils.download(res.data.data.path);
         }).catch(() => {

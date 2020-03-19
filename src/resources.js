@@ -207,6 +207,9 @@ export const closeAccount = resource('', http, {
   },
   exportCloseExcel(params) {
     return http.post('/bms-statement/export-statement-info', params);
+  },
+  exportCloseBill(obj) {
+    return http.post('/bms-statement/export-invoicing-after-info', obj)
   }
 });
 
