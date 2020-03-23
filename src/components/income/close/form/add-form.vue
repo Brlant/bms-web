@@ -13,9 +13,6 @@
           <el-col :span="8">
             <el-form-item label="结算单金额" >{{form.statementAmount | formatMoney}}</el-form-item>
           </el-col>
-          <el-col :span="8" v-show="form.preferentialAmount && addType === 1">
-            <el-form-item label="优惠金额" >{{form.preferentialAmount | formatMoney}}</el-form-item>
-          </el-col>
           <el-col :span="8">
             <el-form-item label="待回款金额" >{{form.unreturnedAmount | formatMoney}}</el-form-item>
           </el-col>
@@ -36,9 +33,6 @@
             <oms-input placeholder="请输入税率" type="number" v-model.number="form.taxRate">
               <span slot="append">%</span>
             </oms-input>
-          </el-form-item>
-          <el-form-item label="优惠金额" label-width="120px">
-            <oms-input placeholder="请输入优惠金额" type="number" v-model="form.preferentialAmount" @blur="formatPrice"/>
           </el-form-item>
           <el-form-item label="折扣" label-width="120px">
             <oms-input placeholder="请输入折扣" type="number" v-model="form.discountAmount">
