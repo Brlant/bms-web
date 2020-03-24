@@ -70,6 +70,11 @@ export const routes = [
             meta: {moduleId: 'monitoring', title: '计费明细管理', perm: 'query-billing-of-account-page', type: 1}
           },
           {
+            path: '/income/detail/collect',
+            component: () => import('./components/income/collect/index.vue'),
+            meta: {moduleId: 'monitoring', title: '数据驾驶舱', perm: 'query-boa-total', type: 1}
+          },
+          {
             path: '/income/billing/manager',
             component: () => import('./components/income/bill/index.vue'),
             meta: {moduleId: 'monitoring', title: '对账单管理', perm: 'account-check-query-page', type: 1}
