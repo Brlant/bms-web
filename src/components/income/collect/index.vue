@@ -10,11 +10,17 @@
     }
   }
   .collect-status-list {
+    min-width: min-content;
     .status-item {
+      height: 60px !important;
       cursor: auto !important;
       width: 150px !important;
+      margin-right: 10px !important;
+      > div {
+        box-sizing: border-box;
+      }
       &:hover {
-        height: 40px !important;
+        height: 60px !important;
         > div.status-bg {
           opacity: 0.3;
         }
@@ -32,7 +38,9 @@
         </el-button>
       </template>
     </search-part>
-    <status-list class="collect-status-list" :statusList="totalCount" :checkStatus="()=>{}"></status-list>
+    <el-scrollbar style="height: 75px" v-if="totalCount">
+      <status-list  class="collect-status-list" :statusList="totalCount" :checkStatus="()=>{}"></status-list>
+    </el-scrollbar>
     <el-table :data="dataList" v-loading="loadingData" row-key="billingOfAccountId"
               border class="clearfix mt-20" ref="table">
       <el-table-column prop="customerName" label="甲方" width="180">
@@ -103,7 +111,7 @@
           obj[7].num += Number(i.nobackAmount);
         });
         Object.values(obj).forEach(obj => {
-          obj.num = obj.num.toFixed(2);
+          obj.num = this.$formatMoney(obj.num)
         });
         return obj;
       }
