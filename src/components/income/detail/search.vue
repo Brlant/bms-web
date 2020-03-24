@@ -96,6 +96,17 @@
             </el-date-picker>
           </oms-form-row>
         </el-col>
+        <el-col :span="8">
+          <oms-form-row label="计费项名称" :span="5">
+<!--            <el-select filterable placeholder="请选择计费项名称" :clearable="true"-->
+<!--                       v-model="searchCondition.billingItemName" popperClass="good-selects">-->
+<!--              <el-option v-for="item in $store.state.billItemList" :key="item.id"-->
+<!--                         :label="item.name" :value="item.name">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+            <el-input v-model.trim="searchCondition.billingItemName" placeholder="请输入计费项名称"></el-input>
+          </oms-form-row>
+        </el-col>
       </el-form>
     </template>
   </search-template>
