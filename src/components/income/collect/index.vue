@@ -14,10 +14,16 @@
     .status-item {
       height: 60px !important;
       cursor: auto !important;
-      width: 150px !important;
-      margin-right: 10px !important;
+      width: 130px !important;
+      margin-right: 5px !important;
+      font-size: 12px;
+
+      .status-num {
+        font-size: 16px !important;
+      }
       > div {
         box-sizing: border-box;
+        padding: 10px 4px 4px 4px;
       }
       &:hover {
         height: 60px !important;
