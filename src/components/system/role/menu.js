@@ -216,6 +216,10 @@ export default [
           {
             id: 'add-statement-estimated-amount',
             label: '生成预计金额结算单'
+          },
+          {
+            id: 'export-unbilled-info',
+            label: '导出未开票明细报表'
           }
         ]
       },

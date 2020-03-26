@@ -268,6 +268,9 @@ export const contractAccountDetail = resource('', http, {
   },
   createAmount(obj) {
     return http.post('/bms-sd/add-statement-estimated-amount', obj);
+  },
+  exportMonthDetail(obj) {
+    return http.post('/bms-boa/export-unbilled-info', obj);
   }
 });
 

@@ -6,7 +6,7 @@
   }
 </style>
 <template>
-  <search-template :isShow="showSearch" :isShowAdvance="false" @search="search" @reset="reset" @isShow="isShow">
+  <search-template :midSpan="0" :titleSpan="1" :isShow="showSearch" :isShowAdvance="false" @search="search" @reset="reset" @isShow="isShow">
     <template slot="title">查询</template>
     <template slot="btn">
       <slot name="btn"></slot>
@@ -174,9 +174,12 @@
         this.queryOrgGoodsList(params);
       },
       search() {
+        this.setSearch();
+        this.$emit('search', this.searchCondition);
+      },
+      setSearch() {
         this.searchCondition.startTime = this.contractTime && this.contractTime[0] || '';
         this.searchCondition.endTime = this.contractTime && this.contractTime[1] || '';
-        this.$emit('search', this.searchCondition);
       },
       reset() {
         this.searchCondition = {

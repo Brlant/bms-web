@@ -12,7 +12,7 @@
 </style>
 <template>
   <div class="order-page">
-    <search-part @search="searchResult">
+    <search-part @search="searchResult" ref="searchPart">
       <template slot="btn">
         <el-button @click="add" plain size="small" v-has="'add-billing-of-account'">
           <f-a class="icon-small" name="plus"></f-a>
@@ -44,6 +44,12 @@
         <el-button @click="exportExcel" plain size="small">
           <f-a class="icon-small" name="export"></f-a>
           导出Excel
+        </el-button>
+
+        <el-button @click="exportCloseAccount" plain size="small"
+                   v-show="filters.attachmentType === '2'" v-has="'export-unbilled-info'">
+          <f-a class="icon-small" name="export"></f-a>
+          导出未开票明细报表
         </el-button>
       </template>
     </search-part>
@@ -148,6 +154,7 @@
   import CloseAccount from './closeAccount';
   import batchInsertCloseAccount from './batchInsertCloseAccount';
   import createForm from './form/create-form';
+
   export default {
     components: {
       SearchPart,
@@ -210,7 +217,7 @@
     },
     methods: {
       selectable(row) {
-        return  this.filters.attachmentType !== '2' ||   this.filters.attachmentType === '2' && !!row.unliquidatedAmount;
+        return this.filters.attachmentType !== '2' || this.filters.attachmentType === '2' && !!row.unliquidatedAmount;
       },
       selectionChange(val) {
         this.selectList = val;
@@ -238,8 +245,8 @@
         if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
         let obj = {};
         this.selectList.forEach(i => obj[i.contractId] = '');
-        if(Object.keys(obj).length > 1) {
-          return this.$notify.info({message: '请选择相同合同的计费明细'})
+        if (Object.keys(obj).length > 1) {
+          return this.$notify.info({message: '请选择相同合同的计费明细'});
         }
         let list = JSON.parse(JSON.stringify(this.selectList));
         list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
@@ -322,12 +329,32 @@
         });
       },
       exportExcel() {
+        this.$refs.searchPart.setSearch();
+        let filters = Object.assign({}, this.$refs.searchPart.searchCondition);
         this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
-        contractAccountDetail.export(this.filters).then(res => {
+        contractAccountDetail.export(filters).then(res => {
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
           utils.download(res.data.data.path);
         }).catch(() => {
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+        });
+      },
+      exportCloseAccount() {
+        this.$refs.searchPart.setSearch();
+        let filters = Object.assign({}, this.$refs.searchPart.searchCondition);
+        if (!filters.startTime) {
+          return this.$notify.info('请选择创建时间');
+        }
+        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
+        contractAccountDetail.exportMonthDetail(filters).then(res => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+          utils.download(res.data.data.path);
+        }).catch(e => {
+          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+          this.$notify.error({
+            duration: 2000,
+            message: e.response && e.response.data && e.response.data.msg || '无对账单信息'
+          });
         });
       },
       add() {
