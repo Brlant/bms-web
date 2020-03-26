@@ -89,6 +89,7 @@
         this.routesCopy = deepCopy(routes);
         this.loading = true;
         Auth.permission().then(res => {
+          this.loading = false;
           // 设置全局鉴权方法
           this.setGlobalPermission(res.data);
           this.menuData = this.getCurrentMenu(res.data);
@@ -97,6 +98,7 @@
           this.$router.addRoutes(this.routesCopy);
           this.$router.addRoutes(ErrorPage);
           this.$store.commit('initPermissions', res.data);
+          this.loading = false;
           // 添加路由后，跳转相应地址
           this.$router.push(this.getCurrentUrl(url), () => {
             this.loading = false;

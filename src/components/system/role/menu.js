@@ -180,20 +180,6 @@ export default [
             label: '查看计费明细'
           },
           {
-            id: 'query-boa-total-manger',
-            label: '数据驾驶舱管理',
-            children: [
-              {
-                id: 'query-boa-total',
-                label: '查看数据驾驶舱',
-              },
-              {
-                id: 'export-boa-total',
-                label: '导出Excel',
-              },
-            ]
-          },
-          {
             id: 'add-billing-of-account',
             label: '增加计费明细'
           },
@@ -296,6 +282,26 @@ export default [
       {
         id: 'query-collection-balance',
         label: '预收款余额',
+      }
+    ]
+  },
+  {
+    id: 'query-boa-total-manger',
+    label: '数据驾驶舱',
+    children: [
+      {
+        id: 'query-boa-total',
+        label: '收入计费',
+        children: [
+          {
+            id: 'query-boa-total',
+            label: '查看收入计费',
+          },
+          {
+            id: 'export-boa-total',
+            label: '导出Excel',
+          },
+        ]
       }
     ]
   },
