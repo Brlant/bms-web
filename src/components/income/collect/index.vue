@@ -58,18 +58,31 @@
       <el-table-column prop="billingTotal" label="计费合计" width="120">
       </el-table-column>
       <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计">
+        <span slot-scope="{row}">{{row.realityBillingTotal | formatMoney}}</span>
       </el-table-column>
       <el-table-column prop="noAccountCheckAmount" label="实际计费未对账" width="150">
+        <span slot-scope="{row}">{{row.noAccountCheckAmount | formatMoney}}</span>
+
       </el-table-column>
       <el-table-column prop="accountCheckAmount" label="实际计费已对账" width="150">
+        <span slot-scope="{row}">{{row.accountCheckAmount | formatMoney}}</span>
+
       </el-table-column>
       <el-table-column prop="invoiceAmount" label="已开票" width="120">
+        <span slot-scope="{row}">{{row.invoiceAmount | formatMoney}}</span>
+
       </el-table-column>
       <el-table-column prop="noInvoiceAmount" label="已对账未开票" width="150">
+        <span slot-scope="{row}">{{row.noInvoiceAmount | formatMoney}}</span>
+
       </el-table-column>
       <el-table-column prop="backAmount" label="已回款金额" width="150">
+        <span slot-scope="{row}">{{row.backAmount | formatMoney}}</span>
+
       </el-table-column>
       <el-table-column prop="nobackAmount" label="已开票未回款金额" width="150px">
+        <span slot-scope="{row}">{{row.nobackAmount | formatMoney}}</span>
+
       </el-table-column>
     </el-table>
 
