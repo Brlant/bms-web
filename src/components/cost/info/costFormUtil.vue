@@ -24,8 +24,13 @@
       </el-select>
     </el-form-item>
     <el-form-item label="计费项名称" prop="billingCustomName" label-width="120px"
-                  :rules="[{required: true, message: '请输入计费项名称', trigger: 'blur'}]">
-      <oms-input placeholder="请输入计费项名称" type="input" v-model="currentItem.billingCustomName"/>
+                  :rules="[{required: true, message: '请选择计费项名称', trigger: 'change'}]">
+      <el-select filterable placeholder="请选择计费项名称" :clearable="true"
+                 v-model="currentItem.billingCustomName" popperClass="good-selects">
+        <el-option v-for="item in billItemList" :key="item.id"
+                   :label="item.name" :value="item.name">
+        </el-option>
+      </el-select>
     </el-form-item>
     <el-row v-show="currentItem.billingItemNo">
       <el-col :span="24">
@@ -93,6 +98,14 @@
         if (!bizItem) return [];
         if (!bizItem.itemId) return this.currentCostType.items.filter(f => (f.bind === (this.billingModelType === '1')));
         return this.currentCostType.items.filter(f => (f.bind === (this.billingModelType === '1') && f.id === bizItem.itemId));
+      },
+      billItemList() {
+        let billingCustomNameList = this.$getDict('billingCustomName');
+        billingCustomNameList = billingCustomNameList.map(m => ({
+          id: Math.random(),
+          name: m.label
+        }));
+        return billingCustomNameList.concat(this.$store.state.billItemList);
       }
     },
     watch: {
