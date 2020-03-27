@@ -64,6 +64,15 @@
             class="inline-input" v-model="form.billingItemName" :fetch-suggestions="querySearch"
             placeholder="请输入计费项" clearable></el-autocomplete>
         </el-form-item>
+        <el-form-item label="计费项名称" prop="billingCustomName"
+                      :rules="[{required: true, message: '请选择计费项名称', trigger: ['blur', 'change']}]">
+          <el-select filterable placeholder="请选择计费项名称" :clearable="true"
+                     v-model="form.billingCustomName" popperClass="good-selects">
+            <el-option v-for="item in billItemList" :key="item.id"
+                       :label="item.name" :value="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-row>
           <el-col :span="8">
             <el-form-item label="单价" prop="billingUntilPrice" label-width="120px"
@@ -111,6 +120,7 @@
           orgGoodsId: '',
           batchNumber: '',
           billingItemName: '',
+          billingCustomName: '',
           billingTotal: '',
           billingUntilPrice: '',
           billingQuantity: ''
@@ -135,6 +145,14 @@
           });
         });
         return values;
+      },
+      billItemList() {
+        let billingCustomNameList = this.$getDict('billingCustomName');
+        billingCustomNameList = billingCustomNameList.map(m => ({
+          id: Math.random(),
+          name: m.label
+        }));
+        return billingCustomNameList.concat(this.$store.state.billItemList);
       }
     },
     watch: {
@@ -153,6 +171,7 @@
             orgGoodsId: '',
             batchNumber: '',
             billingItemName: '',
+            billingCustomName: '',
             billingTotal: '',
             billingUntilPrice: '',
             billingQuantity: ''
