@@ -58,12 +58,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="计费项" prop="billingItemName"
-                      :rules="[{required: true, message: '请输入计费项', trigger: ['blur', 'change']}]">
-          <el-autocomplete style="width: 100%"
-            class="inline-input" v-model="form.billingItemName" :fetch-suggestions="querySearch"
-            placeholder="请输入计费项" clearable></el-autocomplete>
-        </el-form-item>
         <el-form-item label="计费项名称" prop="billingCustomName"
                       :rules="[{required: true, message: '请选择计费项名称', trigger: ['blur', 'change']}]">
           <el-select filterable placeholder="请选择计费项名称" :clearable="true"
@@ -152,7 +146,7 @@
           id: Math.random(),
           name: m.label
         }));
-        return billingCustomNameList.concat(this.$store.state.billItemList);
+        return billingCustomNameList
       }
     },
     watch: {

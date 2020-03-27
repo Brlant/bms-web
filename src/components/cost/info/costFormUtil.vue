@@ -105,7 +105,7 @@
           id: Math.random(),
           name: m.label
         }));
-        return billingCustomNameList.concat(this.$store.state.billItemList);
+        return billingCustomNameList
       }
     },
     watch: {
