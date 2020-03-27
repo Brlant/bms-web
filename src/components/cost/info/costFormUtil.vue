@@ -131,7 +131,6 @@
         this.currentItem.showLadderState =  this.currentItem.ladderState === '1';
       },
       billingItemNoChange(val) {
-        this.currentItem.billingCustomName = '';
         this.currentItem.lowerLimit = '';
         this.currentItem.upperLimit = '';
         if (this.currentItem.billingType === '1') {
@@ -149,7 +148,6 @@
         this.currentItem.billingItemName = item.name;
         this.currentItem.billingRules = item.rule;
         this.currentItem.billingUnit = item.unit;
-        this.currentItem.billingCustomName = item.name;
       },
       formatPrice() {// 格式化单价，保留两位小数
         this.currentItem.unitPrice = utils.autoformatDecimalPoint(this.currentItem.unitPrice);

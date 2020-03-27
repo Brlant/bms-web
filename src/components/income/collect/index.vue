@@ -47,8 +47,8 @@
     <el-scrollbar style="height: 75px" v-if="totalCount">
       <status-list  class="collect-status-list" :statusList="totalCount" :checkStatus="()=>{}"></status-list>
     </el-scrollbar>
-    <el-table :data="dataList" v-loading="loadingData" row-key="billingOfAccountId"
-              border class="clearfix mt-20" ref="table">
+    <el-table :data="dataList" :max-height="bodyHeight" v-loading="loadingData" row-key="billingOfAccountId"
+              border class="clearfix mt-10" ref="table">
       <el-table-column prop="customerName" label="甲方" width="180">
       </el-table-column>
       <el-table-column prop="contractName" label="合同" width="300">
@@ -107,6 +107,11 @@
     },
     mixins: [CommonMixin],
     computed: {
+      bodyHeight: function () {
+        let height = parseInt(this.$store.state.bodyHeight, 10);
+        height = (height - 130) + 'px';
+        return height;
+      },
       totalCount() {
         if(!this.dataList.length) return null;
         let obj =  {
