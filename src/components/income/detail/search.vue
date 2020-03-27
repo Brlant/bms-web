@@ -6,7 +6,8 @@
   }
 </style>
 <template>
-  <search-template :isShow="showSearch" :isShowAdvance="false" @search="search" @reset="reset" @isShow="isShow">
+  <search-template :midSpan="0" :titleSpan="1" :isShow="showSearch" :isShowAdvance="false" @search="search"
+                   @reset="reset" @isShow="isShow">
     <template slot="title">查询</template>
     <template slot="btn">
       <slot name="btn"></slot>
@@ -92,8 +93,18 @@
         </el-col>
         <el-col :span="10">
           <oms-form-row label="创建时间" :span="5">
-            <el-date-picker v-model="contractTime" type="datetimerange"  :default-time="['00:00:00', '23:59:59']">
+            <el-date-picker v-model="contractTime" type="datetimerange" :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
+          </oms-form-row>
+        </el-col>
+        <el-col :span="8">
+          <oms-form-row label="计费项名称" :span="5">
+            <el-select filterable placeholder="请选择计费项名称" :clearable="true"
+                       v-model="searchCondition.billingCustomName" popperClass="good-selects">
+              <el-option v-for="item in billItemList" :key="item.id"
+                         :label="item.name" :value="item.name">
+              </el-option>
+            </el-select>
           </oms-form-row>
         </el-col>
       </el-form>
@@ -118,7 +129,7 @@
           projectId: '',
           orgGoodsId: '',
           batchNumber: '',
-          billingItemName: ''
+          billingCustomName: ''
         },
         showSearch: false,
         list: [],
@@ -131,7 +142,12 @@
     },
     computed: {
       billItemList() {
-        return this.$store.state.billItemList;
+        let billingCustomNameList = this.$getDict('billingCustomName');
+        billingCustomNameList = billingCustomNameList.map(m => ({
+          id: Math.random(),
+          name: m.label
+        }));
+        return billingCustomNameList
       }
     },
     methods: {
@@ -163,9 +179,12 @@
         this.queryOrgGoodsList(params);
       },
       search() {
+        this.setSearch();
+        this.$emit('search', this.searchCondition);
+      },
+      setSearch() {
         this.searchCondition.startTime = this.contractTime && this.contractTime[0] || '';
         this.searchCondition.endTime = this.contractTime && this.contractTime[1] || '';
-        this.$emit('search', this.searchCondition);
       },
       reset() {
         this.searchCondition = {
@@ -177,7 +196,7 @@
           projectId: '',
           orgGoodsId: '',
           batchNumber: '',
-          billingItemName: '',
+          billingCustomName: '',
           startTime: '',
           endTime: ''
         };

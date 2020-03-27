@@ -202,6 +202,10 @@ export default [
           {
             id: 'add-statement-estimated-amount',
             label: '生成预计金额结算单'
+          },
+          {
+            id: 'export-unbilled-info',
+            label: '导出未开票明细报表'
           }
         ]
       },
@@ -251,6 +255,10 @@ export default [
             id: 'batch-collection-jobs-statement',
             label: '批量生成收款作业'
           },
+          {
+            id: 'export-invoicing-after-info',
+            label: '导出开票明细'
+          }
         ]
       },
       {
@@ -274,6 +282,26 @@ export default [
       {
         id: 'query-collection-balance',
         label: '预收款余额',
+      }
+    ]
+  },
+  {
+    id: 'query-boa-total-manger',
+    label: '数据驾驶舱',
+    children: [
+      {
+        id: 'query-boa-total',
+        label: '收入计费',
+        children: [
+          {
+            id: 'query-boa-total',
+            label: '查看收入计费',
+          },
+          {
+            id: 'export-boa-total',
+            label: '导出Excel',
+          },
+        ]
       }
     ]
   },

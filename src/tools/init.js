@@ -63,7 +63,8 @@ export function init(Vue) {
   Vue.filter('nl2br', function (textAreaContent) {
     return textAreaContent.replace(/\n/g, '<br>');
   });
-  Vue.filter('formatMoney', function (val) {
+
+  const formatMoney =  function (val) {
     let num = '';
     if (typeof val === 'string') {
       num = val;
@@ -99,8 +100,9 @@ export function init(Vue) {
       }
       return result;
     }
-  });
-
+  };
+  Vue.filter('formatMoney', formatMoney);
+  Vue.prototype.$formatMoney = formatMoney;
   // 滚动加载
   Vue.prototype.$scrollLoadingData = function (event) {
     let e = event ? event : window.event;
@@ -185,7 +187,6 @@ export function init(Vue) {
         success && success(res);
       }
     }).catch(e => {
-      debugger;
       this.$notify.error({
         duration: 2000,
         message: e.response && e.response.data && e.response.data.msg || errorTitle || '操作失败'

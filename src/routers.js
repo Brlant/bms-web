@@ -97,6 +97,18 @@ export const routes = [
         ]
       },
       {
+        path: '/report',
+        component: () => import('./components/common/parent-route.vue'),
+        meta: {moduleId: 'boa', title: '数据驾驶舱', icon: 'report', perm: 'query-boa-total-manger', type: 1},
+        children: [
+          {
+            path: '/report/collect',
+            component: () => import('./components/income/collect/index.vue'),
+            meta: {moduleId: 'boa', title: '收入计费', perm: 'query-boa-total', type: 1}
+          }
+        ]
+      },
+      {
         path: '/permission',
         component: () => import('./components/system/index.vue'),
         meta: {moduleId: 'permission', title: '系统设置', icon: 'setting', perm: 'system-config'},

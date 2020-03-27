@@ -207,6 +207,9 @@ export const closeAccount = resource('', http, {
   },
   exportCloseExcel(params) {
     return http.post('/bms-statement/export-statement-info', params);
+  },
+  exportCloseBill(obj) {
+    return http.post('/bms-statement/export-invoicing-after-info', obj)
   }
 });
 
@@ -265,6 +268,9 @@ export const contractAccountDetail = resource('', http, {
   },
   createAmount(obj) {
     return http.post('/bms-sd/add-statement-estimated-amount', obj);
+  },
+  exportMonthDetail(obj) {
+    return http.post('/bms-boa/export-unbilled-info', obj);
   }
 });
 
