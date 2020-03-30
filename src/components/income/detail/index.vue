@@ -224,7 +224,77 @@
       },
       batchCreate() {
         if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
-        this.$confirmOpera('是否批量生成勾选的计费明细的对账单', () => {
+        let obj = {};
+        this.selectList.forEach(i => {
+          obj[i.contractId] = '';
+        });
+        if (Object.keys(obj).length > 1) return this.$notify.info('请选择相同合同的计费明细');
+        let item = this.selectList[0];
+        // 本次对账金额
+        let cutAmount = 0;
+        this.selectList.forEach(i => {
+          cutAmount += Number(i.realityBillingTotal);
+        });
+        // (4)上、下限均未设置，不提示。
+        if (!item.lowerLimitAmount && !item.upperLimitAmount) {
+          this.doCreate();
+          return;
+        }
+        this.$http.get(`/bms-boa/query-boa-contractId-sum?contractId=${item.contractId}`).then(res => {
+          // 已对账金额
+           let closeAmount = 10;
+          // (1)对账前未达下限:
+          // 若该合同存在【合同下限金额】，且【合同已执行金额】<【合同下限金 额】，
+          // 则【剩余执行金额】=【合同下限金额】—【合同已执行金额】。
+          if (item.lowerLimitAmount && closeAmount < item.lowerLimitAmount) {
+            // 下限剩余执行金额
+            const lowerAmount = item.lowerLimitAmount - closeAmount;
+            // 1如果【本次对账金额】小于【剩余执行金额】，则【对账后状态】=未 达下限。(即对账后仍未达下限)
+            if (cutAmount < lowerAmount) {
+              this.doCreate('对账后未达合同下限金额');
+              return;
+            }
+            // 2如果不存在【合同上限金额】，则【对账后状态】=未达上限。
+            if (!item.upperLimitAmount) {
+              this.doCreate('对账后未达合同上限金额');
+              return;
+            }
+            // 上限剩余执行金额
+            const upperAmount = item.upperLimitAmount - closeAmount;
+            // 3如果存在【合同上限金额】且【本次对账金额】小于或等于(【合同上 限金额】—【合同已执行金额】)，则【对账后状态】=未超上限，
+            // 否则【对 账后状态】=超过上限。(即对账后超过下限)
+            if (cutAmount <= upperAmount) {
+              this.doCreate('对账后仍未达合同上限金额');
+              return;
+            } else {
+              this.doCreate('对账后超过合同上限金额');
+              return;
+            }
+          }
+          // (2)对账前未超上限:
+          // 若该合同存在【合同上限金额】，且【合同已执行金额】<【合同上限金 额】，
+          // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】。
+          if (item.upperLimitAmount && closeAmount < item.upperLimitAmount) {
+            // 上限剩余执行金额
+            const upperAmount = item.upperLimitAmount - closeAmount;
+            if (cutAmount < upperAmount) {
+              this.doCreate('对账后未达合同上限金额');
+              return;
+            } else {
+              this.doCreate('对账后超过合同上限金额');
+              return;
+            }
+          }
+          // (3)对账前已超上限:
+          // 若该合同存在【合同上限金额】，且【合同已执行金额】>=【合同上限金 额】，
+          // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】,【对账 后状态】=超过上限。
+          if (item.upperLimitAmount && closeAmount >= item.upperLimitAmount) {
+            this.doCreate('对账后超过合同上限金额');
+          }
+        });
+      },
+      doCreate(title = '是否批量生成勾选的计费明细的对账单') {
+        this.$confirmOpera(title, () => {
           this.$httpRequestOpera(accountBill.batchCreateBill(this.selectList.map(m => m.billingOfAccountId)), {
             successTitle: '生成成功',
             errorTitle: '生成失败',
