@@ -244,7 +244,7 @@
             return;
           }
           // 已对账金额
-           let closeAmount = res.data.contractTotal;
+          let closeAmount = res.data.contractTotal;
           // (1)对账前未达下限:
           // 若该合同存在【合同下限金额】，且【合同已执行金额】<【合同下限金 额】，
           // 则【剩余执行金额】=【合同下限金额】—【合同已执行金额】。
@@ -253,12 +253,12 @@
             const lowerAmount = item.lowerLimitAmount - closeAmount;
             // 1如果【本次对账金额】小于【剩余执行金额】，则【对账后状态】=未 达下限。(即对账后仍未达下限)
             if (cutAmount < lowerAmount) {
-              this.doCreate('对账后未达合同下限金额');
+              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同下限金额'));
               return;
             }
             // 2如果不存在【合同上限金额】，则【对账后状态】=未达上限。
             if (!item.upperLimitAmount) {
-              this.doCreate('对账后未达合同上限金额');
+              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同上限金额'));
               return;
             }
             // 上限剩余执行金额
@@ -266,10 +266,10 @@
             // 3如果存在【合同上限金额】且【本次对账金额】小于或等于(【合同上 限金额】—【合同已执行金额】)，则【对账后状态】=未超上限，
             // 否则【对 账后状态】=超过上限。(即对账后超过下限)
             if (cutAmount <= upperAmount) {
-              this.doCreate('对账后仍未达合同上限金额');
+              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '未达合同上限金额'));
               return;
             } else {
-              this.doCreate('对账后超过合同上限金额');
+              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
               return;
             }
           }
@@ -280,10 +280,10 @@
             // 上限剩余执行金额
             const upperAmount = item.upperLimitAmount - closeAmount;
             if (cutAmount < upperAmount) {
-              this.doCreate('对账后未达合同上限金额');
+              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '未达合同上限金额'));
               return;
             } else {
-              this.doCreate('对账后超过合同上限金额');
+              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
               return;
             }
           }
@@ -291,13 +291,24 @@
           // 若该合同存在【合同上限金额】，且【合同已执行金额】>=【合同上限金 额】，
           // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】,【对账 后状态】=超过上限。
           if (item.upperLimitAmount && closeAmount >= item.upperLimitAmount) {
-            this.doCreate('对账后超过合同上限金额');
+            // 上限剩余执行金额
+            const upperAmount = item.upperLimitAmount - closeAmount;
+            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
           }
         });
       },
+      getStr(lowerLimitAmount, upperLimitAmount, closeAmount, amount, cutAmount, status) {
+        let LimitAmountStr = `合同下限金额：${lowerLimitAmount.toFixed(2)}<br>合同上限金额：${upperLimitAmount.toFixed(2)}<br>`;
+        let str = `合同已执行金额：${closeAmount.toFixed(2)}<br>剩余执行金额：${amount.toFixed(2)}<br>
+                        本次对账金额：${cutAmount.toFixed(2)}<br>对账后状态：${status}<br>`;
+        return LimitAmountStr + str;
+      },
       doCreate(title = '') {
-        title = title ? title + '，': '';
-        this.$confirmOpera(title + '是否生成对账单？', () => {
+        title = title ? title + '<br>' : '';
+        this.$alert(title + '是否生成对账单？', '', {
+          dangerouslyUseHTMLString: true,
+          showCancelButton: true
+        }).then(res => {
           this.$httpRequestOpera(accountBill.batchCreateBill(this.selectList.map(m => m.billingOfAccountId)), {
             successTitle: '生成成功',
             errorTitle: '生成失败',
@@ -306,6 +317,7 @@
             }
           });
         });
+
       },
       batchCreateCloseAccount() {
         if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
