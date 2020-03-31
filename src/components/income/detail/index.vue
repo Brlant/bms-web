@@ -293,8 +293,9 @@
           }
         });
       },
-      doCreate(title = '是否批量生成勾选的计费明细的对账单') {
-        this.$confirmOpera(title, () => {
+      doCreate(title = '') {
+        title = title ? title + '，': '';
+        this.$confirmOpera(title + '是否生成对账单？', () => {
           this.$httpRequestOpera(accountBill.batchCreateBill(this.selectList.map(m => m.billingOfAccountId)), {
             successTitle: '生成成功',
             errorTitle: '生成失败',
