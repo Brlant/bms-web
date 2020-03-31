@@ -242,7 +242,7 @@
         }
         this.$http.get(`/bms-boa/query-boa-contractId-sum?contractId=${item.contractId}`).then(res => {
           // 已对账金额
-           let closeAmount = 10;
+           let closeAmount = res.data.contractTotal;
           // (1)对账前未达下限:
           // 若该合同存在【合同下限金额】，且【合同已执行金额】<【合同下限金 额】，
           // 则【剩余执行金额】=【合同下限金额】—【合同已执行金额】。
