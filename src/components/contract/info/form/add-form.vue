@@ -172,7 +172,7 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
-            if (this.form.lowerLimitAmount && this.form.upperLimitAmount && this.form.lowerLimitAmount > this.form.upperLimitAmount) {
+            if (this.form.lowerLimitAmount && this.form.upperLimitAmount && this.form.lowerLimitAmount >= this.form.upperLimitAmount) {
               return this.$notify.info('下限金额不能大于上限金额');
             }
             this.form.contractSignTime = this.form.contractTime[0];
