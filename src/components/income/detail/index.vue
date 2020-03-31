@@ -235,12 +235,14 @@
         this.selectList.forEach(i => {
           cutAmount += Number(i.realityBillingTotal);
         });
-        // (4)上、下限均未设置，不提示。
-        if (!item.lowerLimitAmount && !item.upperLimitAmount) {
-          this.doCreate();
-          return;
-        }
         this.$http.get(`/bms-boa/query-boa-contractId-sum?contractId=${item.contractId}`).then(res => {
+          item.lowerLimitAmount = res.data.lowerLimitAmount;
+          item.upperLimitAmount = res.data.upperLimitAmount;
+          // (4)上、下限均未设置，不提示。
+          if (!item.lowerLimitAmount && !item.upperLimitAmount) {
+            this.doCreate();
+            return;
+          }
           // 已对账金额
            let closeAmount = res.data.contractTotal;
           // (1)对账前未达下限:
