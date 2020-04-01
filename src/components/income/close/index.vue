@@ -249,7 +249,7 @@
         } else {
           this.currentItem = item;
           this.currentItemId = item.billingModelId;
-          this.defaultPageRight.width = '800px';
+          this.defaultPageRight.width = '900px';
           this.form = item;
           this.showPart(1);
         }

@@ -39,12 +39,15 @@
           <oms-row label="合同名称" :span="6">{{formItem.contractName}}</oms-row>
           <oms-row label="合同编号" :span="6">{{formItem.contractNo}}</oms-row>
           <oms-row label="甲方" :span="6">{{formItem.orgName}}</oms-row>
+
         </el-col>
         <el-col :span="12">
           <oms-row label="合同日期" :span="6">
             {{formItem.contractSignTime | date}}~{{formItem.contractOverTime | date}}
           </oms-row>
           <oms-row label="业务员/部门" :span="6">{{formItem.businessManageName}}/{{formItem.companyDepartmentName}}</oms-row>
+          <oms-row label="合同下限金额" :span="6">{{formItem.lowerLimitAmount | formatMoney}}</oms-row>
+          <oms-row label="合同上限金额" :span="6">{{formItem.upperLimitAmount | formatMoney}}</oms-row>
           <oms-row label="状态" :span="6">{{formItem.contractState === '0' ? '停用': '启用'}}</oms-row>
         </el-col>
       </el-row>

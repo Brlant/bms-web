@@ -18,7 +18,8 @@
                       placeholder="请输入名称搜索甲方" v-model="form.orgId"></org-select>
         </el-form-item>
         <el-form-item label="所属部门" prop="companyDepartment">
-          <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment" @focus="queryDepartment()"
+          <el-select filterable remote placeholder="请输入名称搜所属部门" :remote-method="queryDepartment"
+                     @focus="queryDepartment()"
                      :clearable="true" v-model="form.companyDepartment" popperClass="good-selects"
                      @change="companyDepartmentChange">
             <el-option :label="item.name" :value="item.id" :key="item.id" v-for="item in departmentList">
@@ -27,7 +28,8 @@
         </el-form-item>
         <el-form-item label="业务员" prop="businessManageId">
           <el-select placeholder="请选择业务员" v-model="form.businessManageId"
-                     filterable clearable remote :remote-method="queryDepartmentUserNew" @focus="queryDepartmentUserNew()">
+                     filterable clearable remote :remote-method="queryDepartmentUserNew"
+                     @focus="queryDepartmentUserNew()">
             <el-option :label="item.name" :value="item.id" :key="item.id"
                        v-for="item in departmentUserList"></el-option>
           </el-select>
@@ -38,6 +40,14 @@
                           end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="合同下限金额" prop="lowerLimitAmount">
+          <oms-input placeholder="请输入合同下限金额" type="number" @blur="amountChange('lowerLimitAmount')"
+                     v-model.number="form.lowerLimitAmount"/>
+        </el-form-item>
+        <el-form-item label="合同上限金额" prop="upperLimitAmount">
+          <oms-input placeholder="请输入合同上限金额" type="number" @blur="amountChange('upperLimitAmount')"
+                     v-model.number="form.upperLimitAmount"/>
+        </el-form-item>
       </el-form>
     </template>
   </dialog-template>
@@ -45,11 +55,24 @@
 <script>
   import {Contact} from '@/resources';
   import methodsMixin from '@/mixins/methodsMixin';
+  import utils from '@/tools/utils';
 
   export default {
     mixins: [methodsMixin],
 
     data() {
+      const validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback();
+        } else if (value) {
+          if (value <= 0) {
+            return callback(new Error('输入的金额必须大于0'));
+          }
+          callback();
+        } else {
+          callback();
+        }
+      };
       return {
         form: {},
         doing: false,
@@ -71,6 +94,12 @@
           ],
           contractTime: [
             {required: true, message: '请选择合同日期', type: 'array', trigger: 'change'}
+          ],
+          lowerLimitAmount: [
+            {validator: validatePass, trigger: 'blur'}
+          ],
+          upperLimitAmount: [
+            {validator: validatePass, trigger: 'blur'}
           ]
         },
         actionType: '添加'
@@ -112,6 +141,11 @@
       }
     },
     methods: {
+      amountChange(val) {
+        if (this.form[val] === '') return;
+        let str = utils.autoformatDecimalPoint(this.form[val] + '');
+        this.form[val] = parseFloat(str);
+      },
       queryDepartmentUserNew(query) {
         if (!this.form.companyDepartment) {
           this.departmentUserList = [];
@@ -138,6 +172,9 @@
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.doing === false) {
+            if (this.form.lowerLimitAmount && this.form.upperLimitAmount && this.form.lowerLimitAmount >= this.form.upperLimitAmount) {
+              return this.$notify.info('下限金额不能大于上限金额');
+            }
             this.form.contractSignTime = this.form.contractTime[0];
             this.form.contractOverTime = this.form.contractTime[1];
             if (!this.form.contractId) {
