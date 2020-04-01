@@ -35,7 +35,6 @@
         dictRules: {
           name: [
             {required: true, message: '请输入字典组项Key', trigger: 'blur'},
-            {validator: checkGroupName, trigger: 'blur'}
           ],
           label: [
             {required: true, message: '请输入字典组项Value', trigger: 'blur'}
