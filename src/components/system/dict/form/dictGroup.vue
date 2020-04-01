@@ -8,7 +8,7 @@
       <oms-input v-model="dictForm.name" placeholder="请输入字典组值"></oms-input>
     </el-form-item>
     <el-form-item label-width="120px">
-      <el-button type="primary" @click="onTypeSubmit('dictForm')" :disabled="doing">保存</el-button>
+      <el-button type="primary" @mousedown.native="onTypeSubmit('dictForm')" :disabled="doing">保存</el-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>
