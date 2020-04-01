@@ -30,7 +30,8 @@
       <h2 class="detail-title">
         基础信息
         <span class="pull-right">
-           <el-button size="mini" type="primary" @click="exportGoodsTotal" :loading="exportGoodsLoading">导出货品合计</el-button>
+           <el-button size="mini" type="primary" @click="exportGoodsTotal"
+                      :loading="exportGoodsLoading">导出货品合计</el-button>
         </span>
       </h2>
       <el-row class="clearfix">
@@ -40,15 +41,16 @@
           <oms-row label="合同" :span="8">{{ formItem.contractName }}</oms-row>
           <oms-row label="结算单号" :span="8">{{ formItem.statementNo }}</oms-row>
           <oms-row label="结算单状态" :span="8">
-            {{orgType[formItem.statementType < 9  ?  1*formItem.statementType + 1 : formItem.statementType] &&
-            orgType[formItem.statementType < 9  ? 1*formItem.statementType + 1 : formItem.statementType].title}}
+            {{orgType[formItem.statementType < 9 ? 1*formItem.statementType + 1 : formItem.statementType] &&
+            orgType[formItem.statementType < 9 ? 1*formItem.statementType + 1 : formItem.statementType].title}}
           </oms-row>
         </el-col>
         <el-col :span="12">
-          <oms-row label="结算单金额" :span="8">{{ formItem.statementAmount  | formatMoney}}</oms-row>
+          <oms-row label="结算单金额" :span="8">{{ formItem.statementAmount | formatMoney}}</oms-row>
           <oms-row label="结算日期" :span="8">{{ formItem.statementTime | time }}</oms-row>
-          <oms-row label="待回款金额" :span="8">{{ formItem.unreturnedAmount  | formatMoney}}</oms-row>
-          <oms-row label="回款日期" :span="8" v-show="formItem.backAmountTime">{{ formItem.backAmountTime | date }}</oms-row>
+          <oms-row label="待回款金额" :span="8">{{ formItem.unreturnedAmount | formatMoney}}</oms-row>
+          <oms-row label="回款日期" :span="8" v-show="formItem.backAmountTime">{{ formItem.backAmountTime | date }}
+          </oms-row>
           <oms-row label="折扣" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}%</oms-row>
           <oms-row label="备注" :span="8" v-show="formItem.statementRemark">{{ formItem.statementRemark }}</oms-row>
         </el-col>
@@ -72,7 +74,8 @@
         </el-col>
       </el-row>
       <h2 class="detail-title">计费明细</h2>
-      <el-table :data="billAccountList" v-loading="loading" maxHeight="280" border class="clearfix" ref="orderDetail">
+      <el-table :data="billAccountList" v-loading="loading" :maxHeight="bodyHeight" border class="clearfix"
+                ref="orderDetail">
         <el-table-column prop="actionType" label="订单号" width="140">
           <template slot-scope="scope">{{scope.row.orderNumber}}</template>
         </el-table-column>
@@ -147,6 +150,14 @@
     computed: {
       invoiceTypes() {
         return this.$store.state.invoiceTypes;
+      },
+      bodyHeight: function () {
+        let height = parseInt(this.$store.state.bodyHeight, 10);
+        height = (height - 320);
+        if (height < 280) {
+          height = 280;
+        }
+        return height + 'px';
       }
     },
     watch: {
