@@ -266,10 +266,10 @@
             // 3如果存在【合同上限金额】且【本次对账金额】小于或等于(【合同上 限金额】—【合同已执行金额】)，则【对账后状态】=未超上限，
             // 否则【对 账后状态】=超过上限。(即对账后超过下限)
             if (cutAmount <= upperAmount) {
-              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '未达合同上限金额'));
+              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同上限金额'));
               return;
             } else {
-              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
+              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '超过合同上限金额'));
               return;
             }
           }
