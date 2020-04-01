@@ -305,7 +305,7 @@
       },
       doCreate(title = '') {
         title = title ? title + '<br>' : '';
-        this.$alert(title + '是否生成对账单？', '', {
+        this.$alert(title + '是否确定生成对账单？', '', {
           dangerouslyUseHTMLString: true,
           showCancelButton: true
         }).then(res => {
