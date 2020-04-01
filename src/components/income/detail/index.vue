@@ -300,8 +300,7 @@
       getStr(lowerLimitAmount, upperLimitAmount, closeAmount, amount, cutAmount, status) {
         let LimitAmountStr = `合同下限金额：${lowerLimitAmount && lowerLimitAmount.toFixed(2) || '无'}<br>合同上限金额：${
           upperLimitAmount && upperLimitAmount.toFixed(2) || '无'}<br>`;
-        let str = `合同已执行金额：${closeAmount.toFixed(2)}<br>剩余执行金额：${amount.toFixed(2)}<br>
-                        本次对账金额：${cutAmount.toFixed(2)}<br>对账后状态：${status}<br>`;
+        let str = `合同已执行金额：${closeAmount && closeAmount.toFixed(2) || closeAmount}<br>剩余执行金额：${amount && amount.toFixed(2) || amount}<br>本次对账金额：${cutAmount && cutAmount.toFixed(2) || cutAmount}<br>对账后状态：${status}<br>`;
         return LimitAmountStr + str;
       },
       doCreate(title = '') {
