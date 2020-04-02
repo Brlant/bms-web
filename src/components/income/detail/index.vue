@@ -313,6 +313,7 @@
             successTitle: '生成成功',
             errorTitle: '生成失败',
             success: (res) => {
+              this.$refs.table.clearSelection();
               this.queryList(this.pager.currentPage);
             }
           });
@@ -453,6 +454,7 @@
         this.showPart(0);
       },
       change() {
+        this.$refs.table.clearSelection();
         this.resetRightBox();
         this.queryList(this.pager.currentPage);
       },
