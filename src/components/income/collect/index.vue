@@ -56,6 +56,7 @@
       <el-table-column prop="projectName" label="项目" width="140">
       </el-table-column>
       <el-table-column prop="billingTotal" label="计费合计" width="120">
+        <span slot-scope="{row}">{{row.billingTotal | formatMoney}}</span>
       </el-table-column>
       <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计">
         <span slot-scope="{row}">{{row.realityBillingTotal | formatMoney}}</span>
