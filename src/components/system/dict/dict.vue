@@ -107,8 +107,8 @@
                 <th>字典项标题</th>
                 <th>字典项</th>
                 <th>备注</th>
-                <th>排序</th>
-                <th></th>
+                <th style="width: 50px">排序</th>
+                <th style="width: 100px"></th>
               </tr>
               </thead>
               <tbody v-if="loadingRightData">
