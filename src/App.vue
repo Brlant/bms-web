@@ -137,7 +137,7 @@
       this.routesCopy = deepCopy(routes);
       window.localStorage.removeItem('noticeError');
       if (!this.$store.state.user || !this.$store.state.user.userId) {
-        Auth.checkLogin1().then(() => {
+        Auth.checkLogin().then(() => {
           this.queryPermissions(this.$route);
           let data = window.localStorage.getItem('user');
           if (!data) {
