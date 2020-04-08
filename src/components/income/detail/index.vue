@@ -238,11 +238,6 @@
         this.$http.get(`/bms-boa/query-boa-contractId-sum?contractId=${item.contractId}`).then(res => {
           item.lowerLimitAmount = res.data.lowerLimitAmount;
           item.upperLimitAmount = res.data.upperLimitAmount;
-          // (4)上、下限均未设置，不提示。
-          if (!item.lowerLimitAmount && !item.upperLimitAmount) {
-            this.doCreate();
-            return;
-          }
           // 已对账金额
           let closeAmount = res.data.contractTotal;
           // (1)对账前未达下限:
@@ -294,6 +289,12 @@
             // 上限剩余执行金额
             const upperAmount = item.upperLimitAmount - closeAmount;
             this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
+            return;
+          }
+
+          // (4)上、下限有一个设置，不提示。
+          if (!item.lowerLimitAmount || !item.upperLimitAmount) {
+            this.doCreate();
           }
         });
       },
