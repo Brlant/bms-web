@@ -1,4 +1,4 @@
-import {Contact, costItem, costModel, Department, OrgGoods, project, contractCostModel} from '@/resources';
+import {Contact, contractCostModel, costItem, costModel, Department, OrgGoods, project} from '@/resources';
 
 
 export default {
@@ -18,7 +18,8 @@ export default {
   },
   methods: {
     queryAllOrg: function (query) {// 查询货主
-      let params = {keyWord: query,
+      let params = {
+        keyWord: query,
         orgAuditStatus: 1,
         deleteFlag: false
       };
@@ -27,7 +28,8 @@ export default {
       });
     },
     queryAllOrgOms: function (query) {// 查询货主
-      let params = {keyWord: query,
+      let params = {
+        keyWord: query,
         orgAuditStatus: 1,
         deleteFlag: false
       };
@@ -76,8 +78,12 @@ export default {
         this.contractCostModelList = res.data.data.list;
       });
     },
+    // 查询状态为正常的合同信息
     queryContractList(query) {
-      let params = {keyWord: query};
+      let params = {
+        keyWord: query,
+        contractState: '1'
+      };
       Contact.query(params).then(res => {
         if (res.data.code === 200) {
           this.contractList = res.data.data.list;
