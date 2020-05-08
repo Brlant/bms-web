@@ -1,12 +1,13 @@
 {
   "name": "ccs-admin",
   "description": "MCC前台",
-  "version": "1.0.0",
+  "version": "1.34.0",
   "author": "Hulk <jayzch@qq.com>",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "postversion": "git push --follow-tags",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -43,6 +44,9 @@
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
+  },
+  "config": {
+    "unsafe-perm": true
   },
   "browserslist": [
     "> 1%",

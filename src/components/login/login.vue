@@ -101,7 +101,7 @@
       done() {
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
-            this.btnString = '登陆中..';
+            this.btnString = '登录中..';
             this.loading = true;
             let userCopy = JSON.parse(JSON.stringify(this.user));
             userCopy.orgCode = this.needCode ? this.trim(this.user.orgCode) : '';
@@ -138,7 +138,7 @@
               if (data.code === 405) {
                 this.needCode = true;
               }
-              this.btnString = '登陆';
+              this.btnString = '登录';
               this.loading = false;
             });
           }
