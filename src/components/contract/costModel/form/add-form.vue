@@ -9,7 +9,8 @@
         <el-form-item label="合同" prop="contractId"
                       :rules="[{required: true, message: '请选择合同', trigger: 'change'}]">
           <el-select placeholder="请选择合同" v-model="form.contractId"
-                     filterable clearable remote :remote-method="queryContractList" @focus="queryContractList()">
+                     filterable clearable remote :remote-method="queryNormalContractList"
+                     @focus="queryNormalContractList()">
             <el-option :label="item.contractName" :value="item.contractId" :key="item.contractId"
                        v-for="item in contractList"></el-option>
           </el-select>
@@ -30,7 +31,8 @@
           <el-form-item label="计费模型模板" prop="billingModelId"
                         :rules="[{required: true, message: '计费模型模板', trigger: 'change'}]">
             <el-select placeholder="计费模型模板" v-model="currentItem.billingModelId"
-                       filterable clearable remote :remote-method="queryCostModelListNew" @focus="queryCostModelListNew()">
+                       filterable clearable remote :remote-method="queryCostModelListNew"
+                       @focus="queryCostModelListNew()">
               <el-option :label="item.billingModelName" :value="item.billingModelId" :key="item.billingModelId"
                          v-for="item in costModelList"></el-option>
             </el-select>
@@ -133,7 +135,7 @@
       billingModelTypeChange() {
         this.form.billingItems = [];
         this.costModelList = [];
-        this.resetItem()
+        this.resetItem();
       },
       billingTypeChange(val) {
         if (!val) {
@@ -141,7 +143,7 @@
         }
         this.currentCostType = this.costTypes.find(f => f.id === val);
         this.currentItem.ladderState = this.currentCostType.ladderState ? '1' : '0';
-        this.currentItem.showLadderState =  this.currentItem.ladderState === '1';
+        this.currentItem.showLadderState = this.currentItem.ladderState === '1';
       },
       formatPrice() {// 格式化单价，保留两位小数
         this.currentItem.unitPrice = utils.autoformatDecimalPoint(this.currentItem.unitPrice);

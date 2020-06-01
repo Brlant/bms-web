@@ -89,6 +89,13 @@
               </oms-form-row>
             </el-col>
             <el-col :span="8">
+              <oms-form-row label="响应" :span="6">
+                <el-col :span="24">
+                  <oms-input type="text" v-model="searchWord.response" placeholder="请输入响应"></oms-input>
+                </el-col>
+              </oms-form-row>
+            </el-col>
+            <el-col :span="8">
               <oms-form-row label="" :span="5">
                 <el-button type="primary" native-type="submit" @click="searchInOrder">查询</el-button>
                 <el-button native-type="reset" @click="resetSearchForm">重置</el-button>
@@ -115,6 +122,12 @@
         </el-table-column>
         <el-table-column prop="logRemarks" label="日志内容" :sortable="true" min-width="150"></el-table-column>
         <el-table-column prop="body" label="请求体" :sortable="true" min-width="150"></el-table-column>
+        <el-table-column prop="response" label="响应" :sortable="true" min-width="200">
+          <div slot-scope="scope" style="max-height: 150px;overflow-y: auto">
+            {{scope.row.response}}
+          </div>
+        </el-table-column>
+        <el-table-column prop="time" label="响应时长（ms）" :sortable="true" min-width="150"></el-table-column>
         <el-table-column prop="sessionId" label="sessionId" :sortable="true" width="150"></el-table-column>
         <el-table-column prop="ip" label="IP" :sortable="true" width="150"></el-table-column>
       </el-table>
@@ -149,14 +162,16 @@
           startTime: '',
           endTime: '',
           actionType: '',
-          body: ''
+          body: '',
+          response: ''
         },
         searchWord: {
           operatorId: '',
           startTime: '',
           endTime: '',
           actionType: '',
-          body: ''
+          body: '',
+          response: ''
         },
         pager: {
           currentPage: 1,
@@ -249,7 +264,8 @@
           startTime: '',
           endTime: '',
           actionType: '',
-          body: ''
+          body: '',
+          response: ''
         };
         this.expectedTime = '';
         Object.assign(this.filters, this.searchWord);

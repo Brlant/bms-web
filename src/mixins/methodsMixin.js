@@ -79,10 +79,22 @@ export default {
       });
     },
     // 查询状态为正常的合同信息
-    queryContractList(query) {
+    queryNormalContractList(query) {
       let params = {
         keyWord: query,
         contractState: '1'
+      };
+      Contact.query(params).then(res => {
+        if (res.data.code === 200) {
+          this.contractList = res.data.data.list;
+        } else {
+          this.contractList = [];
+        }
+      });
+    },
+    queryContractList(query) {
+      let params = {
+        keyWord: query,
       };
       Contact.query(params).then(res => {
         if (res.data.code === 200) {
