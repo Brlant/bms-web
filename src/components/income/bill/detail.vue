@@ -26,12 +26,13 @@
 <template>
   <div class="content-part">
     <div class="content-right min-gutter">
-      <h3 class="clearfix">详情</h3>
+      <h3 class="clearfix">对账单详情</h3>
       <h2 class="detail-title">
         基础信息
         <span class="pull-right">
            <el-button size="mini" type="primary" @click="exportExcel" :loading="exportLoading">导出excel</el-button>
-           <el-button size="mini" type="primary" @click="exportGoodsTotal" :loading="exportGoodsLoading">导出货品合计</el-button>
+           <el-button size="mini" type="primary" @click="exportGoodsTotal"
+                      :loading="exportGoodsLoading">导出货品合计</el-button>
         </span>
       </h2>
       <el-row>
@@ -43,18 +44,23 @@
           <oms-row label="对账单状态" :span="8">{{ orgType[formItem.accountCheckType].title }}</oms-row>
         </el-col>
         <el-col :span="12">
-          <oms-row label="对账单金额" :span="8">{{ formItem.accountCheckAmount  | formatMoney}}</oms-row>
+          <oms-row label="对账单金额" :span="8">{{ formItem.accountCheckAmount | formatMoney}}</oms-row>
           <oms-row label="是否含税" :span="8">{{ formItem.includeTax === '0' ? '否' : '是' }}</oms-row>
           <oms-row label="税率" :span="8" v-show="formItem.includeTax === '1'">{{ formItem.taxRate }}%</oms-row>
-          <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount  | formatMoney}}
+          <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount |
+            formatMoney}}
           </oms-row>
           <oms-row label="折扣" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}%</oms-row>
-          <oms-row label="实际对账金额" :span="8">{{ formItem.unreturnedAmount  | formatMoney}}</oms-row>
+          <oms-row label="实际对账金额" :span="8">{{ formItem.unreturnedAmount | formatMoney}}</oms-row>
         </el-col>
       </el-row>
       <h2 class="detail-title">对账单明细</h2>
-      <large-data-list :dataList="billAccountList" class="mt-20">
-        <el-table slot-scope="{children}" :data="children" v-loading="loading" border class="clearfix" ref="orderDetail">
+<!--      <large-data-list :dataList="billAccountList" class="mt-20">-->
+        <el-table :data="billAccountList" v-loading="loading" :maxHeight="bodyHeight" border class="clearfix"
+                  ref="orderDetail">
+
+<!--        <el-table slot-scope="{children}" :data="children"-->
+<!--                  v-loading="loading" border :maxHeight="bodyHeight" class="clearfix" ref="orderDetail">-->
           <el-table-column prop="contractName" label="合同" width="100">
             <template slot-scope="scope">{{scope.row.contractName}}</template>
           </el-table-column>
@@ -106,7 +112,7 @@
             <template slot-scope="scope">{{scope.row.unliquidatedAmount | formatMoney}}</template>
           </el-table-column>
         </el-table>
-      </large-data-list>
+<!--      </large-data-list>-->
 
       <div style="margin-left: 50px;margin-top: 50px">
         <el-button type="primary" v-has="'account-check-confirm'" @click="confirm"
@@ -130,6 +136,7 @@
 <script>
   import {accountBill} from '@/resources';
   import utils from '@/tools/utils';
+
   export default {
     props: {
       formItem: {
@@ -235,6 +242,14 @@
             }
           });
         });
+      },
+      bodyHeight: function () {
+        let height = parseInt(this.$store.state.bodyHeight, 10);
+        height = (height - 320);
+        if (height < 280) {
+          height = 280;
+        }
+        return height + 'px';
       }
     }
   };

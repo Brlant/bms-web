@@ -3,6 +3,7 @@ import axios from 'axios';
 import Vue from 'vue';
 import qs from 'qs';
 import WholeErrorSignHandle from '@/tools/whole-error-sign-handle';
+import * as Sentry from '@sentry/browser';
 
 export const http = axios.create({
   baseURL: process.env.VUE_APP_API,
@@ -18,6 +19,15 @@ function isNewReturnType(data) {
 
 // 添加请求拦截器
 http.interceptors.request.use(function (config) {
+  try {
+    let data = JSON.parse(window.localStorage.getItem('user'));
+    let u = {
+      'username': data.userName,
+      'id': data.userId
+    }
+    Sentry.setUser(u);
+  } catch (e) {
+  }
   if (config.method === 'get') {
     config.paramsSerializer = params => {
       return qs.stringify(params, {indices: false});
