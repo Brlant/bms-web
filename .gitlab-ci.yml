@@ -1,6 +1,6 @@
 stages:
-  - test
   - build
+  - test
   - deploy
 
 # 所有 stage 之前的操作
@@ -12,6 +12,8 @@ before_script:
 lint:
   stage: test
   script: npm run lint
+  except: 
+    - master
   tags:
     - node
 
@@ -23,5 +25,6 @@ local-build:
     - scp -r dist/* root@172.25.10.10:/opt/dev-web-dist/bms
   only:
     - dev
+    - master
   tags:
     - node
