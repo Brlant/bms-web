@@ -68,14 +68,14 @@ http.interceptors.response.use(response => {
   let notice = window.localStorage.getItem(noticeTipKey);
   let response = error.response;
 
-  if (notice === '1' && response.status !== 401) {
+  if (notice === '1' && response && response.status !== 401) {
     return Promise.reject(error);
   } else {
     window.localStorage.setItem(noticeTipKey, '1');
   }
   if (!response || response.status === 500) {
     Notification.warning({
-      message: '服务器太久没有响应, 请重试',
+      message: '网络服务异常, 请重试',
       onClose: function () {
         window.localStorage.removeItem(noticeTipKey);
       }
