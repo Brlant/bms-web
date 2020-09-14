@@ -233,7 +233,7 @@ export const accountBill = resource('', http, {
     return http.post('/bms-ac/query-account-check', obj);
   },
   queryDetail(id) {
-    return http.get(`/bms-ad/${id}`);
+    return http.get(`bms-ad/${id}/detail`);
   },
   queryStateNum: (params) => {
     return http.post('/bms-ac/count', params);

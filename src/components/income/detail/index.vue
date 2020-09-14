@@ -49,7 +49,7 @@
         <el-button @click="exportCloseAccount" plain size="small"
                    v-show="filters.attachmentType === '2'" v-has="'export-unbilled-info'">
           <f-a class="icon-small" name="export"></f-a>
-          导出未开票明细报表
+          导出未结算明细报表
         </el-button>
       </template>
     </search-part>
@@ -145,27 +145,27 @@
   </div>
 </template>
 <script>
-  import utils from '@/tools/utils';
-  import SearchPart from './search';
-  import addForm from './form/add-form.vue';
-  import CommonMixin from '@/mixins/commonMixin';
-  import {accountBill, contractAccountDetail} from '@/resources';
-  import Detail from './detail.vue';
-  import CloseAccount from './closeAccount';
-  import batchInsertCloseAccount from './batchInsertCloseAccount';
-  import createForm from './form/create-form';
+import utils from '@/tools/utils';
+import SearchPart from './search';
+import addForm from './form/add-form.vue';
+import CommonMixin from '@/mixins/commonMixin';
+import {accountBill, contractAccountDetail} from '@/resources';
+import Detail from './detail.vue';
+import CloseAccount from './closeAccount';
+import batchInsertCloseAccount from './batchInsertCloseAccount';
+import createForm from './form/create-form';
 
-  export default {
-    components: {
-      SearchPart,
-      CloseAccount,
-      batchInsertCloseAccount,
-      createForm
-    },
-    mixins: [CommonMixin],
-    data() {
-      return {
-        statusType: JSON.parse(JSON.stringify(utils.orderType)),
+export default {
+  components: {
+    SearchPart,
+    CloseAccount,
+    batchInsertCloseAccount,
+    createForm
+  },
+  mixins: [CommonMixin],
+  data() {
+    return {
+      statusType: JSON.parse(JSON.stringify(utils.orderType)),
         filters: {
           attachmentType: '0'
         },
