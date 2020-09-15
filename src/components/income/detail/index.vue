@@ -1,14 +1,14 @@
 <style lang="scss">
-  .total-info {
-    align-items: flex-end;
-    position: absolute;
-    right: 20px;
+.total-info {
+  align-items: flex-end;
+  position: absolute;
+  right: 20px;
 
-    &__item {
-      margin: 0 10px;
-      font-weight: 500;
-    }
+  &__item {
+    margin: 0 10px;
+    font-weight: 500;
   }
+}
 </style>
 <template>
   <div class="order-page">
@@ -57,9 +57,10 @@
                  :checkStatus="changeType" :isShowNum="true" :isShowIcon="isShowIcon"
                  :formatClass="formatClass">
       <span class="total-info" v-if="totalInfo">
-        <span class="total-info__item">数量小计：{{totalInfo.billingQuantity}}</span>
-        <span class="total-info__item">计费小计：{{totalInfo.billingTotal | formatMoney}}</span>
-        <span class="total-info__item">实际计费小计：{{totalInfo.realityBillingTotal | formatMoney}}</span>
+        <span class="total-info__item">数量小计：{{ totalInfo.billingQuantity }}</span>
+        <span class="total-info__item">计费小计：{{ totalInfo.billingTotal | formatMoney }}</span>
+        <span class="total-info__item">未结算金额小计：{{ totalInfo.unliquidatedAmount | formatMoney }}</span>
+        <span class="total-info__item">实际计费小计：{{ totalInfo.realityBillingTotal | formatMoney }}</span>
       </span>
     </status-list>
     <el-table :data="dataList" v-loading="loadingData" row-key="billingOfAccountId"
@@ -67,52 +68,52 @@
       <el-table-column type="selection" width="55" reserve-selection :selectable="selectable">
       </el-table-column>
       <el-table-column prop="contractName" label="合同" width="150">
-        <template slot-scope="scope">{{scope.row.contractName}}</template>
+        <template slot-scope="scope">{{ scope.row.contractName }}</template>
       </el-table-column>
       <el-table-column prop="customerName" label="甲方" width="140">
-        <template slot-scope="scope">{{scope.row.customerName}}</template>
+        <template slot-scope="scope">{{ scope.row.customerName }}</template>
       </el-table-column>
       <el-table-column prop="actionType" label="项目" width="140">
-        <template slot-scope="scope">{{scope.row.projectName}}</template>
+        <template slot-scope="scope">{{ scope.row.projectName }}</template>
       </el-table-column>
       <el-table-column prop="billingTime" label="创建时间" width="160">
-        <template slot-scope="scope">{{scope.row.billingTime | time}}</template>
+        <template slot-scope="scope">{{ scope.row.billingTime | time }}</template>
       </el-table-column>
       <el-table-column prop="actionType" label="订单号" width="140">
-        <template slot-scope="scope">{{scope.row.orderNumber}}</template>
+        <template slot-scope="scope">{{ scope.row.orderNumber }}</template>
       </el-table-column>
       <el-table-column prop="actionType" label="对账单号" width="150">
-        <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
+        <template slot-scope="scope">{{ scope.row.accountCheckNo }}</template>
       </el-table-column>
       <el-table-column prop="actionType" label="货品" width="300">
         <template slot-scope="scope">
-          {{scope.row.orgGoodsName}}
-          <div v-show="scope.row.goodsSpecification">规格：{{scope.row.goodsSpecification}}</div>
+          {{ scope.row.orgGoodsName }}
+          <div v-show="scope.row.goodsSpecification">规格：{{ scope.row.goodsSpecification }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="batchNumber" label="批号" width="120">
-        <template slot-scope="scope">{{scope.row.batchNumber}}</template>
+        <template slot-scope="scope">{{ scope.row.batchNumber }}</template>
       </el-table-column>
       <el-table-column prop="billingItemName" label="计费项" width="200">
-        <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
+        <template slot-scope="scope">{{ formatBillingItemName(scope.row) }}</template>
       </el-table-column>
       <el-table-column prop="billingCustomName" label="计费项名称" width="200">
-        <template slot-scope="scope">{{scope.row.billingCustomName}}</template>
+        <template slot-scope="scope">{{ scope.row.billingCustomName }}</template>
       </el-table-column>
       <el-table-column prop="billingUntilPrice" label="单价" width="150px">
-        <template slot-scope="scope">{{scope.row.billingUntilPrice}}</template>
+        <template slot-scope="scope">{{ scope.row.billingUntilPrice }}</template>
       </el-table-column>
       <el-table-column prop="billingQuantity" label="数量">
-        <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
+        <template slot-scope="scope">{{ scope.row.billingQuantity }}</template>
       </el-table-column>
       <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
-        <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
+        <template slot-scope="scope">{{ scope.row.unreturnedAmount | formatMoney }}</template>
       </el-table-column>
       <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
-        <template slot-scope="scope">{{scope.row.unliquidatedAmount | formatMoney}}</template>
+        <template slot-scope="scope">{{ scope.row.unliquidatedAmount | formatMoney }}</template>
       </el-table-column>
       <el-table-column prop="billingTotal" label="计费合计" fixed="right" width="120">
-        <template slot-scope="scope">{{scope.row.billingTotal | formatMoney}}</template>
+        <template slot-scope="scope">{{ scope.row.billingTotal | formatMoney }}</template>
       </el-table-column>
       <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计"
                        fixed="right">
@@ -120,9 +121,9 @@
           <div v-if="$_has('edit-billing-of-account')">
             <oms-input v-if="scope.row.attachmentType === '0'" v-model="scope.row.realityBillingTotal"
                        @blur="editItem(scope.row)"/>
-            <span v-else>{{scope.row.realityBillingTotal}}</span>
+            <span v-else>{{ scope.row.realityBillingTotal }}</span>
           </div>
-          <span v-else>{{scope.row.realityBillingTotal}}</span>
+          <span v-else>{{ scope.row.realityBillingTotal }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -166,304 +167,306 @@ export default {
   data() {
     return {
       statusType: JSON.parse(JSON.stringify(utils.orderType)),
-        filters: {
-          attachmentType: '0'
-        },
-        dialogComponents: {
-          0: addForm,
-          1: Detail,
-          2: CloseAccount,
-          3: batchInsertCloseAccount,
-          4: createForm
-        },
-        orgType: {
-          0: {'title': '全部', 'num': 0, 'attachmentType': '', isAll: true},
-          1: {'title': '未对账', 'num': 0, 'attachmentType': '0'},
-          2: {'title': '对账中', 'num': 0, 'attachmentType': '1'},
-          3: {'title': '已对账', 'num': 0, 'attachmentType': '2'},
-          4: {'title': '已回款', 'num': 0, 'attachmentType': '3'},
-        },
-        defaultPageRight: {'width': '920px', 'padding': 0},
-        dySelectList: [],
-        selectList: []
-      };
-    },
-    computed: {
-      totalInfo() {
-        if (!this.selectList.length) return;
-        let billingQuantity = 0;
-        let billingTotal = 0;
-        let realityBillingTotal = 0;
-        this.selectList.forEach(i => {
-          billingQuantity += i.billingQuantity;
-          billingTotal += i.billingTotal;
-          realityBillingTotal += (Number(i.realityBillingTotal) || 0);
-        });
-        return {billingQuantity, billingTotal, realityBillingTotal};
-      }
-    },
-    watch: {
       filters: {
-        handler: function (val) {
-          this.$refs.table.clearSelection();
-          this.queryList(1);
-        },
-        deep: true
-      }
-    },
-    mounted() {
-      this.$getDict('invoiceContent');
-      this.queryList(1);
-    },
-    methods: {
-      selectable(row) {
-        return this.filters.attachmentType !== '2' || this.filters.attachmentType === '2' && !!row.unliquidatedAmount;
+        attachmentType: '0'
       },
-      selectionChange(val) {
-        this.selectList = val;
+      dialogComponents: {
+        0: addForm,
+        1: Detail,
+        2: CloseAccount,
+        3: batchInsertCloseAccount,
+        4: createForm
       },
-      batchCreate() {
-        if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
-        let obj = {};
-        this.selectList.forEach(i => {
-          obj[i.contractId] = '';
-        });
-        if (Object.keys(obj).length > 1) return this.$notify.info('请选择相同合同的计费明细');
-        let item = this.selectList[0];
-        // 本次对账金额
-        let cutAmount = 0;
-        this.selectList.forEach(i => {
-          cutAmount += Number(i.realityBillingTotal);
-        });
-        this.$http.get(`/bms-boa/query-boa-contractId-sum?contractId=${item.contractId}`).then(res => {
-          item.lowerLimitAmount = res.data.lowerLimitAmount;
-          item.upperLimitAmount = res.data.upperLimitAmount;
-          // 已对账金额
-          let closeAmount = res.data.contractTotal;
-          // (1)对账前未达下限:
-          // 若该合同存在【合同下限金额】，且【合同已执行金额】<【合同下限金 额】，
-          // 则【剩余执行金额】=【合同下限金额】—【合同已执行金额】。
-          if (item.lowerLimitAmount && closeAmount < item.lowerLimitAmount) {
-            // 下限剩余执行金额
-            const lowerAmount = item.lowerLimitAmount - closeAmount;
-            // 1如果【本次对账金额】小于【剩余执行金额】，则【对账后状态】=未 达下限。(即对账后仍未达下限)
-            if (cutAmount < lowerAmount) {
-              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同下限金额'));
-              return;
-            }
-            // 2如果不存在【合同上限金额】，则【对账后状态】=未达上限。
-            if (!item.upperLimitAmount) {
-              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同上限金额'));
-              return;
-            }
-            // 上限剩余执行金额
-            const upperAmount = item.upperLimitAmount - closeAmount;
-            // 3如果存在【合同上限金额】且【本次对账金额】小于或等于(【合同上 限金额】—【合同已执行金额】)，则【对账后状态】=未超上限，
-            // 否则【对 账后状态】=超过上限。(即对账后超过下限)
-            if (cutAmount <= upperAmount) {
-              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未超合同上限金额'));
-              return;
-            } else {
-              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '超过合同上限金额'));
-              return;
-            }
+      orgType: {
+        0: {'title': '全部', 'num': 0, 'attachmentType': '', isAll: true},
+        1: {'title': '未对账', 'num': 0, 'attachmentType': '0'},
+        2: {'title': '对账中', 'num': 0, 'attachmentType': '1'},
+        3: {'title': '已对账', 'num': 0, 'attachmentType': '2'},
+        4: {'title': '已回款', 'num': 0, 'attachmentType': '3'},
+      },
+      defaultPageRight: {'width': '920px', 'padding': 0},
+      dySelectList: [],
+      selectList: []
+    };
+  },
+  computed: {
+    totalInfo() {
+      if (!this.selectList.length) return;
+      let billingQuantity = 0;
+      let billingTotal = 0;
+      let realityBillingTotal = 0;
+      let unliquidatedAmount = 0;
+      this.selectList.forEach(i => {
+        billingQuantity += i.billingQuantity;
+        billingTotal += i.billingTotal;
+        unliquidatedAmount += i.unliquidatedAmount;
+        realityBillingTotal += (Number(i.realityBillingTotal) || 0);
+      });
+      return {billingQuantity, billingTotal, realityBillingTotal,unliquidatedAmount};
+    }
+  },
+  watch: {
+    filters: {
+      handler: function (val) {
+        this.$refs.table.clearSelection();
+        this.queryList(1);
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    this.$getDict('invoiceContent');
+    this.queryList(1);
+  },
+  methods: {
+    selectable(row) {
+      return this.filters.attachmentType !== '2' || this.filters.attachmentType === '2' && !!row.unliquidatedAmount;
+    },
+    selectionChange(val) {
+      this.selectList = val;
+    },
+    batchCreate() {
+      if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
+      let obj = {};
+      this.selectList.forEach(i => {
+        obj[i.contractId] = '';
+      });
+      if (Object.keys(obj).length > 1) return this.$notify.info('请选择相同合同的计费明细');
+      let item = this.selectList[0];
+      // 本次对账金额
+      let cutAmount = 0;
+      this.selectList.forEach(i => {
+        cutAmount += Number(i.realityBillingTotal);
+      });
+      this.$http.get(`/bms-boa/query-boa-contractId-sum?contractId=${item.contractId}`).then(res => {
+        item.lowerLimitAmount = res.data.lowerLimitAmount;
+        item.upperLimitAmount = res.data.upperLimitAmount;
+        // 已对账金额
+        let closeAmount = res.data.contractTotal;
+        // (1)对账前未达下限:
+        // 若该合同存在【合同下限金额】，且【合同已执行金额】<【合同下限金 额】，
+        // 则【剩余执行金额】=【合同下限金额】—【合同已执行金额】。
+        if (item.lowerLimitAmount && closeAmount < item.lowerLimitAmount) {
+          // 下限剩余执行金额
+          const lowerAmount = item.lowerLimitAmount - closeAmount;
+          // 1如果【本次对账金额】小于【剩余执行金额】，则【对账后状态】=未 达下限。(即对账后仍未达下限)
+          if (cutAmount < lowerAmount) {
+            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同下限金额'));
+            return;
           }
-          // (2)对账前未超上限:
-          // 若该合同存在【合同上限金额】，且【合同已执行金额】<【合同上限金 额】，
-          // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】。
-          if (item.upperLimitAmount && closeAmount < item.upperLimitAmount) {
-            // 上限剩余执行金额
-            const upperAmount = item.upperLimitAmount - closeAmount;
-            if (cutAmount < upperAmount) {
-              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '未达合同上限金额'));
-              return;
-            } else {
-              this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
-              return;
-            }
+          // 2如果不存在【合同上限金额】，则【对账后状态】=未达上限。
+          if (!item.upperLimitAmount) {
+            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同上限金额'));
+            return;
           }
-          // (3)对账前已超上限:
-          // 若该合同存在【合同上限金额】，且【合同已执行金额】>=【合同上限金 额】，
-          // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】,【对账 后状态】=超过上限。
-          if (item.upperLimitAmount && closeAmount >= item.upperLimitAmount) {
-            // 上限剩余执行金额
-            const upperAmount = item.upperLimitAmount - closeAmount;
+          // 上限剩余执行金额
+          const upperAmount = item.upperLimitAmount - closeAmount;
+          // 3如果存在【合同上限金额】且【本次对账金额】小于或等于(【合同上 限金额】—【合同已执行金额】)，则【对账后状态】=未超上限，
+          // 否则【对 账后状态】=超过上限。(即对账后超过下限)
+          if (cutAmount <= upperAmount) {
+            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未超合同上限金额'));
+            return;
+          } else {
+            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '超过合同上限金额'));
+            return;
+          }
+        }
+        // (2)对账前未超上限:
+        // 若该合同存在【合同上限金额】，且【合同已执行金额】<【合同上限金 额】，
+        // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】。
+        if (item.upperLimitAmount && closeAmount < item.upperLimitAmount) {
+          // 上限剩余执行金额
+          const upperAmount = item.upperLimitAmount - closeAmount;
+          if (cutAmount < upperAmount) {
+            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '未达合同上限金额'));
+            return;
+          } else {
             this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
             return;
           }
+        }
+        // (3)对账前已超上限:
+        // 若该合同存在【合同上限金额】，且【合同已执行金额】>=【合同上限金 额】，
+        // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】,【对账 后状态】=超过上限。
+        if (item.upperLimitAmount && closeAmount >= item.upperLimitAmount) {
+          // 上限剩余执行金额
+          const upperAmount = item.upperLimitAmount - closeAmount;
+          this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
+          return;
+        }
 
-          // (4)上、下限有一个设置，不提示。
-          if (!item.lowerLimitAmount || !item.upperLimitAmount) {
-            this.doCreate();
+        // (4)上、下限有一个设置，不提示。
+        if (!item.lowerLimitAmount || !item.upperLimitAmount) {
+          this.doCreate();
+        }
+      });
+    },
+    getStr(lowerLimitAmount, upperLimitAmount, closeAmount, amount, cutAmount, status) {
+      let LimitAmountStr = `合同下限金额：${lowerLimitAmount && lowerLimitAmount.toFixed(2) || '无'}<br>合同上限金额：${
+        upperLimitAmount && upperLimitAmount.toFixed(2) || '无'}<br>`;
+      let str = `合同已执行金额：${closeAmount && closeAmount.toFixed(2) || closeAmount}<br>剩余执行金额：${amount && amount.toFixed(2) || amount}<br>本次对账金额：${cutAmount && cutAmount.toFixed(2) || cutAmount}<br>对账后状态：${status}<br>`;
+      return LimitAmountStr + str;
+    },
+    doCreate(title = '') {
+      title = title ? title + '<br>' : '';
+      this.$alert(title + '是否确定生成对账单？', '', {
+        dangerouslyUseHTMLString: true,
+        showCancelButton: true
+      }).then(res => {
+        this.$httpRequestOpera(accountBill.batchCreateBill(this.selectList.map(m => m.billingOfAccountId)), {
+          successTitle: '生成成功',
+          errorTitle: '生成失败',
+          success: (res) => {
+            this.$refs.table.clearSelection();
+            this.queryList(this.pager.currentPage);
           }
         });
-      },
-      getStr(lowerLimitAmount, upperLimitAmount, closeAmount, amount, cutAmount, status) {
-        let LimitAmountStr = `合同下限金额：${lowerLimitAmount && lowerLimitAmount.toFixed(2) || '无'}<br>合同上限金额：${
-          upperLimitAmount && upperLimitAmount.toFixed(2) || '无'}<br>`;
-        let str = `合同已执行金额：${closeAmount && closeAmount.toFixed(2) || closeAmount}<br>剩余执行金额：${amount && amount.toFixed(2) || amount}<br>本次对账金额：${cutAmount && cutAmount.toFixed(2) || cutAmount}<br>对账后状态：${status}<br>`;
-        return LimitAmountStr + str;
-      },
-      doCreate(title = '') {
-        title = title ? title + '<br>' : '';
-        this.$alert(title + '是否确定生成对账单？', '', {
-          dangerouslyUseHTMLString: true,
-          showCancelButton: true
-        }).then(res => {
-          this.$httpRequestOpera(accountBill.batchCreateBill(this.selectList.map(m => m.billingOfAccountId)), {
-            successTitle: '生成成功',
-            errorTitle: '生成失败',
-            success: (res) => {
-              this.$refs.table.clearSelection();
-              this.queryList(this.pager.currentPage);
-            }
-          });
-        });
+      });
 
-      },
-      batchCreateCloseAccount() {
-        if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
-        let list = JSON.parse(JSON.stringify(this.selectList));
-        list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
-        this.dySelectList = list;
-        this.showPart(2);
-      },
-      batchInsertCloseAccount() {
-        if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
-        let obj = {};
-        this.selectList.forEach(i => obj[i.contractId] = '');
-        if (Object.keys(obj).length > 1) {
-          return this.$notify.info({message: '请选择相同合同的计费明细'});
+    },
+    batchCreateCloseAccount() {
+      if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
+      let list = JSON.parse(JSON.stringify(this.selectList));
+      list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
+      this.dySelectList = list;
+      this.showPart(2);
+    },
+    batchInsertCloseAccount() {
+      if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
+      let obj = {};
+      this.selectList.forEach(i => obj[i.contractId] = '');
+      if (Object.keys(obj).length > 1) {
+        return this.$notify.info({message: '请选择相同合同的计费明细'});
+      }
+      let list = JSON.parse(JSON.stringify(this.selectList));
+      list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
+      this.dySelectList = list;
+      this.showPart(3);
+    },
+    createCloseAccount() {
+      this.form = {};
+      this.showPart(4);
+    },
+    formatBillingItemName(item) {
+      let bill = this.$store.state.billItemList.find(f => f.id === item.billingItemName);
+      if (!bill) return item.billingItemName;
+      return bill.name;
+    },
+    editItem(item) {
+      item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
+      this.$httpRequestOpera(contractAccountDetail.update(item), {
+        errorTitle: '修改失败',
+        success: res => {
+          item.unreturnedAmount = item.realityBillingTotal;
+          item.unliquidatedAmount = item.realityBillingTotal;
+          this.$notify.success({message: '修改成功'});
+        },
+        error: () => {
         }
-        let list = JSON.parse(JSON.stringify(this.selectList));
-        list.forEach(i => i.statementAmount = utils.autoformatDecimalPoint(i.unliquidatedAmount));
-        this.dySelectList = list;
-        this.showPart(3);
-      },
-      createCloseAccount() {
-        this.form = {};
-        this.showPart(4);
-      },
-      formatBillingItemName(item) {
-        let bill = this.$store.state.billItemList.find(f => f.id === item.billingItemName);
-        if (!bill) return item.billingItemName;
-        return bill.name;
-      },
-      editItem(item) {
-        item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
-        this.$httpRequestOpera(contractAccountDetail.update(item), {
-          errorTitle: '修改失败',
-          success: res => {
-            item.unreturnedAmount = item.realityBillingTotal;
-            item.unliquidatedAmount = item.realityBillingTotal;
-            this.$notify.success({message: '修改成功'});
-          },
-          error: () => {
-          }
+      });
+    },
+    changeType(item, key) {
+      this.filters.attachmentType = item.attachmentType;
+    },
+    isShowIcon(item, key, activeStatus) {
+      return item.attachmentType === activeStatus;
+    },
+    formatClass(item, key, activeStatus) {
+      return {
+        'active': item.attachmentType === activeStatus
+      };
+    },
+    showRecordDate: function (data) {
+      if (!data) return '';
+      return data ? this.$moment(data).format('YYYY-MM-DD HH:mm:ss') : '';
+    },
+    searchResult: function (search) {
+      this.filters = Object.assign({}, this.filters, search);
+    },
+    resetRightBox() {
+      this.defaultPageRight.width = '920px';
+      this.showIndex = -1;
+      this.currentItemId = '';
+      this.currentItem = {};
+      this.dySelectList = [];
+    },
+    showPart(index) {
+      this.currentPart = this.dialogComponents[index];
+      this.$nextTick(() => {
+        this.showIndex = index;
+      });
+    },
+    showDetail(item) {
+      this.currentItem = item;
+      this.currentItemId = item.billingModelId;
+      this.defaultPageRight.width = '900px';
+      this.form = item;
+      this.showPart(1);
+    },
+    queryList(pageNo) {
+      const http = contractAccountDetail.query;
+      const params = this.queryUtil(http, pageNo, null, () => {
+        this.dataList.forEach(item => {
+          item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
         });
-      },
-      changeType(item, key) {
-        this.filters.attachmentType = item.attachmentType;
-      },
-      isShowIcon(item, key, activeStatus) {
-        return item.attachmentType === activeStatus;
-      },
-      formatClass(item, key, activeStatus) {
-        return {
-          'active': item.attachmentType === activeStatus
-        };
-      },
-      showRecordDate: function (data) {
-        if (!data) return '';
-        return data ? this.$moment(data).format('YYYY-MM-DD HH:mm:ss') : '';
-      },
-      searchResult: function (search) {
-        this.filters = Object.assign({}, this.filters, search);
-      },
-      resetRightBox() {
-        this.defaultPageRight.width = '920px';
-        this.showIndex = -1;
-        this.currentItemId = '';
-        this.currentItem = {};
-        this.dySelectList = [];
-      },
-      showPart(index) {
-        this.currentPart = this.dialogComponents[index];
-        this.$nextTick(() => {
-          this.showIndex = index;
+      });
+      this.queryStatusNum(params);
+    },
+    queryStatusNum: function (params) {
+      contractAccountDetail.queryStateNum(Object.assign({}, params, {attachmentType: null})).then(res => {
+        let data = res.data.data;
+        utils.setStatusCount(this.orgType, data, 'attachmentType');
+      });
+    },
+    exportExcel() {
+      this.$refs.searchPart.setSearch();
+      let filters = Object.assign({}, this.$refs.searchPart.searchCondition);
+      this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
+      contractAccountDetail.export(filters).then(res => {
+        this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+        utils.download(res.data.data.path);
+      }).catch(() => {
+        this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+      });
+    },
+    exportCloseAccount() {
+      this.$refs.searchPart.setSearch();
+      let filters = Object.assign({}, this.$refs.searchPart.searchCondition);
+      if (!filters.startTime) {
+        return this.$notify.info('请选择创建时间');
+      }
+      this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
+      contractAccountDetail.exportMonthDetail(filters).then(res => {
+        this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+        utils.download(res.data.data.path);
+      }).catch(e => {
+        this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
+        this.$notify.error({
+          duration: 2000,
+          message: e.response && e.response.data && e.response.data.msg || '无对账单信息'
         });
-      },
-      showDetail(item) {
-        this.currentItem = item;
-        this.currentItemId = item.billingModelId;
-        this.defaultPageRight.width = '900px';
-        this.form = item;
-        this.showPart(1);
-      },
-      queryList(pageNo) {
-        const http = contractAccountDetail.query;
-        const params = this.queryUtil(http, pageNo, null, () => {
-          this.dataList.forEach(item => {
-            item.realityBillingTotal = utils.autoformatDecimalPoint(item.realityBillingTotal);
-          });
-        });
-        this.queryStatusNum(params);
-      },
-      queryStatusNum: function (params) {
-        contractAccountDetail.queryStateNum(Object.assign({}, params, {attachmentType: null})).then(res => {
-          let data = res.data.data;
-          utils.setStatusCount(this.orgType, data, 'attachmentType');
-        });
-      },
-      exportExcel() {
-        this.$refs.searchPart.setSearch();
-        let filters = Object.assign({}, this.$refs.searchPart.searchCondition);
-        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
-        contractAccountDetail.export(filters).then(res => {
-          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
-          utils.download(res.data.data.path);
-        }).catch(() => {
-          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
-        });
-      },
-      exportCloseAccount() {
-        this.$refs.searchPart.setSearch();
-        let filters = Object.assign({}, this.$refs.searchPart.searchCondition);
-        if (!filters.startTime) {
-          return this.$notify.info('请选择创建时间');
-        }
-        this.$store.commit('initPrint', {isPrinting: true, moduleId: this.$route.path});
-        contractAccountDetail.exportMonthDetail(filters).then(res => {
-          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
-          utils.download(res.data.data.path);
-        }).catch(e => {
-          this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
-          this.$notify.error({
-            duration: 2000,
-            message: e.response && e.response.data && e.response.data.msg || '无对账单信息'
-          });
-        });
-      },
-      add() {
-        this.form = {};
-        this.showPart(0);
-      },
-      edit(item) {
-        this.currentItem = item;
-        this.currentItemId = item.billingModelId;
-        this.form = item;
-        this.showPart(0);
-      },
-      change() {
-        this.$refs.table.clearSelection();
-        this.resetRightBox();
-        this.queryList(this.pager.currentPage);
-      },
-      cellClick(row, column, cell) {
-        if (column.type === 'selection') {
-          this.$refs.table.toggleRowSelection(row);
-        }
+      });
+    },
+    add() {
+      this.form = {};
+      this.showPart(0);
+    },
+    edit(item) {
+      this.currentItem = item;
+      this.currentItemId = item.billingModelId;
+      this.form = item;
+      this.showPart(0);
+    },
+    change() {
+      this.$refs.table.clearSelection();
+      this.resetRightBox();
+      this.queryList(this.pager.currentPage);
+    },
+    cellClick(row, column, cell) {
+      if (column.type === 'selection') {
+        this.$refs.table.toggleRowSelection(row);
       }
     }
-  };
+  }
+};
 </script>

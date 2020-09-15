@@ -64,7 +64,7 @@ export function init(Vue) {
     return textAreaContent.replace(/\n/g, '<br>');
   });
 
-  const formatMoney =  function (val) {
+  const formatMoney = function (val) {
     let num = '';
     if (typeof val === 'string') {
       num = val;

@@ -78,6 +78,7 @@
 
           box-shadow: 2px 0 5px 2px #67c23a
         }
+
         .alarm-title {
           color: #67c23a;
         }
@@ -97,6 +98,7 @@
 
           box-shadow: 2px 0 5px 2px #eee
         }
+
         .alarm-title {
           color: #eee;
         }
@@ -115,11 +117,11 @@
 
           box-shadow: 2px 0 5px 2px $error-color
         }
+
         .alarm-title {
           color: $error-color;
         }
       }
-
 
 
       &.status-0 {
