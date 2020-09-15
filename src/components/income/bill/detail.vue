@@ -47,74 +47,75 @@
           <oms-row label="对账单金额" :span="8">{{ formItem.accountCheckAmount | formatMoney}}</oms-row>
           <oms-row label="是否含税" :span="8">{{ formItem.includeTax === '0' ? '否' : '是' }}</oms-row>
           <oms-row label="税率" :span="8" v-show="formItem.includeTax === '1'">{{ formItem.taxRate }}%</oms-row>
-          <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{ formItem.preferentialAmount |
-            formatMoney}}
+          <oms-row label="优惠金额" :span="8" v-show="formItem.preferentialAmount">{{
+              formItem.preferentialAmount |
+                formatMoney
+            }}
           </oms-row>
           <oms-row label="折扣" :span="8" v-show="formItem.discountAmount">{{ formItem.discountAmount }}%</oms-row>
-          <oms-row label="实际对账金额" :span="8">{{ formItem.unreturnedAmount | formatMoney}}</oms-row>
+          <oms-row label="实际对账金额" :span="8">{{ formItem.unreturnedAmount | formatMoney }}</oms-row>
         </el-col>
       </el-row>
+
       <h2 class="detail-title">对账单明细</h2>
-<!--      <large-data-list :dataList="billAccountList" class="mt-20">-->
-        <el-table :data="billAccountList" v-loading="loading" :maxHeight="bodyHeight" border class="clearfix"
-                  ref="orderDetail">
+      <el-table :data="billAccountList" :maxHeight="bodyHeight" border class="clearfix" ref="orderDetail"
+                v-loading="loading">
+        <el-table-column label="项目" prop="actionType" width="140">
+          <template slot-scope="scope">{{ scope.row.projectName }}</template>
+        </el-table-column>
+        <el-table-column label="创建时间" prop="billingTime" width="160">
+          <template slot-scope="scope">{{ scope.row.billingTime | time }}</template>
+        </el-table-column>
+        <el-table-column label="订单号" prop="actionType" width="140">
+          <template slot-scope="scope">{{ scope.row.orderNumber }}</template>
+        </el-table-column>
+        <el-table-column label="对账单号" prop="actionType" width="150">
+          <template slot-scope="scope">{{ scope.row.accountCheckNo }}</template>
+        </el-table-column>
+        <el-table-column label="货品" prop="actionType" width="200">
+          <template slot-scope="scope">
+            {{ scope.row.orgGoodsName }}
+            <div v-show="scope.row.goodsSpecification">规格：{{ scope.row.goodsSpecification }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="批号" prop="batchNumber" width="120">
+          <template slot-scope="scope">{{ scope.row.batchNumber }}</template>
+        </el-table-column>
+        <el-table-column label="计费项" prop="billingItemName" width="200">
+          <template slot-scope="scope">{{ formatBillingItemName(scope.row) }}</template>
+        </el-table-column>
+        <el-table-column label="计费项名称" prop="billingCustomName" width="200">
+          <template slot-scope="scope">{{ scope.row.billingCustomName }}</template>
+        </el-table-column>
+        <el-table-column label="单价" prop="billingUntilPrice" width="150px">
+          <template slot-scope="scope">{{ scope.row.billingUntilPrice }}</template>
+        </el-table-column>
+        <el-table-column label="数量" prop="billingQuantity">
+          <template slot-scope="scope">{{ scope.row.billingQuantity }}</template>
+        </el-table-column>
+        <el-table-column label="计费合计" prop="billingTotal">
+          <template slot-scope="scope">{{ scope.row.billingTotal | formatMoney }}</template>
+        </el-table-column>
+        <el-table-column label="实际计费合计" prop="realityBillingTotal" width="120px">
+        </el-table-column>
+        <el-table-column fixed="right" label="待回款金额" prop="unreturnedAmount" width="120">
+          <template slot-scope="scope">{{ scope.row.unreturnedAmount | formatMoney }}</template>
+        </el-table-column>
+        <el-table-column fixed="right" label="未结算金额" prop="unliquidatedAmount" width="120">
+          <template slot-scope="scope">{{ scope.row.unliquidatedAmount | formatMoney }}</template>
+        </el-table-column>
+      </el-table>
+      <div class="text-center" v-show="billAccountList.length && !loading">
+        <el-pagination
+          :current-page="pager.currentPage"
+          :page-sizes="[10,20,50,100]" :pageSize="pager.pageSize" :total="pager.count"
+          @current-change="handleCurrentChange" @size-change="handleSizeChange"
+          layout="total, sizes, prev, pager, next, jumper">
+        </el-pagination>
+      </div>
 
-<!--        <el-table slot-scope="{children}" :data="children"-->
-<!--                  v-loading="loading" border :maxHeight="bodyHeight" class="clearfix" ref="orderDetail">-->
-          <el-table-column prop="contractName" label="合同" width="100">
-            <template slot-scope="scope">{{scope.row.contractName}}</template>
-          </el-table-column>
-          <el-table-column prop="customerName" label="甲方" width="140">
-            <template slot-scope="scope">{{scope.row.customerName}}</template>
-          </el-table-column>
-          <el-table-column prop="actionType" label="项目" width="140">
-            <template slot-scope="scope">{{scope.row.projectName}}</template>
-          </el-table-column>
-          <el-table-column prop="billingTime" label="创建时间" width="160">
-            <template slot-scope="scope">{{scope.row.billingTime | time}}</template>
-          </el-table-column>
-          <el-table-column prop="actionType" label="订单号" width="140">
-            <template slot-scope="scope">{{scope.row.orderNumber}}</template>
-          </el-table-column>
-          <el-table-column prop="actionType" label="对账单号" width="150">
-            <template slot-scope="scope">{{scope.row.accountCheckNo}}</template>
-          </el-table-column>
-          <el-table-column prop="actionType" label="货品" width="200">
-            <template slot-scope="scope">
-              {{scope.row.orgGoodsName}}
-              <div v-show="scope.row.goodsSpecification">规格：{{scope.row.goodsSpecification}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="batchNumber" label="批号" width="120">
-            <template slot-scope="scope">{{scope.row.batchNumber}}</template>
-          </el-table-column>
-          <el-table-column prop="billingItemName" label="计费项" width="200">
-            <template slot-scope="scope">{{formatBillingItemName(scope.row)}}</template>
-          </el-table-column>
-          <el-table-column prop="billingCustomName" label="计费项名称" width="200">
-            <template slot-scope="scope">{{scope.row.billingCustomName}}</template>
-          </el-table-column>
-          <el-table-column prop="billingUntilPrice" label="单价" width="150px">
-            <template slot-scope="scope">{{scope.row.billingUntilPrice}}</template>
-          </el-table-column>
-          <el-table-column prop="billingQuantity" label="数量">
-            <template slot-scope="scope">{{scope.row.billingQuantity}}</template>
-          </el-table-column>
-          <el-table-column prop="billingTotal" label="计费合计">
-            <template slot-scope="scope">{{scope.row.billingTotal | formatMoney}}</template>
-          </el-table-column>
-          <el-table-column prop="realityBillingTotal" width="120px" label="实际计费合计">
-          </el-table-column>
-          <el-table-column prop="unreturnedAmount" label="待回款金额" width="120" fixed="right">
-            <template slot-scope="scope">{{scope.row.unreturnedAmount | formatMoney}}</template>
-          </el-table-column>
-          <el-table-column prop="unliquidatedAmount" label="未结算金额" width="120" fixed="right">
-            <template slot-scope="scope">{{scope.row.unliquidatedAmount | formatMoney}}</template>
-          </el-table-column>
-        </el-table>
-<!--      </large-data-list>-->
 
-      <div style="margin-left: 50px;margin-top: 50px">
+      <div style="margin-left: 5px;margin-top: 15px">
         <el-button type="primary" v-has="'account-check-confirm'" @click="confirm"
                    v-if="formItem.accountCheckType === '0'">确认帐单
         </el-button>
@@ -134,42 +135,65 @@
   </div>
 </template>
 <script>
-  import {accountBill} from '@/resources';
-  import utils from '@/tools/utils';
+import {accountBill} from '@/resources';
+import utils from '@/tools/utils';
 
-  export default {
-    props: {
-      formItem: {
-        type: Object,
-        required: true
-      },
-      index: Number,
-      orgType: Object
+export default {
+  props: {
+    formItem: {
+      type: Object,
+      required: true
     },
-    data() {
-      return {
-        billAccountList: [],
-        loading: false,
-        exportLoading: false,
-        exportGoodsLoading: false
-      };
+    index: Number,
+    orgType: Object
+  },
+  data() {
+    return {
+      billAccountList: [],
+      loading: false,
+      exportLoading: false,
+      exportGoodsLoading: false,
+      pager: {
+        currentPage: 1,
+        count: 0,
+        pageSize: 10
+      }
+    };
     },
     watch: {
       formItem: {
         handler(val) {
           this.billAccountList = [];
           if (!val.accountCheckId) return;
-          this.queryDetail(val.accountCheckId);
+          this.queryList(1);
         },
         immediate: true
       }
     },
     methods: {
-      queryDetail(accountCheckId) {
+      handleSizeChange(val) {
+        this.pager.pageSize = val;
+        this.queryList(1);
+      },
+      handleCurrentChange(val) {
+        this.queryList(val);
+      },
+      queryList(pageNo) {
+        this.billAccountList = [];
+        if (!this.formItem.accountCheckId) return;
+        this.pager.currentPage = pageNo;
+        let params = Object.assign({}, {
+          pageNo: pageNo,
+          pageSize: this.pager.pageSize,
+        });
         this.loading = true;
-        accountBill.queryDetail(accountCheckId).then(res => {
+        let nowTime = new Date();
+        this.nowTime = nowTime;
+        let url = `bms-ad/${this.formItem.accountCheckId}/detail`;
+        this.$http.get(url, {params}).then(res => {
+          this.billAccountList = res.data.list || [];
+          this.pager.count = res.data.count;
           this.loading = false;
-          this.billAccountList = res.data.data || [];
         }).catch(() => {
           this.loading = false;
         });

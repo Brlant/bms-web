@@ -49,7 +49,7 @@
         <el-button @click="exportCloseAccount" plain size="small"
                    v-show="filters.attachmentType === '2'" v-has="'export-unbilled-info'">
           <f-a class="icon-small" name="export"></f-a>
-          导出未开票明细报表
+          导出未结算明细报表
         </el-button>
       </template>
     </search-part>
