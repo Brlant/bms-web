@@ -131,7 +131,7 @@ $leftWidth: 0;
         </el-pagination>
       </div>
 
-      <div style="margin-left: 50px;margin-top: 20px" v-has="'statement-audit'">
+      <div style="margin-left: 5px;margin-top: 10px" v-has="'statement-audit'">
         <el-button type="success" @click="confirm" v-if="formItem.statementType === '0'">审核通过</el-button>
         <el-button type="primary" @click="noPass" v-if="formItem.statementType === '0'">审核不通过</el-button>
       </div>
@@ -159,7 +159,7 @@ export default {
       pager: {
         currentPage: 1,
         count: 0,
-        pageSize: 20
+        pageSize: 10
       }
     };
   },

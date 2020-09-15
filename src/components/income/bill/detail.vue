@@ -115,7 +115,7 @@
       </div>
 
 
-      <div style="margin-left: 50px;margin-top: 50px">
+      <div style="margin-left: 5px;margin-top: 15px">
         <el-button type="primary" v-has="'account-check-confirm'" @click="confirm"
                    v-if="formItem.accountCheckType === '0'">确认帐单
         </el-button>
@@ -156,7 +156,7 @@ export default {
       pager: {
         currentPage: 1,
         count: 0,
-        pageSize: 20
+        pageSize: 10
       }
     };
     },
