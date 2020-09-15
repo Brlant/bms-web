@@ -263,12 +263,15 @@
   .el-card__body {
     padding: 0;
   }
+
   .el-card__header {
     padding: 0;
   }
+
   &.el-card {
     border: 0;
   }
+
   .logo-part {
     height: 160px;
     background: $loginBackground;
@@ -279,10 +282,12 @@
     line-height: 80px;
     font-size: 40px;
     color: $activeColor;
+
     img {
       margin-right: 10px;
     }
   }
+
   .box-card-form {
     padding: 20px 40px;
   }
@@ -326,12 +331,15 @@
 .transfer-list .el-transfer-panel {
   width: 320px;
   height: 510px;
+
   .el-transfer-panel__list.is-filterable {
     height: 400px;
   }
+
   .el-transfer-panel__filter .el-input__inner {
     height: 30px;
   }
+
   .el-checkbox-group {
     .el-checkbox {
       display: block;
@@ -343,9 +351,10 @@
 
   .el-form-item.is-content-center {
     margin-bottom: 0;
+
     .el-form-item__content {
       height: 40px;
-      display:flex;
+      display: flex;
       align-items: center;
     }
   }
