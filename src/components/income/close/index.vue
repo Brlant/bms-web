@@ -85,24 +85,25 @@
   </div>
 </template>
 <script>
-  import SearchPart from './search';
-  import addForm from './form/add-form.vue';
-  import CommonMixin from '@/mixins/commonMixin';
-  import {closeAccount} from '@/resources';
-  import Detail from './detail.vue';
-  import receiveTask from './receiveTask';
-  import utils from '@/tools/utils'
-  export default {
-    components: {
-      SearchPart,
-      receiveTask
-    },
-    mixins: [CommonMixin],
-    data() {
-      return {
-        filters: {
-          statementType: '0'
-        },
+import SearchPart from './search';
+import addForm from './form/add-form.vue';
+import CommonMixin from '@/mixins/commonMixin';
+import {closeAccount} from '@/resources';
+import Detail from './detail.vue';
+import receiveTask from './receiveTask';
+import utils from '@/tools/utils'
+
+export default {
+  components: {
+    SearchPart,
+    receiveTask
+  },
+  mixins: [CommonMixin],
+  data() {
+    return {
+      filters: {
+        statementType: '0'
+      },
         dialogComponents: {
           0: addForm,
           1: Detail,
@@ -184,7 +185,7 @@
           this.$store.commit('initPrint', {isPrinting: false, moduleId: this.$route.path});
           this.$notify.info({
             duration: 2000,
-            message: error.response.data && error.response.data.msg || '导出信息出现问题，可能是没有数据权限导致'
+            message: error.response.data && error.response.data.msg || '导出失败'
           });
         });
       },
