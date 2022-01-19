@@ -56,7 +56,7 @@
 </template>
 
 <script>
-  import {Auth} from '../../resources';
+  import {Auth} from '@/resources';
   import AppFooter from '../layout/app.footer.vue';
   import {base64} from '@dtop/dtop-web-common';
   import Logo from '@/assets/img/logo_pic.png';

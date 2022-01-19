@@ -14,7 +14,8 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'https://dev-bms.cdcerp.cn/',
+        // target: 'https://dev-bms.cdcerp.cn/',
+        target: 'https://hp-bms.cdcerp.cn/',
         changOrigin: true
       }
     }
