@@ -226,80 +226,102 @@ export default {
       this.selectList = val;
     },
     batchCreate() {
-      if (!this.selectList.length) return this.$notify.info({message: '请选择计费明细'});
-      let obj = {};
-      this.selectList.forEach(i => {
-        obj[i.contractId] = '';
-      });
-      if (Object.keys(obj).length > 1) return this.$notify.info('请选择相同合同的计费明细');
-      let item = this.selectList[0];
-      // 本次对账金额
-      let cutAmount = 0;
-      this.selectList.forEach(i => {
-        cutAmount += Number(i.realityBillingTotal);
-      });
-      this.$http.get(`/bms-boa/query-boa-contractId-sum?contractId=${item.contractId}`).then(res => {
-        item.lowerLimitAmount = res.data.lowerLimitAmount;
-        item.upperLimitAmount = res.data.upperLimitAmount;
-        // 已对账金额
-        let closeAmount = res.data.contractTotal;
-        // (1)对账前未达下限:
-        // 若该合同存在【合同下限金额】，且【合同已执行金额】<【合同下限金 额】，
-        // 则【剩余执行金额】=【合同下限金额】—【合同已执行金额】。
-        if (item.lowerLimitAmount && closeAmount < item.lowerLimitAmount) {
-          // 下限剩余执行金额
-          const lowerAmount = item.lowerLimitAmount - closeAmount;
-          // 1如果【本次对账金额】小于【剩余执行金额】，则【对账后状态】=未 达下限。(即对账后仍未达下限)
-          if (cutAmount < lowerAmount) {
-            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同下限金额'));
-            return;
-          }
-          // 2如果不存在【合同上限金额】，则【对账后状态】=未达上限。
-          if (!item.upperLimitAmount) {
-            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同上限金额'));
-            return;
-          }
-          // 上限剩余执行金额
-          const upperAmount = item.upperLimitAmount - closeAmount;
-          // 3如果存在【合同上限金额】且【本次对账金额】小于或等于(【合同上 限金额】—【合同已执行金额】)，则【对账后状态】=未超上限，
-          // 否则【对 账后状态】=超过上限。(即对账后超过下限)
-          if (cutAmount <= upperAmount) {
-            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未超合同上限金额'));
-            return;
-          } else {
-            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, lowerAmount, cutAmount, '超过合同上限金额'));
-            return;
-          }
-        }
-        // (2)对账前未超上限:
-        // 若该合同存在【合同上限金额】，且【合同已执行金额】<【合同上限金 额】，
-        // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】。
-        if (item.upperLimitAmount && closeAmount < item.upperLimitAmount) {
-          // 上限剩余执行金额
-          const upperAmount = item.upperLimitAmount - closeAmount;
-          if (cutAmount < upperAmount) {
-            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '未达合同上限金额'));
-            return;
-          } else {
-            this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
-            return;
-          }
-        }
-        // (3)对账前已超上限:
-        // 若该合同存在【合同上限金额】，且【合同已执行金额】>=【合同上限金 额】，
-        // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】,【对账 后状态】=超过上限。
-        if (item.upperLimitAmount && closeAmount >= item.upperLimitAmount) {
-          // 上限剩余执行金额
-          const upperAmount = item.upperLimitAmount - closeAmount;
-          this.doCreate(this.getStr(item.lowerLimitAmount, item.upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
-          return;
-        }
+      if (!this.selectList.length) {
+        console.log("请选择计费明细");
+        return this.$notify.info({message: '请选择计费明细'});
+      }
 
-        // (4)上、下限有一个设置，不提示。
-        if (!item.lowerLimitAmount || !item.upperLimitAmount) {
-          this.doCreate();
-        }
-      });
+      // 下面的代码都用不上了，支持多个合同合并，那单个合同的提示语就不重要了，直接调用接口生成对账单，后端按客户分组，一个对账单存多个合同即可
+      this.doCreate();
+
+      // let obj = {};
+      // this.selectList.forEach(i => {
+      //   obj[i.contractId] = '';
+      // });
+
+      // 2023-03-21 不同的合同可以一起批量生成对账单
+      // 所以下面的代码注释掉
+      // const len = Object.keys(obj).length;
+      // if (len > 1) {
+      //   debugger
+      //   console.log("请选择相同合同的计费明细");
+      //   return this.$notify.info('请选择相同合同的计费明细');
+      // }
+
+      // let item = this.selectList[0];
+      // 本次对账金额
+      // let contractIds = new Set();
+      // let cutAmount = 0;
+      // this.selectList.forEach(row => {
+      //   cutAmount += Number(row.realityBillingTotal);
+        // contractIds.add(row.contractId);
+      // });
+
+      // contractIds.forEach(contractId=>{
+      //   this.$http.get(`/bms-boa/query-boa-contractId-sum?contractId=${contractId}`).then(res => {
+      //     const lowerLimitAmount = res.data.lowerLimitAmount;
+      //     const upperLimitAmount = res.data.upperLimitAmount;
+      //     // 已对账金额
+      //     let closeAmount = res.data.contractTotal;
+      //     // (1)对账前未达下限:
+      //     // 若该合同存在【合同下限金额】，且【合同已执行金额】<【合同下限金 额】，
+      //     // 则【剩余执行金额】=【合同下限金额】—【合同已执行金额】。
+      //     if (lowerLimitAmount && closeAmount < lowerLimitAmount) {
+      //       // 下限剩余执行金额
+      //       const lowerAmount = lowerLimitAmount - closeAmount;
+      //       // 1如果【本次对账金额】小于【剩余执行金额】，则【对账后状态】=未 达下限。(即对账后仍未达下限)
+      //       if (cutAmount < lowerAmount) {
+      //         this.doCreate(this.getStr(lowerLimitAmount, upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同下限金额'));
+      //         return;
+      //       }
+      //       // 2如果不存在【合同上限金额】，则【对账后状态】=未达上限。
+      //       if (!upperLimitAmount) {
+      //         this.doCreate(this.getStr(lowerLimitAmount, upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未达合同上限金额'));
+      //         return;
+      //       }
+      //       // 上限剩余执行金额
+      //       const upperAmount = upperLimitAmount - closeAmount;
+      //       // 3如果存在【合同上限金额】且【本次对账金额】小于或等于(【合同上 限金额】—【合同已执行金额】)，则【对账后状态】=未超上限，
+      //       // 否则【对 账后状态】=超过上限。(即对账后超过下限)
+      //       if (cutAmount <= upperAmount) {
+      //         this.doCreate(this.getStr(lowerLimitAmount, upperLimitAmount, closeAmount, lowerAmount, cutAmount, '未超合同上限金额'));
+      //         return;
+      //       } else {
+      //         this.doCreate(this.getStr(lowerLimitAmount, upperLimitAmount, closeAmount, lowerAmount, cutAmount, '超过合同上限金额'));
+      //         return;
+      //       }
+      //     }
+      //     // (2)对账前未超上限:
+      //     // 若该合同存在【合同上限金额】，且【合同已执行金额】<【合同上限金 额】，
+      //     // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】。
+      //     if (upperLimitAmount && closeAmount < upperLimitAmount) {
+      //       // 上限剩余执行金额
+      //       const upperAmount = upperLimitAmount - closeAmount;
+      //       if (cutAmount < upperAmount) {
+      //         this.doCreate(this.getStr(lowerLimitAmount, upperLimitAmount, closeAmount, upperAmount, cutAmount, '未达合同上限金额'));
+      //         return;
+      //       } else {
+      //         this.doCreate(this.getStr(lowerLimitAmount, upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
+      //         return;
+      //       }
+      //     }
+      //     // (3)对账前已超上限:
+      //     // 若该合同存在【合同上限金额】，且【合同已执行金额】>=【合同上限金 额】，
+      //     // 则【剩余执行金额】=【合同上限金额】—【合同已执行金额】,【对账 后状态】=超过上限。
+      //     if (upperLimitAmount && closeAmount >= upperLimitAmount) {
+      //       // 上限剩余执行金额
+      //       const upperAmount = upperLimitAmount - closeAmount;
+      //       this.doCreate(this.getStr(lowerLimitAmount, upperLimitAmount, closeAmount, upperAmount, cutAmount, '超过合同上限金额'));
+      //       return;
+      //     }
+      //
+      //     // (4)上、下限有一个设置，不提示。
+      //     if (!lowerLimitAmount || !upperLimitAmount) {
+      //       this.doCreate();
+      //     }
+      //   });
+      // })
+
     },
     getStr(lowerLimitAmount, upperLimitAmount, closeAmount, amount, cutAmount, status) {
       let LimitAmountStr = `合同下限金额：${lowerLimitAmount && lowerLimitAmount.toFixed(2) || '无'}<br>合同上限金额：${
