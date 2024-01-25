@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../assets/scss/mixins";
 
   body {
@@ -67,7 +67,7 @@
                 <div style="width:300px;margin-right:50px">
                   <el-input v-model="resetUser.code"></el-input>
                 </div>
-                <div syle="line-height:0;">
+                <div style="line-height:0;">
                   <el-button :disabled="leftTime>0" @click="resendSMS">重新发送<span
                     v-show="leftTime>0">({{leftTime}})</span></el-button>
                 </div>
@@ -126,7 +126,7 @@
 </template>
 
 <script>
-  import {http, User} from '../../resources';
+  import {http, User} from '@/resources';
   import Logo from '@/assets/img/logo_pic.png'
 
   const timeInterval = 60;
@@ -139,15 +139,15 @@
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
-          let rl = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
-          if (!rl.test(self.resetUser.password)) {
-            callback('新密码必须包含数字、大写字母,小写字母,至少8-16个字符');
-          } else {
+          // let rl = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+          // if (!rl.test(self.resetUser.password)) {
+          //   callback('新密码必须包含数字、大写字母,小写字母,至少8-16个字符');
+          // } else {
             if (self.resetUser.password2 !== '') {
               this.$refs.resetForm.validateField('password2');
             }
             callback();
-          }
+          // }
         }
       };
       let validatePass2 = (rule, value, callback) => {

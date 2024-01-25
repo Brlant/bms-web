@@ -1,4 +1,4 @@
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   @import "../../assets/scss/mixins";
 
   body {
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import {User} from '../../resources';
+  import {User} from '@/resources';
 
   export default {
     name: 'resetpsw',
@@ -81,7 +81,7 @@
           ],
           password: [
             {required: true, message: '请输入新密码', trigger: 'blur'},
-            {validator: checkPasswd, trigger: 'blur'}
+            // {validator: checkPasswd, trigger: 'blur'}
           ],
           password2: [
             {required: true, message: '请输入确认密码', trigger: 'blur'},
@@ -105,7 +105,7 @@
               let error = e.response;
               if (error.status === 400) {
                 this.$notify.info({
-                  message: error.data.meta.message
+                  message: error.data.msg
                 });
               }
             });
