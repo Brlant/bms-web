@@ -1177,6 +1177,10 @@ export const Auth = {
   logout: () => {
     return http.get('/logout');
   },
+  // 短信登录接口：/login/phone
+  loginByPhone: (data) => {
+    return http.post('/login/phone', data);
+  },
   isLogin() {
     try {
       return User.current();

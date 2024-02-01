@@ -88,27 +88,35 @@ export default {
     next();
   },
   data: function () {
-    return {loopQuery: false};
+    return {
+      isCheck: false,
+      loopQuery: false
+    };
   },
   methods: {
     // 检查密码，如果密码强度不符合或者超过多少天没有
     checkPwd() {
       let updatePassFlag = this.$store.state.user.updatePassFlag;
       let days = this.$store.state.user.passwordRule;
-      if (!updatePassFlag || !days){
-        // 如果密码正常，不需要修改，那就直接pass
+      let path = this.$route.path;
+      let ext = path.indexOf('login') !== -1 || path.indexOf('resetpsw') !== -1 || path.indexOf('forget') !== -1;
+      if (ext || !updatePassFlag || !days) {
+        // 以上几种情况都直接返回，不需要安全提示
         return;
       }
 
-      // 如果需要修改密码，给出提示：您当前登录密码使用已超过xx天，为保证您的账号安全，请立即修改。
-      this.$alert('您当前登录密码使用已超过' + days + '天，为保证您的账号安全，请立即修改。', '安全提示', {
+      // 如果需要修改密码，那么就显示安全提示
+      const msg = '您当前登录密码使用已超过' + days + '天，为保证您的账号安全，请立即修改。';
+      this.$alert(msg, '安全提示', {
         confirmButtonText: '去修改', center: true,showClose:false
       }).then(() => {
-        console.warn("用户点击了去修改，即将跳转到重置密码页面。");
+        this.isCheck = true;
         this.$router.push("/resetpsw")
       }).catch(err=>{
         console.log(err)
       });
+      // 重复触发会导致调到重置密码页面也会有安全提示，这是不希望看到的，所以只希望触发一次
+      this.isCheck = false;
     },
     setBodyHeight: function () {
       this.$store.commit('setBodyHeight', window.innerHeight - 200 + 'px');
@@ -200,6 +208,25 @@ export default {
     this.queryUserwehcatInfo();
 
     setTimeout(this.checkPwd,200);
+    // 监听后退和地址栏变化
+    window.addEventListener('popstate', (e) => {
+      // 当用户手动后退或者修改地址栏的时候，重新触法一次密码校验
+      let hash = e.currentTarget.location.hash;
+      // console.log("popstate.location.hash",hash);
+
+      // 定义那些页面不需要安全提示
+      let ext = hash.indexOf('login') !== -1 || hash.indexOf('resetpsw') !== -1 || hash.indexOf('forget') !== -1;
+      if (ext || this.isCheck) {
+        // 如果是登录页或者重置密码或者忘记密码，那么是不需要给安全提示的
+        // console.warn(ext,this.isCheck);
+        return;
+      }
+
+      this.isCheck = true;
+      // 输入地址后回车，页面加载需要时间，这里加个延时才能正常弹出安全提示，
+      // 不加的话，当组件加载完成会覆盖，导致安全提示一闪而过
+      setTimeout(this.checkPwd, 200);
+    });
   }
 }
 ;
