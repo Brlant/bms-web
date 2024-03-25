@@ -50,7 +50,7 @@
       <div style="padding:20px">
 <!--        账号密码-->
         <el-form v-show="loginStyle===0" label-position="top" ref="loginForm" label-width="80px" :model="user" :rules="rules"
-                 @submit.prevent="onSubmit" onsubmit="return false">
+                 @submit.prevent="done" onsubmit="return false">
           <el-form-item label="用户名" prop="username">
             <oms-input v-model="user.username" :showFocus="isFocus === 2" placeholder="手机号/邮箱/用户名"
                        @blur="check()"></oms-input>
@@ -71,7 +71,7 @@
           </el-form-item>
 
           <el-form-item label-width="80px">
-            <el-button type="primary" @click="onSubmit" style="display:block;width:100%;" native-type="submit">
+            <el-button type="primary" @click="done" style="display:block;width:100%;" native-type="submit">
               {{btnString}} <i class="el-icon-loading" v-show="loading"></i></el-button>
 
           </el-form-item>
@@ -103,7 +103,7 @@
 <!--        </el-form>-->
         <!--        二次认证登录-->
         <el-form v-show="loginStyle===1" class="login-form" label-position="top" ref="phoneForm" label-width="80px"
-                 :model="user1" :rules="rules1"
+                 :model="user" :rules="rules"
                  onsubmit="return false">
           <div class="flex">
             <i class="el-icon-arrow-left cursor" @click="goBack"></i>
@@ -113,7 +113,7 @@
           <el-form-item label="短信验证码" prop="validateCode">
             <div style="display:flex">
               <div style="width:360px;margin-right:50px">
-                <el-input v-model="user1.validateCode" placeholder="请输入短信验证码"></el-input>
+                <el-input v-model="user.validateCode" placeholder="请输入短信验证码"></el-input>
               </div>
               <div style="line-height:0;">
                 <el-button :disabled="smsBtnDisabled" style="width: 110px" @click="sendSMS">{{ smsBtnText }}</el-button>
@@ -249,7 +249,7 @@
       sendSMS: function () {
         this.leftTime = this.maxTimes;
         this.setTimer();
-        http.post('/sendSms', {phone: this.user1.phone}).then(response => {// 验证
+        http.post('/sendSms', {phone: this.user.username}).then(response => {// 验证
           this.$notify.info({
             message: '发送成功'
           });
@@ -322,7 +322,56 @@
 
       // 二次验证登录
       handlePass() {
-        console.log('验证成功')
+        // console.log('滑动验证成功')
+        if (!this.user.validateCode) {
+          this.resetDragVerify();
+          this.$message({
+            message: '请输入短信验证码',
+            type: 'warning'
+          });
+
+          return;
+        }
+
+        this.loading = true;
+        let user = {
+          phone: this.user.username,
+          validateCode: this.user.validateCode,
+          type: this.user.type
+        };
+        Auth.secondaryCertificateLogin(user).then(response => {
+          let userId = window.localStorage.getItem('userId');
+          this.$store.commit('initUser', response.data);
+          this.$store.commit('initCode', this.user.orgCode);
+          // this.$nextTick(function () {
+          //   if (userId === response.data.userId) {
+          //     let lastUrl = window.localStorage.getItem('lastUrl');
+          //     if (lastUrl && lastUrl.indexOf('/login') === -1 && lastUrl.indexOf('/logout') === -1) {
+          //       window.localStorage.removeItem('lastUrl');
+          //       window.location.href = lastUrl;
+          //       return lastUrl;
+          //     }
+          //   } else {
+          //     this.$router.replace('/');
+          //   }
+          //   this.$router.replace('/');
+          // });
+          this.$emit('login');
+        }).catch(error => {
+          this.resetDragVerify();
+          let data = error.response.data;
+          this.$notify.error({
+            message: data.msg || '无法登录'
+          });
+
+          this.loading = false;
+
+          let code = data.code;
+          if (code === 602){
+            this.loginStyle = 0;
+            this.user.validateCode = ''
+          }
+        })
       },
       // 验证失败
       handleFail() {
@@ -353,8 +402,19 @@
             userCopy.orgCode = this.needCode ? this.trim(this.user.orgCode) : '';
             userCopy.username = this.trim(this.user.username);
             userCopy.encryptionPsw = base64(userCopy.password);
+            userCopy.enableSecondaryCertificateConfig = 1;
             delete userCopy.password;
             Auth.login(userCopy).then(response => {
+              let data = response.data;
+              if (data.secondaryCertificateFlag) {
+                this.loginStyle = 1;
+
+                this.loading = false;
+                this.btnString = '登录';
+                this.smsBtnText = '获取验证码';
+
+                return;
+              }
               if (!response.data) return;
               let userId = window.localStorage.getItem('userId');
               this.$store.commit('initUser', response.data);

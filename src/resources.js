@@ -1171,6 +1171,9 @@ export const Auth = {
   checkLogin: () => {
     return http.get('/userinfo');
   },
+  secondaryCertificateLogin: (data) => {
+    return http.post('/secondaryCertificate/login', data);
+  },
   login: (data) => {
     return http.post('/login', data);
   },
