@@ -110,10 +110,10 @@
             <h3 class="title">二次认证</h3>
           </div>
 
-          <el-form-item label="短信验证码" prop="validateCode">
+          <el-form-item label="短信验证码" prop="validateCodeSMS">
             <div style="display:flex">
               <div style="width:360px;margin-right:50px">
-                <el-input v-model="user.validateCode" placeholder="请输入短信验证码"></el-input>
+                <el-input v-model="user.validateCodeSMS" placeholder="请输入短信验证码"></el-input>
               </div>
               <div style="line-height:0;">
                 <el-button :disabled="smsBtnDisabled" style="width: 110px" @click="sendSMS">{{ smsBtnText }}</el-button>
@@ -167,6 +167,7 @@
           username: window.localStorage.getItem('user') ? JSON.parse(window.localStorage.getItem('user')).userAccount : '',
           password: '',
           validateCode: '',
+          validateCodeSMS:'',
           type: 0,
           orgCode: window.localStorage.getItem('orgCode') ? JSON.parse(window.localStorage.getItem('orgCode')) : ''
         },
@@ -323,7 +324,7 @@
       // 二次验证登录
       handlePass() {
         // console.log('滑动验证成功')
-        if (!this.user.validateCode) {
+        if (!this.user.validateCodeSMS) {
           this.resetDragVerify();
           this.$message({
             message: '请输入短信验证码',
@@ -336,7 +337,7 @@
         this.loading = true;
         let user = {
           phone: this.user.username,
-          validateCode: this.user.validateCode,
+          validateCode: this.user.validateCodeSMS,
           type: this.user.type
         };
         Auth.secondaryCertificateLogin(user).then(response => {
@@ -369,7 +370,7 @@
           let code = data.code;
           if (code === 602){
             this.loginStyle = 0;
-            this.user.validateCode = ''
+            this.user.validateCodeSMS = ''
           }
         })
       },
@@ -384,9 +385,15 @@
       },
       goBack() {
         this.loginStyle = 0;
-        this.user1 = {
-          validateCode:null,
-        }
+        // this.user1 = {
+        //   validateCode:null,
+        // }
+        this.user.validateCodeSMS = '';
+        this.btnString = '登录';
+        this.leftTime = 0;
+        this.smsBtnText = '获取验证码';
+        this.loading = false;
+
         this.$refs.phoneForm.resetFields();
         this.$refs.dragVerify.reset();
       },
