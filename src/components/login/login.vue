@@ -110,7 +110,7 @@
             <h3 class="title">二次认证</h3>
           </div>
 
-          <el-form-item label="短信验证码" prop="validateCodeSMS">
+          <el-form-item label="短信验证码" prop="validateCodeSMS" required>
             <div style="display:flex">
               <div style="width:360px;margin-right:50px">
                 <el-input v-model="user.validateCodeSMS" placeholder="请输入短信验证码"></el-input>
